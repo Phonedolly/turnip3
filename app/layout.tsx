@@ -4,20 +4,20 @@ import { Outfit, Noto_Sans_KR } from "next/font/google";
 import localFont from 'next/font/local'
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 
-export const notoSansKr = Noto_Sans_KR({
+const notoSansKr = Noto_Sans_KR({
   weight: ["400", "700", "900"],
   subsets: ["latin"],
   variable: "--font-noto-sans-kr"
 });
 
-export const outfit = Outfit({
+const outfit = Outfit({
   weight: ["400", "700", "900"],
   subsets: ["latin"],
   variable: "--font-outfit",
 
 });
 
-export const spoqaHanSansNeo = localFont(
+const spoqaHanSansNeo = localFont(
   {
     src: [{
       path: "../fonts/SpoqaHanSansNeo-Bold.woff2",
@@ -47,7 +47,7 @@ export const spoqaHanSansNeo = localFont(
     variable: '--font-spoqa-han-sans-neo',
   }
 )
-export const cascadiaCode = localFont(
+const cascadiaCode = localFont(
   {
     src: [{
       path: "../fonts/CascadiaCode.woff2",
@@ -63,7 +63,7 @@ export const cascadiaCode = localFont(
   }
 )
 
-export const cascadiaMono = localFont(
+const cascadiaMono = localFont(
   {
     src: [{
       path: "../fonts/CascadiaMono.woff2",

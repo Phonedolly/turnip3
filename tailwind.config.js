@@ -1,6 +1,5 @@
 /** @type {import('tailwindcss').Config} */
 
-import { spoqaHanSansNeo } from '@/app/layout';
 module.exports = {
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',

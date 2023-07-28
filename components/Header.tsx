@@ -1,6 +1,5 @@
 "use client";
 
-import { outfit } from "@/app/layout";
 import AppIcon from "./AppIcon";
 import DropDownIcon from "@/components/DropDownIcon";
 import SearchIcon from "@/components/SerachIcon";
@@ -9,9 +8,9 @@ import { useState } from "react";
 
 const IconAndName = () => {
   return (
-    <div className="relative flex flex-row items-center justify-between gap-0.5 ">
+    <div className="relative flex flex-row items-center justify-between gap-0.5">
       <AppIcon className="h-6 w-6" />
-      <h1 className={`select-none text-xl font-bold ${outfit.className}`}>
+      <h1 className={`select-none text-xl font-bold font-outfit`}>
         {process.env.NEXT_PUBLIC_APP_NAME}
       </h1>
     </div>
@@ -24,7 +23,7 @@ const CategoryDropdown = (props: { categories: string[] }) => {
   return (
     <div className="itmes-center relative flex flex-col">
       <div className="flex select-none flex-row items-center">
-        <h1 className={`hidden text-lg ${outfit.className}`}>More</h1>
+        <h1 className={`hidden text-lg font-outfit`}>More</h1>
         <DropDownIcon
           className={`relative h-9 w-9 cursor-pointer ${isOpenCategory === true
             ? `rotate-180 rounded-full bg-neutral-200`
@@ -59,7 +58,7 @@ const CategoryDropdown = (props: { categories: string[] }) => {
 
 const Header = (props: { categories: string[] }) => {
   return (
-    <div className="sticky top-4 z-50 flex h-12 w-11/12 max-w-7xl flex-row items-center justify-between rounded-2xl bg-white/60 px-2 shadow-[0px_2px_5px_3px_rgba(0,0,0,0.125)] backdrop-blur-xl sm:h-14 sm:px-4">
+    <div className="sticky top-4 z-50 flex h-14 w-11/12 flex-row items-center justify-between rounded-2xl bg-white/60 px-3 shadow-[0px_2.5px_5px_3px_rgba(0,0,0,0.08)] backdrop-blur-xl sm:h-14 sm:px-4">
       <IconAndName />
       <CategoryDropdown categories={props.categories} />
     </div>
