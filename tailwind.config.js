@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+
+import { spoqaHanSansNeo } from '@/app/layout';
 module.exports = {
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -7,6 +9,12 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        'spoqa-han-sans-neo': ['var(--font-spoqa-han-sans-neo)'],
+        'outfit': ['var(--font-outfit)', 'var(--font-spoqa-han-sans-neo)'],
+        'cascadia-code': ['var(--font-cascadia-code)', 'var(--font-spoqa-han-sans-neo)'],
+        'cascadia-mono': ['var(--font-cascadia-mono)', 'var(--font-spoqa-han-sans-neo)']
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':

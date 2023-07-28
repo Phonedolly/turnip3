@@ -26,16 +26,15 @@ const CategoryDropdown = (props: { categories: string[] }) => {
       <div className="flex select-none flex-row items-center">
         <h1 className={`hidden text-lg ${outfit.className}`}>More</h1>
         <DropDownIcon
-          className={`relative h-9 w-9 cursor-pointer ${
-            isOpenCategory === true
-              ? `rotate-180 rounded-full bg-neutral-200`
-              : ``
-          }`}
+          className={`relative h-9 w-9 cursor-pointer ${isOpenCategory === true
+            ? `rotate-180 rounded-full bg-neutral-200`
+            : ``
+            }`}
           onClick={() => setIsOpenCategory(!isOpenCategory)}
         />
         <SearchIcon
           className="h-9 w-9 cursor-pointer p-1.5"
-          onClick={() => {}}
+          onClick={() => { }}
         />
       </div>
       {isOpenCategory === true ? (
@@ -60,8 +59,7 @@ const CategoryDropdown = (props: { categories: string[] }) => {
 
 const Header = (props: { categories: string[] }) => {
   return (
-    // transition duration-500 hover:scale-[1.02] hover:shadow-[0px_4px_6px_3px_rgba(0,0,0,0.2)]
-    <div className="sticky top-4 z-50 flex h-12 w-full max-w-7xl flex-row items-center justify-between rounded-2xl bg-white/60 px-2 shadow-[0px_2px_5px_3px_rgba(0,0,0,0.125)] backdrop-blur-xl sm:h-14 sm:px-4">
+    <div className="sticky top-4 z-50 flex h-12 w-11/12 max-w-7xl flex-row items-center justify-between rounded-2xl bg-white/60 px-2 shadow-[0px_2px_5px_3px_rgba(0,0,0,0.125)] backdrop-blur-xl sm:h-14 sm:px-4">
       <IconAndName />
       <CategoryDropdown categories={props.categories} />
     </div>

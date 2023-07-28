@@ -22,24 +22,16 @@ export const compileMdx = async (newMdx: string) => {
       remarkMdxFrontmatter,
     ],
   });
+  const convertedFrontmatter = frontmatter as StabilizedFrontmatter;
+  const stabilizedFrontmatter: StabilizedFrontmatter = {
+    ...convertedFrontmatter,
+    epoch: Number(convertedFrontmatter.epoch),
+  };
   const content = compiledMdx({
     components,
   });
-  let frontmatterWithProperties = {
-    ...(frontmatter as object),
-    epoch: Number(frontmatter?.epoch),
-  } as {
-    title?: string;
-    category?: string;
-    thumbnail: string,
-    epoch: number;
-    date?: string;
-    description?: string;
-
-  };
-
   return {
     content,
-    frontmatter: frontmatterWithProperties,
+    frontmatter: stabilizedFrontmatter,
   };
 };
