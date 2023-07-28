@@ -122,6 +122,7 @@ export const getDataFromS3 = cache(async () => {
   const postKeys = await getPostKeys(s3, bucket);
   const posts = await getAllPosts(s3, bucket);
 
+  /* compile posts */
   const compiledPosts = (await Promise.all(
     posts.map(
       (post) =>
