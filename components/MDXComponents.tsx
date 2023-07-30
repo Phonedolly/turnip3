@@ -1,4 +1,7 @@
+"use client";
+
 import { MDXComponents } from "mdx/types";
+import Image from "next/image";
 import rangeParser from "parse-numeric-range";
 import { Highlight, themes } from "prism-react-renderer";
 import { v4 as uuidv4 } from "uuid";
@@ -17,6 +20,18 @@ const components: MDXComponents = {
   h2: (props) => <h2 {...props} className="my-1 py-2 text-2xl font-bold" />,
   h3: (props) => <h3 {...props} className="my-0.5 py-1.5 text-xl font-bold" />,
   h4: (props) => <h4 {...props} className="my-0 py-1 text-lg font-bold " />,
+  img: (props) => {
+    return (
+      <div className="relative h-auto w-full">
+        <Image
+          src={props.src as string}
+          fill
+          alt={props.alt || ""}
+          style={{ objectFit: "contain" }}
+        />
+      </div>
+    );
+  },
   pre: (props) => {
     const langClassName = props.children?.props?.className || "";
     const code = props.children?.props.children?.trim() || "";
@@ -28,10 +43,19 @@ const components: MDXComponents = {
         ? calculateLinesToHighlight(props.highlights)
         : () => false;
     return (
-      <div className="my-8 flex flex-col gap-2 rounded-xl bg-neutral-100 shadow-[0_7px_24px_4px_rgba(0,0,0,0.25)]" key={uuidv4()}>
+      <div
+        className="my-8 flex flex-col gap-2 rounded-xl bg-neutral-100 shadow-[0_7px_24px_4px_rgba(0,0,0,0.25)]"
+        key={uuidv4()}
+      >
         <div className="flex flex-row items-center py-3">
-          <div className="text-md mx-3 rounded-lg bg-neutral-200 px-3 py-0.5 text-center font-bold text-black shadow-[0_2px_4px_1px_rgba(0,0,0,0.1)]" key={uuidv4()}>{`${language}`}</div>
-          <div className="mr-2 flex items-center justify-center break-all font-mono text-[0.95rem] text-neutral-400" key={uuidv4()}>
+          <div
+            className="text-md mx-3 rounded-lg bg-neutral-200 px-3 py-0.5 text-center font-bold text-black shadow-[0_2px_4px_1px_rgba(0,0,0,0.1)]"
+            key={uuidv4()}
+          >{`${language}`}</div>
+          <div
+            className="mr-2 flex items-center justify-center break-all font-mono text-[0.95rem] text-neutral-400"
+            key={uuidv4()}
+          >
             {fileName && `${fileName}`}
           </div>
         </div>
@@ -56,10 +80,11 @@ const components: MDXComponents = {
                 {tokens.map((line, i) => (
                   <div
                     {...getLineProps({ line, key: i })}
-                    className={`block px-6 last:rounded-b-xl ${highlights(i) === true
-                      ? `bg-red-100 hover:saturate-200`
-                      : `hover:bg-neutral-200/70 hover:saturate-200`
-                      }`}
+                    className={`block px-6 last:rounded-b-xl ${
+                      highlights(i) === true
+                        ? `bg-red-100 hover:saturate-200`
+                        : `hover:bg-neutral-200/70 hover:saturate-200`
+                    }`}
                     key={uuidv4()}
                   >
                     <div className="flex flex-row" key={uuidv4()}>
@@ -69,12 +94,15 @@ const components: MDXComponents = {
                             {`${i + 1}`}
                             {Array(
                               String(tokens.length).length -
-                              String(i + 1).length,
+                                String(i + 1).length,
                             ).fill(<span>{` `}</span>)}
                           </h1>
                         </div>
                       ) : null}
-                      <div className="px-1 lg:whitespace-pre-wrap lg:break-all" key={uuidv4()}>
+                      <div
+                        className="px-1 lg:whitespace-pre-wrap lg:break-all"
+                        key={uuidv4()}
+                      >
                         {line.map((token, key) => (
                           <span
                             {...getTokenProps({ token, key })}
@@ -95,7 +123,13 @@ const components: MDXComponents = {
   },
   span: (props) => {
     if (props.className?.includes("math math-inline")) {
-      return <span {...props} key={uuidv4()} className={`${props.className} select-none`} />;
+      return (
+        <span
+          {...props}
+          key={uuidv4()}
+          className={`${props.className} select-none`}
+        />
+      );
     } else if (props.className === "katex-display") {
       return (
         <span
@@ -116,12 +150,12 @@ const components: MDXComponents = {
   },
   div: (props) => {
     if (props.className?.includes("math math-display")) {
-      return <div {...props} className={`${props.className} select-none`} key={uuidv4()} />;
+      return <div {...props} className={`${props.className} select-none`} />;
     } else {
-      return <div {...props} key={uuidv4()} />;
+      return <div {...props} />;
     }
   },
-  a: (props) => <a {...props} key={uuidv4()} />,
+  a: (props) => <a {...props} />,
 };
 
 export default components;

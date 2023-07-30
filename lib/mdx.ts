@@ -38,7 +38,7 @@ export const compileMdx = async (newMdx: string) => {
     ],
   });
 
-  return mainpulateMdx(compiledMdx, frontmatter as object)
+  return mainpulateMdx(compiledMdx, frontmatter as object);
 };
 
 export const compileMdxSync = (newMdx: string) => {
@@ -53,6 +53,25 @@ export const compileMdxSync = (newMdx: string) => {
       remarkMdxFrontmatter,
     ],
   });
-  
+
   return mainpulateMdx(compiledMdx, frontmatter as object);
+};
+
+export const compileMdxSyncCompiledOnly = (newMdx: string) => {
+  const { default: compiledMdx, frontmatter } = evaluateSync(newMdx, {
+    ...(runtime as any),
+    development: false,
+    rehypePlugins: [rehypeMdxCodeProps, rehypeKatex],
+    remarkPlugins: [
+      remarkGfm,
+      remarkMath,
+      remarkFrontmatter,
+      remarkMdxFrontmatter,
+    ],
+  });
+
+  return {
+    compiledMdx,
+    frontmatter: { ...frontmatter, epoch: Number(frontmatter?.epoch) },
+  };
 };

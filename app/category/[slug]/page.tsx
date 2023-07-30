@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { outfit } from "../../layout";
 import Header from "@/components/Header";
-import { getDataFromS3 } from "@/lib/S3";
+import { getInitDataFromS3 } from "@/lib/S3";
 import Link from "next/link";
 import RedirectToHome from "./RedirectToHome";
 
@@ -14,7 +14,7 @@ export default async function HomeWithMorePage({
   if (Number(params.slug) <= 0 || Number.isNaN(Number(params.slug))) {
     return <RedirectToHome />;
   }
-  const { config, postKeys, categories } = await getDataFromS3();
+  const { config, postKeys, categories } = await getInitDataFromS3();
   return (
     <main className="flex min-h-screen w-screen flex-col items-center justify-between p-4">
       <Header categories={categories} />

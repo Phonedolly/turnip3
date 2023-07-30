@@ -3,12 +3,11 @@ import "server-only";
 import {
   S3Client,
   GetObjectCommand,
-  GetObjectCommandInput,
   ListObjectsV2Command,
   PutObjectCommand,
   ListObjectsV2CommandOutput,
+  _Object,
 } from "@aws-sdk/client-s3";
-import { compileMdx } from "./mdx";
 
 export const initS3 = () => {
   const s3 = new S3Client({
@@ -22,7 +21,11 @@ export const initS3 = () => {
   return s3;
 };
 
-const listS3Files = async (s3: S3Client, bucket: string, prefix: string) => {
+export const listS3Files = async (
+  s3: S3Client,
+  bucket: string,
+  prefix: string,
+) => {
   const params: {
     Bucket: string;
     Prefix: string;
@@ -34,7 +37,7 @@ const listS3Files = async (s3: S3Client, bucket: string, prefix: string) => {
     // MaxKeys: 1000,
   };
   let cycle = true;
-  const keys: (string | undefined)[] = [];
+  const keys: _Object[] = [];
   while (cycle) {
     const data = (await s3
       .send(new ListObjectsV2Command(params))
@@ -45,7 +48,10 @@ const listS3Files = async (s3: S3Client, bucket: string, prefix: string) => {
     const { Contents, IsTruncated, NextContinuationToken } = data;
     if (Contents) {
       Contents.forEach((item) => {
-        keys.push(item.Key);
+        if (!item) {
+          return;
+        }
+        keys.push(item);
       });
     }
     if (!IsTruncated || !NextContinuationToken) {
@@ -56,9 +62,9 @@ const listS3Files = async (s3: S3Client, bucket: string, prefix: string) => {
   return keys;
 };
 
-const getPostKeys = cache(async (s3: S3Client, bucket: string) => {
-  const postKeys = await listS3Files(s3, bucket, "posts/");
-  if (!postKeys) {
+export const getEpoches = cache(async (s3: S3Client, bucket: string) => {
+  const epochKeys = await listS3Files(s3, bucket, "posts/");
+  if (epochKeys.length === 0) {
     console.error("posts directory not found. Trying to create the directory.");
     createPostDir(s3, bucket)
       .then((res) => {
@@ -69,29 +75,42 @@ const getPostKeys = cache(async (s3: S3Client, bucket: string) => {
         console.error("Trying to create posts directory failed!");
       });
   }
-  postKeys.shift(); // remove directory name
+  epochKeys.shift(); // remove directory name
+  const epochesAsNumber = epochKeys
+    .filter((postKey) => postKey.Key?.endsWith("/"))
+    .map((postKey) =>
+      Number(postKey.Key?.replace("posts/", "").replace("/", "")),
+    );
 
-  return postKeys;
+  return epochesAsNumber;
 });
 
-const getAllPosts = async (s3: S3Client, bucket: string) => {
-  const postKeys = await getPostKeys(s3, bucket);
-
-  const promises = postKeys.map(
-    (postKey) =>
+export const getAllPosts = async (s3: S3Client, bucket: string) => {
+  const epoches = await getEpoches(s3, bucket);
+  const promises = epoches.map(
+    (epoch) =>
       new Promise(async (resolve) => {
-        const command = new GetObjectCommand({ Bucket: bucket, Key: postKey });
-        const response = await s3.send(command);
-        const post = (await response.Body?.transformToString()) as string;
-        resolve(post);
+        const command = new GetObjectCommand({
+          Bucket: bucket,
+          Key: `posts/${epoch}/${epoch}.mdx`,
+        });
+        const response = await s3.send(command).catch(() => undefined);
+        if (response === undefined) {
+          return resolve({ post: null, epoch });
+        }
+        const post = (await response?.Body?.transformToString()) as string;
+
+        resolve({ post, epoch });
       }),
   );
-  const posts = (await Promise.all(promises)) as string[];
+  const posts = (
+    (await Promise.all(promises)) as { post: string | null; epoch: number }[]
+  ).filter((post) => post.post !== null) as { post: string; epoch: number }[];
 
   return posts;
 };
 
-const getConfig = async (s3: S3Client, bucket: string) => {
+export const getConfig = async (s3: S3Client, bucket: string) => {
   /* retrieve config.json */
   const params = {
     Bucket: bucket,
@@ -116,38 +135,3 @@ const createPostDir = async (s3: S3Client, bucket: string) => {
     return Promise.reject();
   }
 };
-
-export const getDataFromS3 = cache(async () => {
-  const bucket = process.env.S3_BUCKET_NAME as string;
-  const s3 = initS3();
-
-  /* retrieve data */
-  const config = await getConfig(s3, bucket);
-
-  const categories = config.categories;
-  const postKeys = await getPostKeys(s3, bucket);
-  const posts = await getAllPosts(s3, bucket);
-
-  /* compile posts */
-  const compiledPosts = (await Promise.all(
-    posts.map(
-      (post) =>
-        new Promise(async (resolve) => {
-          const compiledPost = await compileMdx(post);
-          resolve(compiledPost);
-        }),
-    ),
-  )) as {
-    content: JSX.Element;
-    frontmatter: {
-      title?: string | undefined;
-      category?: string | undefined;
-      thumbnail: string;
-      epoch: number;
-      date?: string | undefined;
-      description?: string | undefined;
-    };
-  }[];
-
-  return { config, postKeys, posts, compiledPosts, categories };
-});

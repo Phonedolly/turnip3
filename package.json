@@ -24,6 +24,7 @@
     "fast-average-color-node": "^2.6.0",
     "file2arraybuffer": "^1.2.2",
     "framer-motion": "^10.14.0",
+    "gm": "^1.25.0",
     "highlight.js": "^11.8.0",
     "image2uri": "^2.0.2",
     "next": "13.4.12",
@@ -40,12 +41,14 @@
     "remark-math": "^5.1.1",
     "remark-mdx-frontmatter": "^3.0.0",
     "server-only": "^0.0.1",
+    "spawn-sync": "^2.0.0",
     "tailwindcss": "3.3.3",
     "tinycolor2": "^1.6.0",
     "typescript": "5.1.6",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "@types/gm": "^1.25.1",
     "@types/gtag.js": "^0.0.12",
     "@types/tinycolor2": "^1.4.3",
     "@types/uuid": "^9.0.2",
