@@ -10,6 +10,18 @@ import {
 } from "@aws-sdk/client-s3";
 import { compileMdx } from "./mdx";
 
+export const initS3 = () => {
+  const s3 = new S3Client({
+    credentials: {
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
+    },
+    region: process.env.S3_REGION as string,
+  });
+
+  return s3;
+};
+
 const listS3Files = async (s3: S3Client, bucket: string, prefix: string) => {
   const params: {
     Bucket: string;
@@ -107,13 +119,7 @@ const createPostDir = async (s3: S3Client, bucket: string) => {
 
 export const getDataFromS3 = cache(async () => {
   const bucket = process.env.S3_BUCKET_NAME as string;
-  const s3 = new S3Client({
-    credentials: {
-      accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
-    },
-    region: process.env.S3_REGION as string,
-  });
+  const s3 = initS3();
 
   /* retrieve data */
   const config = await getConfig(s3, bucket);

@@ -12,7 +12,8 @@ module.exports = {
         'spoqa-han-sans-neo': ['var(--font-spoqa-han-sans-neo)'],
         'outfit': ['var(--font-outfit)', 'var(--font-spoqa-han-sans-neo)'],
         'cascadia-code': ['var(--font-cascadia-code)', 'var(--font-spoqa-han-sans-neo)'],
-        'cascadia-mono': ['var(--font-cascadia-mono)', 'var(--font-spoqa-han-sans-neo)']
+        'cascadia-mono': ['var(--font-cascadia-mono)', 'var(--font-spoqa-han-sans-neo)'], 'mono': ['var(--font-cascadia-mono)', 'var(--font-spoqa-han-sans-neo)'],
+        'code': ['var(--font-cascadia-code)', 'var(--font-spoqa-han-sans-neo)'],
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

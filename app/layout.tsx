@@ -89,9 +89,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  console.log(outfit.style)
-  console.log(notoSansKr.style)
-  console.log({ fontFamily: `${outfit.style.fontFamily.split(",")[0]}, ${notoSansKr.style.fontFamily}`, fontStyle: 'normal' })
   return (
     <html
       lang={process.env.NEXT_PUBLIC_LANG || "en"}
@@ -107,7 +104,7 @@ export default function RootLayout({
       <GoogleAnalytics
         GA_MEASUREMENT_ID={process.env.NEXT_PUBLIC_GA_ID as string}
       />
-      <body>{children}</body>
+      <body className="w-screen h-screen">{children}</body>
     </html>
   );
 }

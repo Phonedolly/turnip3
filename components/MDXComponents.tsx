@@ -28,19 +28,20 @@ const components: MDXComponents = {
         ? calculateLinesToHighlight(props.highlights)
         : () => false;
     return (
-      <div className="my-8 flex flex-col gap-2 rounded-xl bg-neutral-100 shadow-[0_7px_24px_4px_rgba(0,0,0,0.25)]">
-        <div className="flex flex-row items-center">
-          <div className="text-md mx-3 rounded-xl bg-neutral-400/80 px-3 py-0.5 text-center font-bold text-white">{`${language}`}</div>
-          <div className="mr-2 flex items-center justify-center break-all font-mono text-[0.95rem] text-neutral-400">
+      <div className="my-8 flex flex-col gap-2 rounded-xl bg-neutral-100 shadow-[0_7px_24px_4px_rgba(0,0,0,0.25)]" key={uuidv4()}>
+        <div className="flex flex-row items-center py-3">
+          <div className="text-md mx-3 rounded-lg bg-neutral-200 px-3 py-0.5 text-center font-bold text-black shadow-[0_2px_4px_1px_rgba(0,0,0,0.1)]" key={uuidv4()}>{`${language}`}</div>
+          <div className="mr-2 flex items-center justify-center break-all font-mono text-[0.95rem] text-neutral-400" key={uuidv4()}>
             {fileName && `${fileName}`}
           </div>
         </div>
-        <div className="overflow-auto">
+        <div className="overflow-auto" key={uuidv4()}>
           <Highlight
             // {...defaultProps}
             code={code}
             language={language}
             theme={themes.github}
+            key={uuidv4()}
           >
             {({ className, style, tokens, getLineProps, getTokenProps }) => (
               <pre
@@ -55,31 +56,30 @@ const components: MDXComponents = {
                 {tokens.map((line, i) => (
                   <div
                     {...getLineProps({ line, key: i })}
-                    className={`block px-6 last:rounded-b-xl ${
-                      highlights(i) === true
-                        ? `bg-red-100 hover:saturate-200`
-                        : `hover:bg-neutral-200/70 hover:saturate-200`
-                    }`}
+                    className={`block px-6 last:rounded-b-xl ${highlights(i) === true
+                      ? `bg-red-100 hover:saturate-200`
+                      : `hover:bg-neutral-200/70 hover:saturate-200`
+                      }`}
                     key={uuidv4()}
                   >
-                    <div className="flex flex-row">
+                    <div className="flex flex-row" key={uuidv4()}>
                       {showLineNumber === true ? (
                         <div className="flex flex-row">
                           <h1 className="mr-4 select-none text-neutral-400">
                             {`${i + 1}`}
                             {Array(
                               String(tokens.length).length -
-                                String(i + 1).length,
+                              String(i + 1).length,
                             ).fill(<span>{` `}</span>)}
                           </h1>
                         </div>
                       ) : null}
-                      <div className="px-1 lg:whitespace-pre-wrap lg:break-all">
+                      <div className="px-1 lg:whitespace-pre-wrap lg:break-all" key={uuidv4()}>
                         {line.map((token, key) => (
                           <span
-                            key={key}
                             {...getTokenProps({ token, key })}
-                            className="font-[Spoqa Han Sans Neo] rounded-none font-mono text-[0.9rem]"
+                            key={uuidv4()}
+                            className=" rounded-none font-mono text-[0.9rem]"
                           />
                         ))}
                       </div>
@@ -95,11 +95,12 @@ const components: MDXComponents = {
   },
   span: (props) => {
     if (props.className?.includes("math math-inline")) {
-      return <span {...props} className={`${props.className} select-none`} />;
+      return <span {...props} key={uuidv4()} className={`${props.className} select-none`} />;
     } else if (props.className === "katex-display") {
       return (
         <span
           {...props}
+          key={uuidv4()}
           className={`${props.className} mx-0 my-2 overflow-hidden overflow-x-auto`}
         />
       );
@@ -115,12 +116,12 @@ const components: MDXComponents = {
   },
   div: (props) => {
     if (props.className?.includes("math math-display")) {
-      return <div {...props} className={`${props.className} select-none`} />;
+      return <div {...props} className={`${props.className} select-none`} key={uuidv4()} />;
     } else {
-      return <div {...props} />;
+      return <div {...props} key={uuidv4()} />;
     }
   },
-  a: (props) => <a {...props} />,
+  a: (props) => <a {...props} key={uuidv4()} />,
 };
 
 export default components;
