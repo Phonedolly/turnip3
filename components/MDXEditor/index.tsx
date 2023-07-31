@@ -31,7 +31,6 @@ const MDXEditor = (props: {
     };
   };
 }) => {
-
   const monaco = useMonaco();
   useEffect(() => {
     if (!monaco) {
@@ -51,6 +50,7 @@ const MDXEditor = (props: {
 
   return (
     <Editor
+      className="min-h-[45vh]"
       language="markdown"
       defaultValue={props.initialCompiledMdxInfo.mdx}
       loading={null}
