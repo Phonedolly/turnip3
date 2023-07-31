@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import MDXComponents from '@/components/MDXUI'
+import MDXComponents from "@/components/MDXUI";
 import * as runtime from "react/jsx-runtime";
 import { evaluate, evaluateSync } from "@mdx-js/mdx";
 import componentsGenerator from "@/components/MDXUI";
@@ -12,38 +12,13 @@ import rehypeKatex from "rehype-katex";
 import "katex/dist/katex.min.css";
 import rehypeMdxCodeProps from "rehype-mdx-code-props";
 import remarkGfm from "remark-gfm";
+import { getMDXComponent } from "mdx-bundler/client";
 
-
-export default function Post(props: {
-  post: {
-    originalPost: string;
-    epoch: number;
-    compiledPost: {
-      content: JSX.Element;
-      frontmatter: {
-        title?: string | undefined;
-        category?: string | undefined;
-        thumbnail: string;
-        epoch: number;
-        date?: string | undefined;
-        description?: string | undefined;
-      };
-    }
-  }
-
-}) {
-  const { default: compiledMdx, frontmatter } = evaluateSync(props.post.originalPost, {
-    ...(runtime as any),
-    development: false,
-    rehypePlugins: [rehypeMdxCodeProps, rehypeKatex],
-    remarkPlugins: [
-      remarkGfm,
-      remarkMath,
-      remarkFrontmatter,
-      remarkMdxFrontmatter,
-    ],
-  });
-
-  const element = compiledMdx({})
-  return <div className='flex flex-col items-center w-full h-full'>{element}</div>
+export default function Post(props: { code: string; imageSizes: IImageSizes }) {
+  const Component = getMDXComponent(props.code);
+  return (
+    <div className="flex h-full w-full flex-col items-center">
+      {<Component components={componentsGenerator(props.imageSizes)} />}
+    </div>
+  );
 }

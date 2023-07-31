@@ -12,6 +12,7 @@ import PublishIcon from "./icons/PublishIcon";
 import { useRouter } from "next/navigation";
 import { getMDXComponent } from "mdx-bundler/client";
 import { IPost } from "@/types/IPost";
+import componentsGenerator from "./MDXUI";
 
 const EpochIsNull = () => (
   <div className="text-bold flex h-full w-full select-none flex-col items-center justify-center bg-red-500 font-outfit text-5xl font-bold">
@@ -168,7 +169,7 @@ export default function Writer(props: {
         className="h-[50vh] w-full overflow-y-scroll px-10 py-12"
         key={uuidv4()}
       >
-        <Component />
+        <Component components={componentsGenerator(imageSizes)} />
       </div>
       {/* Image Management Popup */}
       {isShowImagesPopup === true ? (
