@@ -6,7 +6,6 @@ export interface IPost {
     [key: string]: any;
   };
   mdx: string;
-  content: React.FunctionComponent<MDXContentProps>;
   category?: string;
   epoch?: number;
   title?: string;

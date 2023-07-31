@@ -32,7 +32,6 @@ const MDXEditor = (props: {
     };
   };
 }) => {
-  console.log(props.epoch);
 
   const monaco = useMonaco();
   useEffect(() => {
@@ -59,7 +58,6 @@ const MDXEditor = (props: {
       theme="turnip3"
       options={monacoConfig}
       onChange={async (mdx) => {
-        console.log(mdx);
         try {
           const formData = new FormData();
           formData.append("mdxSource", mdx || "");
@@ -79,7 +77,6 @@ const MDXEditor = (props: {
             mdxHasProblem: false,
             code: code,
             mdx: mdx || "",
-            content: getMDXComponent(code),
           }));
           console.log("Apply Success");
         } catch (e) {

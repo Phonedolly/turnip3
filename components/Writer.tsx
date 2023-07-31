@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import MdxEditor from "./MDXEditor";
 import SignOut from "./SignOut";
@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import { getMDXComponent } from "mdx-bundler/client";
 import { IPost } from "@/types/IPost";
 import componentsGenerator from "./MDXUI";
+import Preview from "./Preview";
 
 const EpochIsNull = () => (
   <div className="text-bold flex h-full w-full select-none flex-col items-center justify-center bg-red-500 font-outfit text-5xl font-bold">
@@ -37,7 +38,6 @@ export default function Writer(props: {
     code: props.initialCompiledMdxInfo.code,
     frontmatter: props.initialCompiledMdxInfo.frontmatter,
     mdx: props.initialCompiledMdxInfo.mdx,
-    content: getMDXComponent(props.initialCompiledMdxInfo.code),
   });
   const [mediaList, setMediaList] = useState<MediaListWithObjectUrl[]>([]);
   const [isWorking, setIsWorking] = useState<boolean>(false);
@@ -45,9 +45,30 @@ export default function Writer(props: {
   const [frontmatter, setFrontmatter] = useState<{
     [key: string]: any;
   }>(props.initialCompiledMdxInfo.frontmatter);
-
-  const Component = useMemo(() => getMDXComponent(post.code), [post.code]);
+  const [previewScrollTop, setPreviewScrollTop] = useState<number>(0);
   const router = useRouter();
+
+  const MemoizedPreview = useMemo(
+    () => (
+      <Preview
+        code={post.code}
+        imageSizes={imageSizes}
+        previewScrollTop={previewScrollTop}
+        setPreviewScrollTop={setPreviewScrollTop}
+      />
+    ),
+    [imageSizes, post.code],
+  );
+  // useEffect(() => {
+  //   if (!previewRef.current) return;
+  //   const handler = (e) => {
+  //     console.log(e);
+  //   };
+  //   previewRef.current.addEventListener("scroll", handler);
+  //   // return () => {
+  //   //   previewRef.current?.removeEventListener("scroll", handler);
+  //   // };
+  // }, [previewRef]);
 
   const getMediaList = async () => {
     setIsWorking(true);
@@ -165,12 +186,7 @@ export default function Writer(props: {
         />
       </div>
       {/* Content Preview */}
-      <div
-        className="h-[50vh] w-full overflow-y-scroll px-10 py-12"
-        key={uuidv4()}
-      >
-        <Component components={componentsGenerator(imageSizes)} />
-      </div>
+      {MemoizedPreview}
       {/* Image Management Popup */}
       {isShowImagesPopup === true ? (
         <div
@@ -181,15 +197,6 @@ export default function Writer(props: {
             className="relative flex h-[50vh] w-[70vw] flex-col items-center justify-center rounded-2xl bg-white p-6 shadow-[0px_8px_24px_20px_rgba(0,0,0,0.15)]"
             onClick={(e) => e.stopPropagation()}
           >
-            {isWorking === true ? (
-              <div className="absolute flex h-full w-full flex-row items-center justify-center">
-                <div className="rounded-xl bg-neutral-900 px-5 py-5">
-                  <h1 className="select-none font-mono text-2xl font-bold text-white">
-                    Working...
-                  </h1>
-                </div>
-              </div>
-            ) : null}
             <h1 className="font-outfit text-4xl font-bold">
               Content Management
             </h1>
@@ -256,6 +263,15 @@ export default function Writer(props: {
                 );
               })}
             </div>
+          </div>
+        </div>
+      ) : null}
+      {isWorking === true ? (
+        <div className="absolute flex h-full w-full flex-row items-center justify-center">
+          <div className="rounded-xl bg-neutral-900 px-5 py-5">
+            <h1 className="select-none font-mono text-2xl font-bold text-white">
+              Working...
+            </h1>
           </div>
         </div>
       ) : null}

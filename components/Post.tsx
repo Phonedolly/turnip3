@@ -13,12 +13,13 @@ import "katex/dist/katex.min.css";
 import rehypeMdxCodeProps from "rehype-mdx-code-props";
 import remarkGfm from "remark-gfm";
 import { getMDXComponent } from "mdx-bundler/client";
+import { useMemo } from "react";
 
 export default function Post(props: { code: string; imageSizes: IImageSizes }) {
-  const Component = getMDXComponent(props.code);
+  const Component = useMemo(() => getMDXComponent(props.code), [props.code]);
   return (
     <div className="flex h-full w-full flex-col items-center">
-      {<Component components={componentsGenerator(props.imageSizes)} />}
+      <Component components={componentsGenerator(props.imageSizes)} />
     </div>
   );
 }
