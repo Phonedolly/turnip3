@@ -1,4 +1,4 @@
-import { initS3Client, listS3Files } from "@/lib/S3";
+import { initS3Client } from "@/lib/S3";
 import {
   DeleteObjectCommand,
   GetObjectCommand,

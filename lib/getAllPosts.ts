@@ -31,12 +31,24 @@ export const getAllPosts = async (s3: S3Client) => {
   );
 
   const posts = await Promise.allSettled(promises).then((res) =>
-    res.reduce((acc: number[], curr) => {
-      if (curr.status === "fulfilled") {
-        acc.push(curr.value as number);
-      }
-      return acc;
-    }, []),
+    res.reduce(
+      (
+        acc: { postAsMdx: string; epoch: number; imageSizes: IImageSizes }[],
+        curr,
+      ) => {
+        if (curr.status === "fulfilled") {
+          acc.push(
+            curr.value as {
+              postAsMdx: string;
+              epoch: number;
+              imageSizes: IImageSizes;
+            },
+          );
+        }
+        return acc;
+      },
+      [],
+    ),
   );
 
   return posts;

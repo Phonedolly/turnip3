@@ -2,7 +2,6 @@
 
 import { Editor, useMonaco } from "@monaco-editor/react";
 import monacoConfig from "@/components/MDXEditor/MonacoConfig";
-import { compileMdxSyncCompiledOnly } from "@/lib/mdx";
 import React, {
   Dispatch,
   SetStateAction,

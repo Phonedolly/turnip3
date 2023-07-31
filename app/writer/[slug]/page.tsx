@@ -1,6 +1,6 @@
 import { SessionProvider, signIn, signOut } from "next-auth/react";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "../../api/auth/[...nextauth]/route";
+import { authOptions } from "../../api/auth/[...nextauth]/authOptions";
 import SignIn from "@/components/SignIn";
 import SignOut from "@/components/SignOut";
 import Editor from "@/components/MDXEditor";

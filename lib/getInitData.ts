@@ -1,8 +1,5 @@
 import { cache } from "react";
 import { initS3Client } from "./S3";
-import { compileMdxSyncCompiledOnly } from "./mdx";
-import MDXComponents from "@/components/MDXUI";
-import { MDXContent } from "mdx/types";
 import { getConfig } from "./getConfig";
 import { getAllPosts } from "./getAllPosts";
 import { bundleMDX } from "mdx-bundler";

@@ -10,7 +10,7 @@ import { initS3Client } from "@/lib/S3";
 import getImagesSizes from "@/lib/getImageSizes";
 import { getMDXComponent } from "mdx-bundler/client";
 import componentsGenerator from "@/components/MDXUI";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 import Post from "@/components/Post";
 
 export default async function HomeWithMorePage({

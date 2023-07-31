@@ -32,7 +32,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
       />
     );
   },
-  pre: (props) => {
+  pre: (props: any) => {
     const langClassName = props.children?.props?.className || "";
     const code = props.children?.props.children?.trim() || "";
     const language = langClassName.replace(/language-/, "");
