@@ -1,4 +1,5 @@
 import {
+  GetObjectCommand,
   ListObjectsV2Command,
   PutObjectCommand,
   S3Client,
@@ -9,19 +10,37 @@ import { listS3Files } from "./listFiles";
 
 const shouldMakeNewEpoch = async (s3: S3Client) => {
   const epoches = await getEpoches(s3);
-  epoches.sort();
+  if (epoches.length === 0) {
+    return true;
+  }
+  epoches.sort((a, b) => a - b);
   const objectListInLastEpoch = await listS3Files(
     s3,
     `posts/${epoches[epoches.length - 1]}`,
   );
-  if (
-    (objectListInLastEpoch.length === 1 &&
-      objectListInLastEpoch[0].Key ===
-        `posts/${epoches[epoches.length - 1]}/imageSizes.json`) ||
-    objectListInLastEpoch.length === 0
-  ) {
+  console.log(objectListInLastEpoch);
+  const tryToGetMdx = await s3
+    .send(
+      new GetObjectCommand({
+        Bucket: process.env.S3_BUCKET_NAME,
+        Key: `posts/${epoches[epoches.length - 1]}/${
+          epoches[epoches.length - 1]
+        }.mdx`,
+      }),
+    )
+    .catch((errReason) => {
+      console.error("MDX Not Found!");
+      return null;
+    });
+  if (!tryToGetMdx) {
+    console.log(
+      `shouldMakeNewEpoch: false, lastEpoch: ${epoches[epoches.length - 1]}`,
+    );
     return false;
   } else {
+    console.log(
+      `shouldMakeNewEpoch: true, lastEpoch: ${epoches[epoches.length - 1]}`,
+    );
     return true;
   }
 };
@@ -30,7 +49,7 @@ const initNewPost = async () => {
   const s3 = initS3Client();
   if (!(await shouldMakeNewEpoch(s3))) {
     const epoches = await getEpoches(s3);
-    epoches.sort();
+    epoches.sort((a, b) => a - b);
     return epoches[epoches.length - 1];
   }
 

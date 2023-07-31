@@ -19,7 +19,7 @@ const EpochIsNull = () => (
 );
 
 export default function Writer(props: {
-  epoch: number | null;
+  epoch: number;
   imageSizes: IImageSizes;
   initialCompiledMdxInfo: {
     code: string;

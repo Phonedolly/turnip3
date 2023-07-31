@@ -109,7 +109,7 @@ for (let i = 1; i <= 100; i++) {
   const { code, frontmatter } = result;
   return (
     <Writer
-      epoch={1690747613634}
+      epoch={epoch}
       imageSizes={imageSizes as IImageSizes}
       initialCompiledMdxInfo={{ code, frontmatter, mdx: initialMdx }}
     />
