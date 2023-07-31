@@ -92,13 +92,16 @@ for (let i = 1; i <= 100; i++) {
           return options;
         },
       })
-    : post
-  const { code, frontmatter } = result;
+    : post;
+  const { code, frontmatter, mdx } = {
+    ...result,
+    mdx: !post ? initialMdx : post.postAsMdx,
+  };
   return (
     <Writer
       epoch={epoch}
       imageSizes={imageSizes as IImageSizes}
-      initialCompiledMdxInfo={{ code, frontmatter, mdx: initialMdx }}
+      initialCompiledMdxInfo={{ code, frontmatter, mdx }}
     />
   );
 }

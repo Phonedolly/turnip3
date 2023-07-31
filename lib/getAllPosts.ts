@@ -38,7 +38,6 @@ export const getAllPosts = async (s3: S3Client) => {
       return acc;
     }, []),
   );
-  console.log("posts");
-  console.log(posts);
+
   return posts;
 };
