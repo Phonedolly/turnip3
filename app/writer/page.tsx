@@ -7,7 +7,7 @@ import Editor from "@/components/MDXEditor";
 import Writer from "@/components/Writer";
 import initNewPost from "@/lib/initNewPost";
 import getImagesSizes from "@/lib/getImageSizes";
-import { initS3 } from "@/lib/S3";
+import { initS3Client } from "@/lib/S3";
 
 export default async function WriterWrapper() {
   const session = await getServerSession(authOptions);
@@ -16,7 +16,7 @@ export default async function WriterWrapper() {
   //   return <SignIn />
   // } else {
   const epoch: number | null = await initNewPost();
-  const imageSizes = await getImagesSizes(await initS3(), epoch as number);
+  const imageSizes = await getImagesSizes(await initS3Client(), epoch as number);
   return (
     <Writer epoch={1690747613634} imageSizes={imageSizes as IImageSizes} />
   );

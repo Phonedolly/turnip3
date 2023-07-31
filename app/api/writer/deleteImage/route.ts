@@ -1,4 +1,4 @@
-import { initS3, listS3Files } from "@/lib/S3";
+import { initS3Client, listS3Files } from "@/lib/S3";
 import {
   DeleteObjectCommand,
   GetObjectCommand,
@@ -8,7 +8,7 @@ import { NextResponse } from "next/server";
 import fileToArrayBuffer from "file2arraybuffer";
 import { MediaListWithObjectUrl } from "@/types/MediaListWithObjectUrl";
 
-const s3 = initS3();
+const s3 = initS3Client();
 
 const checkFileDuplicated = (epoch: string, fileName: string) => {
   return s3

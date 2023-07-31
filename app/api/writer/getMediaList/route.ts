@@ -1,34 +1,17 @@
-import { initS3, listS3Files } from "@/lib/S3";
+import { initS3Client } from "@/lib/S3";
 import { GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { NextResponse } from "next/server";
 import fileToArrayBuffer from "file2arraybuffer";
 import { MediaListWithObjectUrl } from "@/types/MediaListWithObjectUrl";
-
-const s3 = initS3();
-
-const checkFileDuplicated = (epoch: string, fileName: string) => {
-  return s3
-    .send(
-      new GetObjectCommand({
-        Bucket: process.env.S3_BUCKET_NAME as string,
-        Key: `posts/${epoch}/${fileName}`,
-      }),
-    )
-    .then(() => {
-      return true;
-    })
-    .catch(() => {
-      return false;
-    });
-};
+import { listS3Files } from "@/lib/listFiles";
 
 export async function GET(request: Request) {
+  const s3 = initS3Client();
   const url = new URL(request.url);
   const epoch = url.searchParams.get("epoch");
   const files = (
     await listS3Files(
       s3,
-      process.env.S3_BUCKET_NAME as string,
       `posts/${epoch}/`,
     )
   ).map((media) => ({

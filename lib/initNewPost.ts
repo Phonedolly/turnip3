@@ -1,8 +1,8 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3";
-import { initS3 } from "./S3";
+import { initS3Client } from "./S3";
 
 const initNewPost = async () => {
-  const s3 = await initS3();
+  const s3 = await initS3Client();
   const epoch = Date.now();
   const params = {
     Bucket: process.env.S3_BUCKET_NAME as string,

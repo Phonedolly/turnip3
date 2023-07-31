@@ -11,8 +11,8 @@ import rehypeMdxCodeProps from "rehype-mdx-code-props";
 import remarkGfm from "remark-gfm";
 
 const mainpulateMdx = (compiledMdx: Function, frontmatter: object) => {
-  const convertedFrontmatter = frontmatter as StabilizedFrontmatter;
-  const stabilizedFrontmatter: StabilizedFrontmatter = {
+  const convertedFrontmatter = frontmatter as IStabilizedFrontmatter;
+  const stabilizedFrontmatter: IStabilizedFrontmatter = {
     ...convertedFrontmatter,
     epoch: Number(convertedFrontmatter.epoch),
   };

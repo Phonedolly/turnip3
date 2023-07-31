@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import MdxEditor from "./MDXEditor";
 import SignOut from "./SignOut";
-import ImageIcon from "./ImageIcon";
+import ImageIcon from "./icons/ImageIcon";
 import { _Object } from "@aws-sdk/client-s3";
 import { MediaListWithObjectUrl } from "@/types/MediaListWithObjectUrl";
-import TrashIcon from "./TrashIcon";
+import TrashIcon from "./icons/TrashIcon";
 
 const EpochIsNull = () => (
   <div className="text-bold flex h-full w-full select-none flex-col items-center justify-center bg-red-500 font-outfit text-5xl font-bold">

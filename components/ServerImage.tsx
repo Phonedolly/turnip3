@@ -1,6 +1,6 @@
 "use client";
 
-import { initS3 } from "@/lib/S3";
+import { initS3Client } from "@/lib/S3";
 import getImagesSizes from "@/lib/getImageSizes";
 import Image from "next/image";
 import path from "path";

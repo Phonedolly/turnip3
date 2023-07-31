@@ -1,4 +1,4 @@
-interface StabilizedFrontmatter {
+interface IStabilizedFrontmatter {
   title: string;
   category: string;
   date: string;
