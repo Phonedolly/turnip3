@@ -1,10 +1,15 @@
-'use client';
+"use client";
 
 import { Editor, useMonaco } from "@monaco-editor/react";
-import monacoConfig from '@/components/MDXEditor/MonacoConfig';
-import { compileMdx, compileMdxSync } from "@/lib/mdx";
+import monacoConfig from "@/components/MDXEditor/MonacoConfig";
+import {
+  compileMdx,
+  compileMdxSync,
+  compileMdxSyncCompiledOnly,
+} from "@/lib/mdx";
 import { Dispatch, SetStateAction, memo, useEffect, useState } from "react";
 import Turnip3Theme from "./Turnip3Theme";
+import MDXComponents from "@/components/MDXComponents";
 
 const initialMdx = `---
 title: Trying out new custom code blocks
@@ -39,12 +44,14 @@ for (let i = 1; i <= 100; i++) {
 \`\`\`
 `;
 
-const MDXEditor = (props: { setPost: Dispatch<SetStateAction<IPost>> }) => {
+const MDXEditor = (props: {
+  setPost: Dispatch<SetStateAction<IPost>>;
+  imageSizes: IImageSizes;
+}) => {
   const initialCompiledMdx = compileMdxSync(initialMdx);
   const [Content, setContent] = useState<JSX.Element>(
-    initialCompiledMdx.content
+    initialCompiledMdx.content,
   );
-
 
   const monaco = useMonaco();
   useEffect(() => {
@@ -54,31 +61,41 @@ const MDXEditor = (props: { setPost: Dispatch<SetStateAction<IPost>> }) => {
     monaco.editor.defineTheme("turnip3", Turnip3Theme);
     monaco.editor.setTheme("turnip3");
   }, [monaco]);
-  
+
   useEffect(() => {
-    props.setPost(prev => ({ ...prev, content: initialCompiledMdx.content }))
-  }, [])
+    props.setPost((prev) => ({ ...prev, content: initialCompiledMdx.content }));
+  }, []);
 
-  return <Editor
-    language="markdown"
-    defaultValue={initialMdx}
-    loading={null}
-    theme="turnip3"
-    options={monacoConfig}
-    onChange={(mdx) => {
-      try {
-        const { content: compiledMdx, frontmatter } = compileMdxSync(mdx || "");
-        console.log("MDX Compile success!");
-        setContent(compiledMdx);
-        props.setPost(prev => ({ ...prev, frontmatter, mdxHasProblem: false, content: compiledMdx }));
-        console.log("Apply Success");
-      } catch (e) {
-        props.setPost(prev => ({ ...prev, mdxHasProblem: true, }));
-        console.error(e);
-        console.log("MDX compile error!");
-      }
-    }}
-  />
-}
+  return (
+    <Editor
+      language="markdown"
+      defaultValue={initialMdx}
+      loading={null}
+      theme="turnip3"
+      options={monacoConfig}
+      onChange={(mdx) => {
+        try {
+          const res = compileMdxSyncCompiledOnly(mdx || "");
+          console.log("MDX Compile success!");
+          const content = res.compiledMdx({
+            components: MDXComponents(props.imageSizes),
+          });
+          setContent(content);
+          props.setPost((prev) => ({
+            ...prev,
+            frontmatter: res.frontmatter,
+            mdxHasProblem: false,
+            content,
+          }));
+          console.log("Apply Success");
+        } catch (e) {
+          props.setPost((prev) => ({ ...prev, mdxHasProblem: true }));
+          console.error(e);
+          console.log("MDX compile error!");
+        }
+      }}
+    />
+  );
+};
 
-export default MDXEditor
+export default MDXEditor;

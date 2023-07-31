@@ -17,7 +17,7 @@ const calculateLinesToHighlight = (raw: string) => {
 };
 
 const components: (imageSize: IImageSizes) => MDXComponents = (
-  imageSize: IImageSizes,
+  imageSizes: IImageSizes,
 ) => ({
   h1: (props) => <h1 {...props} className="my-1 py-2 text-3xl font-bold" />,
   h2: (props) => <h2 {...props} className="my-1 py-2 text-2xl font-bold" />,
@@ -26,7 +26,11 @@ const components: (imageSize: IImageSizes) => MDXComponents = (
   img: (props) => {
     console.log(props);
     return (
-      <ServerImage src={props.src} alt={props.alt} imageSize={imageSize} />
+      <ServerImage
+        src={props.src as string}
+        alt={props.alt as string}
+        imageSizes={imageSizes}
+      />
     );
   },
   pre: (props) => {

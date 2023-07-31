@@ -1,15 +1,21 @@
+"use client";
+
 import { initS3 } from "@/lib/S3";
 import getImagesSizes from "@/lib/getImageSizes";
 import Image from "next/image";
 import path from "path";
-import { DetailedHTMLProps, ImgHTMLAttributes } from "react";
 
-const ServerImage = async (props: {
+const ServerImage = (props: {
   src: string;
   alt: string;
   imageSizes: IImageSizes;
 }) => {
-  const specificImageSize = props.imageSizes[path.parse(props.src).name];
+  console.log(props.imageSizes);
+  const specificImageSize =
+    props.imageSizes[
+      decodeURIComponent(path.parse(props.src).name) +
+        decodeURIComponent(path.parse(props.src).ext)
+    ];
   return (
     <Image
       src={props.src as string}

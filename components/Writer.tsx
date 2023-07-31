@@ -15,7 +15,10 @@ const EpochIsNull = () => (
   </div>
 );
 
-export default function Writer(props: { epoch: number | null }) {
+export default function Writer(props: {
+  epoch: number | null;
+  imageSizes: IImageSizes;
+}) {
   const [isShowImagesPopup, setIsShowImagesPopup] = useState<boolean>(false);
   useState<boolean>(false);
   const [post, setPost] = useState<IPost>({});
@@ -23,6 +26,7 @@ export default function Writer(props: { epoch: number | null }) {
     MediaListWithObjectUrl[] | undefined
   >(undefined);
   const [isWorking, setIsWorking] = useState<boolean>(false);
+  const [imageSizes, setImageSizes] = useState<IImageSizes>(props.imageSizes);
 
   const getMediaList = async () => {
     setIsWorking(true);
@@ -58,6 +62,10 @@ export default function Writer(props: { epoch: number | null }) {
         setIsWorking(false);
       })
       .catch((err) => console.log(err));
+
+    const res = await fetch(`/api/writer/getImageSizes?epoch=${props.epoch}`);
+    const sizes = await res.json();
+    setImageSizes(sizes);
   };
 
   if (!props.epoch) {
@@ -81,7 +89,7 @@ export default function Writer(props: { epoch: number | null }) {
             }}
           />
         </div>
-        <MdxEditor setPost={setPost} />
+        <MdxEditor setPost={setPost} imageSizes={imageSizes} />
       </div>
       {/* Content Preview */}
       <div
