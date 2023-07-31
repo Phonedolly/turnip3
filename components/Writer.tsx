@@ -11,6 +11,7 @@ import TrashIcon from "./icons/TrashIcon";
 import PublishIcon from "./icons/PublishIcon";
 import { useRouter } from "next/navigation";
 import { getMDXComponent } from "mdx-bundler/client";
+import { IPost } from "@/types/IPost";
 
 const EpochIsNull = () => (
   <div className="text-bold flex h-full w-full select-none flex-col items-center justify-center bg-red-500 font-outfit text-5xl font-bold">
@@ -34,14 +35,12 @@ export default function Writer(props: {
   const [post, setPost] = useState<IPost>({
     code: props.initialCompiledMdxInfo.code,
     frontmatter: props.initialCompiledMdxInfo.frontmatter,
+    mdx: props.initialCompiledMdxInfo.mdx,
+    content: getMDXComponent(props.initialCompiledMdxInfo.code),
   });
-  const [mediaList, setMediaList] = useState<
-    MediaListWithObjectUrl[] | undefined
-  >(undefined);
+  const [mediaList, setMediaList] = useState<MediaListWithObjectUrl[]>([]);
   const [isWorking, setIsWorking] = useState<boolean>(false);
   const [imageSizes, setImageSizes] = useState<IImageSizes>(props.imageSizes);
-  const [mdxValue, setMdxValue] = useState<string>("");
-  console.log(props.initialCompiledMdxInfo.frontmatter);
   const [frontmatter, setFrontmatter] = useState<{
     [key: string]: any;
   }>(props.initialCompiledMdxInfo.frontmatter);
@@ -108,10 +107,9 @@ export default function Writer(props: {
     setIsWorking(true);
 
     const formData = new FormData();
-    console.log(frontmatter);
-    console.log(mdxValue);
+
     formData.append("epoch", String(props.epoch as Number));
-    formData.append("mdx", mdxValue);
+    formData.append("mdx", post.mdx);
 
     fetch("/api/writer/publishPost", {
       method: "POST",
@@ -160,7 +158,6 @@ export default function Writer(props: {
         <MdxEditor
           setPost={setPost}
           imageSizes={imageSizes}
-          setMdxValue={setMdxValue}
           setFrontmatter={setFrontmatter}
           epoch={props.epoch}
           initialCompiledMdxInfo={props.initialCompiledMdxInfo}

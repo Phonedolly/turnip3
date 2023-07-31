@@ -92,20 +92,7 @@ for (let i = 1; i <= 100; i++) {
           return options;
         },
       })
-    : await bundleMDX({
-        source: post.code,
-        mdxOptions(options, frontmatter) {
-          options.remarkPlugins = [
-            remarkGfm,
-            remarkMath,
-            remarkFrontmatter,
-            remarkMdxFrontmatter,
-          ];
-          options.rehypePlugins = [rehypeMdxCodeProps, rehypeKatex];
-
-          return options;
-        },
-      });
+    : post
   const { code, frontmatter } = result;
   return (
     <Writer

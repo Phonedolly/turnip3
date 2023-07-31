@@ -13,12 +13,12 @@ import React, {
 } from "react";
 import Turnip3Theme from "./Turnip3Theme";
 import { MDXContentProps, getMDXComponent } from "mdx-bundler/client";
+import { IPost } from "@/types/IPost";
 
 const MDXEditor = (props: {
   setPost: Dispatch<SetStateAction<IPost>>;
   imageSizes: IImageSizes;
   epoch: number;
-  setMdxValue: Dispatch<SetStateAction<string>>;
   setFrontmatter: Dispatch<
     SetStateAction<{
       [key: string]: any;
@@ -34,9 +34,6 @@ const MDXEditor = (props: {
 }) => {
   console.log(props.epoch);
 
-  const Component = getMDXComponent(props.initialCompiledMdxInfo.code);
-  const [Content, setContent] = useState<React.FC<MDXContentProps>>(Component);
-
   const monaco = useMonaco();
   useEffect(() => {
     if (!monaco) {
@@ -50,11 +47,8 @@ const MDXEditor = (props: {
     props.setPost((prev) => ({
       ...prev,
       content: getMDXComponent(props.initialCompiledMdxInfo.code),
+      mdx: props.initialCompiledMdxInfo.mdx,
     }));
-  }, []);
-
-  useEffect(() => {
-    props.setMdxValue(props.initialCompiledMdxInfo.mdx);
   }, []);
 
   return (
@@ -67,7 +61,6 @@ const MDXEditor = (props: {
       onChange={async (mdx) => {
         console.log(mdx);
         try {
-          props.setMdxValue(mdx || "");
           const formData = new FormData();
           formData.append("mdxSource", mdx || "");
           const result = await (
@@ -78,14 +71,15 @@ const MDXEditor = (props: {
           ).json();
           const { code, frontmatter } = result;
           console.log("MDX Compile success!");
-          const Component = () => getMDXComponent(code);
+          // const Component = () => getMDXComponent(code);
           props.setFrontmatter(frontmatter);
-          setContent(Component);
           props.setPost((prev) => ({
             ...prev,
             frontmatter,
             mdxHasProblem: false,
-            Component,
+            code: code,
+            mdx: mdx || "",
+            content: getMDXComponent(code),
           }));
           console.log("Apply Success");
         } catch (e) {

@@ -338,15 +338,14 @@ const config: editor.IStandaloneThemeData = {
   colors: {
     "editor.foreground": "#24292e",
     "editor.background": "#ffffff",
-    "editor.selectionBackground": "#c8c8fa80",
-    "editor.inactiveSelectionBackground": "#fafbfc80",
-    // "editor.lineHighlightBackground": "#fafbfc",
-    "editor.lineHighlightBackground": "#d4d4d480",
+    "editor.selectionBackground": "#c8c8fa",
+    "editor.inactiveSelectionBackground": "#fafbfc",
+    "editor.lineHighlightBackground": "#fafbfc",
     "editorCursor.foreground": "#24292e",
-    "editorWhitespace.foreground": "#959da580",
-    "editorIndentGuide.background": "#959da580",
-    "editorIndentGuide.activeBackground": "#24292e80",
-    "editor.selectionHighlightBorder": "#fafbfc80",
+    "editorWhitespace.foreground": "#959da5",
+    "editorIndentGuide.background": "#959da5",
+    "editorIndentGuide.activeBackground": "#24292e",
+    "editor.selectionHighlightBorder": "#fafbfc",
   },
 };
 
