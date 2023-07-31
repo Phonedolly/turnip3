@@ -1,9 +1,9 @@
 'use client';
 
-import MDXComponents from '@/components/MDXComponents'
+import MDXComponents from '@/components/MDXUI'
 import * as runtime from "react/jsx-runtime";
 import { evaluate, evaluateSync } from "@mdx-js/mdx";
-import components from "@/components/MDXComponents";
+import componentsGenerator from "@/components/MDXUI";
 import "highlight.js/styles/github.css";
 import remarkFrontmatter from "remark-frontmatter";
 import remarkMdxFrontmatter from "remark-mdx-frontmatter";

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import MdxEditor from "./MDXEditor";
 import SignOut from "./SignOut";
@@ -8,6 +8,9 @@ import ImageIcon from "./icons/ImageIcon";
 import { _Object } from "@aws-sdk/client-s3";
 import { MediaListWithObjectUrl } from "@/types/MediaListWithObjectUrl";
 import TrashIcon from "./icons/TrashIcon";
+import PublishIcon from "./icons/PublishIcon";
+import { useRouter } from "next/navigation";
+import { getMDXComponent } from "mdx-bundler/client";
 
 const EpochIsNull = () => (
   <div className="text-bold flex h-full w-full select-none flex-col items-center justify-center bg-red-500 font-outfit text-5xl font-bold">
@@ -18,15 +21,33 @@ const EpochIsNull = () => (
 export default function Writer(props: {
   epoch: number | null;
   imageSizes: IImageSizes;
+  initialCompiledMdxInfo: {
+    code: string;
+    frontmatter: {
+      [key: string]: any;
+    };
+    mdx: string;
+  };
 }) {
   const [isShowImagesPopup, setIsShowImagesPopup] = useState<boolean>(false);
   useState<boolean>(false);
-  const [post, setPost] = useState<IPost>({});
+  const [post, setPost] = useState<IPost>({
+    code: props.initialCompiledMdxInfo.code,
+    frontmatter: props.initialCompiledMdxInfo.frontmatter,
+  });
   const [mediaList, setMediaList] = useState<
     MediaListWithObjectUrl[] | undefined
   >(undefined);
   const [isWorking, setIsWorking] = useState<boolean>(false);
   const [imageSizes, setImageSizes] = useState<IImageSizes>(props.imageSizes);
+  const [mdxValue, setMdxValue] = useState<string>("");
+  console.log(props.initialCompiledMdxInfo.frontmatter);
+  const [frontmatter, setFrontmatter] = useState<{
+    [key: string]: any;
+  }>(props.initialCompiledMdxInfo.frontmatter);
+
+  const Component = useMemo(() => getMDXComponent(post.code), [post.code]);
+  const router = useRouter();
 
   const getMediaList = async () => {
     setIsWorking(true);
@@ -36,6 +57,10 @@ export default function Writer(props: {
       ).json()
     ).files;
     setMediaList(mediaList);
+    const imageSizesFromServer = (await (
+      await fetch(`/api/writer/getImageSizes?epoch=${props.epoch}`)
+    ).json()) as IImageSizes;
+    setImageSizes(imageSizesFromServer);
     setIsWorking(false);
   };
 
@@ -49,7 +74,7 @@ export default function Writer(props: {
     // const filename = encodeURIComponent(file.name);
     // const fileType = encodeURIComponent(file.type);
     const formData = new FormData();
-    formData.append("epoch", (props.epoch as Number).toString());
+    formData.append("epoch", String(props.epoch as Number));
     formData.append("file", file);
     formData.append("name", file.name);
 
@@ -66,6 +91,45 @@ export default function Writer(props: {
     const res = await fetch(`/api/writer/getImageSizes?epoch=${props.epoch}`);
     const sizes = await res.json();
     setImageSizes(sizes);
+  };
+
+  const publish = async () => {
+    // TODO check some conditions
+    if (
+      frontmatter &&
+      (!frontmatter.title ||
+        !frontmatter.category ||
+        !frontmatter.thumbnail ||
+        !frontmatter.date ||
+        !frontmatter.epoch)
+    ) {
+      alert("Please fill in all the fields of frontmatter!");
+    }
+    setIsWorking(true);
+
+    const formData = new FormData();
+    console.log(frontmatter);
+    console.log(mdxValue);
+    formData.append("epoch", String(props.epoch as Number));
+    formData.append("mdx", mdxValue);
+
+    fetch("/api/writer/publishPost", {
+      method: "POST",
+      body: formData,
+    })
+      .then(async (res) => {
+        await res.json();
+      })
+      .catch((errReason) => {
+        console.error("publish failed!");
+        console.error(errReason);
+      })
+      .then((resAsJson) => {
+        console.log("publish success!");
+        console.log(resAsJson);
+        setIsWorking(false);
+        router.push(`/`);
+      });
   };
 
   if (!props.epoch) {
@@ -88,15 +152,26 @@ export default function Writer(props: {
               setIsShowImagesPopup(true);
             }}
           />
+          <PublishIcon
+            className="h-12 w-12 cursor-pointer p-2"
+            onClick={publish}
+          />
         </div>
-        <MdxEditor setPost={setPost} imageSizes={imageSizes} />
+        <MdxEditor
+          setPost={setPost}
+          imageSizes={imageSizes}
+          setMdxValue={setMdxValue}
+          setFrontmatter={setFrontmatter}
+          epoch={props.epoch}
+          initialCompiledMdxInfo={props.initialCompiledMdxInfo}
+        />
       </div>
       {/* Content Preview */}
       <div
         className="h-[50vh] w-full overflow-y-scroll px-10 py-12"
         key={uuidv4()}
       >
-        {post.content}
+        <Component />
       </div>
       {/* Image Management Popup */}
       {isShowImagesPopup === true ? (
@@ -130,7 +205,7 @@ export default function Writer(props: {
             <div className="flex h-16 flex-row items-center gap-x-2 bg-neutral-300 px-4">
               <h1 className="font-outfit text-xl font-bold ">Workspace</h1>
               <h1 className="relative top-0.5 w-full font-mono text-sm font-bold">
-                s3:{mediaList && mediaList[0].Key}
+                s3:{(mediaList && mediaList[0]?.Key) || ""}
               </h1>
             </div>
             <div className="flex h-full w-full flex-col overflow-y-scroll">

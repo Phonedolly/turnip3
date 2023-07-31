@@ -1,5 +1,8 @@
 interface IPost {
-  content?: JSX.Element;
+  code: string;
+  frontmatter: {
+    [key: string]: any;
+  };
   category?: string;
   epoch?: number;
   title?: string;

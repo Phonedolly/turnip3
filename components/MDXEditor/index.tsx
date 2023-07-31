@@ -2,56 +2,40 @@
 
 import { Editor, useMonaco } from "@monaco-editor/react";
 import monacoConfig from "@/components/MDXEditor/MonacoConfig";
-import {
-  compileMdx,
-  compileMdxSync,
-  compileMdxSyncCompiledOnly,
-} from "@/lib/mdx";
-import { Dispatch, SetStateAction, memo, useEffect, useState } from "react";
+import { compileMdxSyncCompiledOnly } from "@/lib/mdx";
+import React, {
+  Dispatch,
+  SetStateAction,
+  memo,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import Turnip3Theme from "./Turnip3Theme";
-import MDXComponents from "@/components/MDXComponents";
-
-const initialMdx = `---
-title: Trying out new custom code blocks
-date: "2021-11-02"
-description: "A great way to display your code snippets on your MDX+Gatsby blog."
----
-
-Here's an example of my new custom code blocks:
-
-\`\`\`jsx
-// here's a button in React!
-<button
-  onClick={() => {
-    alert("Hello MDX!");
-  }}
->
-  test
-</button>
-\`\`\`
-
-Wow! Such code snippets!
-Let's see another, with line highlighting:
-
-\`\`\`js
-// fizzbuzz in JS
-for (let i = 1; i <= 100; i++) {
-  let out = "";
-  if (i % 3 === 0) out += "Fizz";
-  if (i % 5 === 0) out += "Buzz";
-  console.log(out || i);
-}
-\`\`\`
-`;
+import { MDXContentProps, getMDXComponent } from "mdx-bundler/client";
 
 const MDXEditor = (props: {
   setPost: Dispatch<SetStateAction<IPost>>;
   imageSizes: IImageSizes;
+  epoch: number;
+  setMdxValue: Dispatch<SetStateAction<string>>;
+  setFrontmatter: Dispatch<
+    SetStateAction<{
+      [key: string]: any;
+    }>
+  >;
+  initialCompiledMdxInfo: {
+    mdx: string;
+    code: string;
+    frontmatter: {
+      [key: string]: any;
+    };
+  };
 }) => {
-  const initialCompiledMdx = compileMdxSync(initialMdx);
-  const [Content, setContent] = useState<JSX.Element>(
-    initialCompiledMdx.content,
-  );
+  console.log(props.epoch);
+
+  const Component = getMDXComponent(props.initialCompiledMdxInfo.code);
+  const [Content, setContent] = useState<React.FC<MDXContentProps>>(Component);
 
   const monaco = useMonaco();
   useEffect(() => {
@@ -63,29 +47,45 @@ const MDXEditor = (props: {
   }, [monaco]);
 
   useEffect(() => {
-    props.setPost((prev) => ({ ...prev, content: initialCompiledMdx.content }));
+    props.setPost((prev) => ({
+      ...prev,
+      content: getMDXComponent(props.initialCompiledMdxInfo.code),
+    }));
+  }, []);
+
+  useEffect(() => {
+    props.setMdxValue(props.initialCompiledMdxInfo.mdx);
   }, []);
 
   return (
     <Editor
       language="markdown"
-      defaultValue={initialMdx}
+      defaultValue={props.initialCompiledMdxInfo.mdx}
       loading={null}
       theme="turnip3"
       options={monacoConfig}
-      onChange={(mdx) => {
+      onChange={async (mdx) => {
+        console.log(mdx);
         try {
-          const res = compileMdxSyncCompiledOnly(mdx || "");
+          props.setMdxValue(mdx || "");
+          const formData = new FormData();
+          formData.append("mdxSource", mdx || "");
+          const result = await (
+            await fetch("/api/writer/buildMDX", {
+              method: "POST",
+              body: formData,
+            })
+          ).json();
+          const { code, frontmatter } = result;
           console.log("MDX Compile success!");
-          const content = res.compiledMdx({
-            components: MDXComponents(props.imageSizes),
-          });
-          setContent(content);
+          const Component = () => getMDXComponent(code);
+          props.setFrontmatter(frontmatter);
+          setContent(Component);
           props.setPost((prev) => ({
             ...prev,
-            frontmatter: res.frontmatter,
+            frontmatter,
             mdxHasProblem: false,
-            content,
+            Component,
           }));
           console.log("Apply Success");
         } catch (e) {

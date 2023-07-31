@@ -4,27 +4,41 @@ import getImagesSizes from "./getImageSizes";
 
 export const getAllPosts = async (s3: S3Client) => {
   const epoches = await getEpoches(s3);
+  console.log(epoches);
+  console.log("epoches");
   const promises = epoches.map(
     (epoch) =>
-      new Promise(async (resolve) => {
+      new Promise(async (resolve, reject) => {
         const command = new GetObjectCommand({
           Bucket: process.env.S3_BUCKET_NAME,
           Key: `posts/${epoch}/${epoch}.mdx`,
         });
-        const response = await s3.send(command).catch(() => undefined);
-        if (response === undefined) {
-          return resolve({ post: null, epoch });
+        const response = await s3.send(command).catch((err) => {
+          console.error("response.body");
+          console.error(err);
+          return reject(err);
+        });
+        if (!response?.Body) {
+          return;
         }
-        const post = (await response?.Body?.transformToString()) as string;
+        const postAsMdx = (await response.Body.transformToString()) as string;
+        console.log(epoch);
 
         const imageSizes = (await getImagesSizes(s3, epoch)) as IImageSizes;
 
-        resolve({ post, epoch, imageSizes });
+        return resolve({ postAsMdx, epoch, imageSizes });
       }),
   );
-  const posts = (
-    (await Promise.all(promises)) as { post: string | null; epoch: number }[]
-  ).filter((post) => post.post !== null) as { post: string; epoch: number }[];
 
+  const posts = await Promise.allSettled(promises).then((res) =>
+    res.reduce((acc: number[], curr) => {
+      if (curr.status === "fulfilled") {
+        acc.push(curr.value as number);
+      }
+      return acc;
+    }, []),
+  );
+  console.log("posts");
+  console.log(posts);
   return posts;
 };

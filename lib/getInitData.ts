@@ -1,14 +1,19 @@
 import { cache } from "react";
 import { initS3Client } from "./S3";
-import { compileMdx, compileMdxSyncCompiledOnly } from "./mdx";
-import MDXComponents from "@/components/MDXComponents";
-import getImagesSizes from "./getImageSizes";
+import { compileMdxSyncCompiledOnly } from "./mdx";
+import MDXComponents from "@/components/MDXUI";
 import { MDXContent } from "mdx/types";
 import { getConfig } from "./getConfig";
-import { getEpoches } from "./getEpoches";
 import { getAllPosts } from "./getAllPosts";
+import { bundleMDX } from "mdx-bundler";
+import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
+import remarkFrontmatter from "remark-frontmatter";
+import remarkMdxFrontmatter from "remark-mdx-frontmatter";
+import rehypeKatex from "rehype-katex";
+import rehypeMdxCodeProps from "rehype-mdx-code-props";
 
-export const getInitDataFromS3 = cache(async () => {
+export const getInitDataFromS3 = async () => {
   const bucket = process.env.S3_BUCKET_NAME as string;
   const s3 = initS3Client();
 
@@ -16,45 +21,48 @@ export const getInitDataFromS3 = cache(async () => {
   const config = await getConfig(s3);
 
   const categories = config.categories;
-  const postKeys = await getEpoches(s3);
   const posts = await getAllPosts(s3);
 
   /* compile posts */
   const compiledPosts = (await Promise.all(
     posts.map(
       (post) =>
-        new Promise(async (resolve) => {
-          const compiledPost = compileMdxSyncCompiledOnly(post.post);
-          const compiledPostWithImageSizes = {
-            ...compiledPost,
-            contentWithImageSizes: compiledPost.compiledMdx({
-              components: MDXComponents(
-                (await getImagesSizes(s3, post.epoch)) as IImageSizes,
-              ),
-            }),
-          };
+        new Promise(async (resolve, reject) => {
+          const result = await bundleMDX({
+            source: post.postAsMdx,
+            mdxOptions(options, frontmatter) {
+              options.remarkPlugins = [
+                remarkGfm,
+                remarkMath,
+                remarkFrontmatter,
+                remarkMdxFrontmatter,
+              ];
+              options.rehypePlugins = [rehypeMdxCodeProps, rehypeKatex];
+
+              return options;
+            },
+          })
+            .then((result) => result)
+            .catch((errReason) => {
+              console.error("Compile Error!");
+              console.error(errReason);
+              return reject(false);
+            });
           resolve({
-            ...compiledPostWithImageSizes,
-            originalPost: post.post,
-            epoch: post.epoch,
+            ...post,
+            code: result?.code,
+            frontmatter: result?.frontmatter,
           });
         }),
     ),
   )) as {
-    originalPost: string;
+    postAsMdx: string;
     epoch: number;
-    contentWithImageSizes: JSX.Element;
-    compiledMdx: MDXContent;
+    imageSizes: IImageSizes;
+    code: string;
     frontmatter: {
-      epoch: number;
-      constructor: Function;
-      toString(): string;
-      toLocaleString(): string;
-      valueOf(): Object;
-      hasOwnProperty(v: PropertyKey): boolean;
-      isPrototypeOf(v: Object): boolean;
-      propertyIsEnumerable(v: PropertyKey): boolean;
+      [key: string]: any;
     };
   }[];
-  return { config, postKeys, posts, compiledPosts, categories };
-});
+  return { config, compiledPosts, categories };
+};

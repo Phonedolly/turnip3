@@ -1,7 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Outfit, Noto_Sans_KR } from "next/font/google";
-import localFont from 'next/font/local'
+import localFont from "next/font/local";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import Header from "@/components/Header";
 import { getInitDataFromS3 } from "@/lib/getInitData";
@@ -9,77 +9,76 @@ import { getInitDataFromS3 } from "@/lib/getInitData";
 const notoSansKr = Noto_Sans_KR({
   weight: ["400", "700", "900"],
   subsets: ["latin"],
-  variable: "--font-noto-sans-kr"
+  variable: "--font-noto-sans-kr",
 });
 
 const outfit = Outfit({
   weight: ["400", "700", "900"],
   subsets: ["latin"],
   variable: "--font-outfit",
-
 });
 
-const spoqaHanSansNeo = localFont(
-  {
-    src: [{
+const spoqaHanSansNeo = localFont({
+  src: [
+    {
       path: "../fonts/SpoqaHanSansNeo-Bold.woff2",
-      weight: '700',
-      style: 'normal',
+      weight: "700",
+      style: "normal",
     },
     {
       path: "../fonts/SpoqaHanSansNeo-Light.woff2",
-      weight: '300',
-      style: 'normal'
+      weight: "300",
+      style: "normal",
     },
     {
       path: "../fonts/SpoqaHanSansNeo-Medium.woff2",
-      weight: '500',
-      style: 'normal'
+      weight: "500",
+      style: "normal",
     },
     {
       path: "../fonts/SpoqaHanSansNeo-Regular.woff2",
-      weight: '400',
-      style: 'normal'
+      weight: "400",
+      style: "normal",
     },
     {
       path: "../fonts/SpoqaHanSansNeo-Thin.woff2",
-      weight: '100',
-      style: 'normal'
-    }],
-    variable: '--font-spoqa-han-sans-neo',
-  }
-)
-const cascadiaCode = localFont(
-  {
-    src: [{
+      weight: "100",
+      style: "normal",
+    },
+  ],
+  variable: "--font-spoqa-han-sans-neo",
+});
+const cascadiaCode = localFont({
+  src: [
+    {
       path: "../fonts/CascadiaCode.woff2",
-      weight: '400',
-      style: 'normal',
+      weight: "400",
+      style: "normal",
     },
     {
       path: "../fonts/CascadiaCodeItalic.woff2",
-      weight: '400',
-      style: 'italic'
-    }],
-    variable: '--font-cascadia-code',
-  }
-)
+      weight: "400",
+      style: "italic",
+    },
+  ],
+  variable: "--font-cascadia-code",
+});
 
-const cascadiaMono = localFont(
-  {
-    src: [{
+const cascadiaMono = localFont({
+  src: [
+    {
       path: "../fonts/CascadiaMono.woff2",
-      weight: '400',
-      style: 'normal',
+      weight: "400",
+      style: "normal",
     },
     {
       path: "../fonts/CascadiaMonoItalic.woff2",
-      weight: '400',
-      style: 'italic'
-    }],
-    variable: '--font-cascadia-mono',
-  }
-)
+      weight: "400",
+      style: "italic",
+    },
+  ],
+  variable: "--font-cascadia-mono",
+});
 
 export const metadata: Metadata = {
   title: process.env.APP_NAME,

@@ -1,6 +1,6 @@
 import * as runtime from "react/jsx-runtime";
 import { evaluate, evaluateSync } from "@mdx-js/mdx";
-import components from "@/components/MDXComponents";
+import componentsGenerator from "@/components/MDXUI";
 import "highlight.js/styles/github.css";
 import remarkFrontmatter from "remark-frontmatter";
 import remarkMdxFrontmatter from "remark-mdx-frontmatter";
@@ -10,38 +10,64 @@ import "katex/dist/katex.min.css";
 import rehypeMdxCodeProps from "rehype-mdx-code-props";
 import remarkGfm from "remark-gfm";
 
-const mainpulateMdx = (compiledMdx: Function, frontmatter: object) => {
-  const convertedFrontmatter = frontmatter as IStabilizedFrontmatter;
+const manipulateMdx = (
+  compiledMdx: Function,
+  frontmatter: unknown,
+  imageSizes: IImageSizes,
+) => {
+  console.log(111)
+  console.log(frontmatter);
+  const convertedFrontmatter = frontmatter as IPreStabilizedFrontmatter;
   const stabilizedFrontmatter: IStabilizedFrontmatter = {
     ...convertedFrontmatter,
     epoch: Number(convertedFrontmatter.epoch),
   };
   const content = compiledMdx({
-    components,
+    components: componentsGenerator(imageSizes),
   });
   return {
     content,
     frontmatter: stabilizedFrontmatter,
+    imageSizes,
   };
 };
 
-export const compileMdx = async (newMdx: string) => {
-  const { default: compiledMdx, frontmatter } = await evaluate(newMdx, {
-    ...(runtime as any),
-    development: false,
-    rehypePlugins: [rehypeMdxCodeProps, rehypeKatex],
-    remarkPlugins: [
-      remarkGfm,
-      remarkMath,
-      remarkFrontmatter,
-      remarkMdxFrontmatter,
-    ],
-  });
+// export const compileMdx = async (newMdx: string) => {
+//   const { default: compiledMdx, frontmatter } = await evaluate(newMdx, {
+//     ...(runtime as any),
+//     development: false,
+//     rehypePlugins: [rehypeMdxCodeProps, rehypeKatex],
+//     remarkPlugins: [
+//       remarkGfm,
+//       remarkMath,
+//       remarkFrontmatter,
+//       remarkMdxFrontmatter,
+//     ],
+//   });
 
-  return mainpulateMdx(compiledMdx, frontmatter as object);
-};
+//   return manipulateMdx(compiledMdx, frontmatter as object);
+// };
 
-export const compileMdxSync = (newMdx: string) => {
+// export const compileMdxSync = (newMdx: string) => {
+//   const { default: compiledMdx, frontmatter } = evaluateSync(newMdx, {
+//     ...(runtime as any),
+//     development: false,
+//     rehypePlugins: [rehypeMdxCodeProps, rehypeKatex],
+//     remarkPlugins: [
+//       remarkGfm,
+//       remarkMath,
+//       remarkFrontmatter,
+//       remarkMdxFrontmatter,
+//     ],
+//   });
+
+//   return manipulateMdx(compiledMdx, frontmatter as object);
+// };
+
+export const compileMdxSyncCompiledOnly = (
+  newMdx: string,
+  imageSizes: IImageSizes,
+) => {
   const { default: compiledMdx, frontmatter } = evaluateSync(newMdx, {
     ...(runtime as any),
     development: false,
@@ -53,25 +79,16 @@ export const compileMdxSync = (newMdx: string) => {
       remarkMdxFrontmatter,
     ],
   });
-
-  return mainpulateMdx(compiledMdx, frontmatter as object);
-};
-
-export const compileMdxSyncCompiledOnly = (newMdx: string) => {
-  const { default: compiledMdx, frontmatter } = evaluateSync(newMdx, {
-    ...(runtime as any),
-    development: false,
-    rehypePlugins: [rehypeMdxCodeProps, rehypeKatex],
-    remarkPlugins: [
-      remarkGfm,
-      remarkMath,
-      remarkFrontmatter,
-      remarkMdxFrontmatter,
-    ],
-  });
-
-  return {
-    compiledMdx,
-    frontmatter: { ...frontmatter as Object, epoch: Number(frontmatter?.epoch) },
-  };
+  console.log(`ftonr`);
+  console.log(compiledMdx.children);
+  const re = manipulateMdx(compiledMdx, frontmatter as unknown, imageSizes);
+  console.log(re.content);
+  return re;
+  // return {
+  //   compiledMdx,
+  //   frontmatter: {
+  //     ...(frontmatter as Object),
+  //     epoch: Number(frontmatter?.epoch),
+  //   },
+  // };
 };

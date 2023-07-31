@@ -1,5 +1,9 @@
 import { initS3Client } from "@/lib/S3";
-import { GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
+import {
+  GetObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} from "@aws-sdk/client-s3";
 import { NextResponse } from "next/server";
 import fileToArrayBuffer from "file2arraybuffer";
 import path from "path";
@@ -7,7 +11,7 @@ import { subClass } from "gm";
 import getImagesSizes from "@/lib/getImageSizes";
 const im = subClass({ imageMagick: "7+" });
 
-const checkFileDuplicated = (epoch: number, fileName: string) => {
+const checkFileDuplicated = (s3: S3Client, epoch: number, fileName: string) => {
   return s3
     .send(
       new GetObjectCommand({
@@ -26,13 +30,13 @@ const checkFileDuplicated = (epoch: number, fileName: string) => {
 export async function POST(request: Request) {
   const s3 = initS3Client();
   const formData = await request.formData();
-  const epoch = formData.get("epoch") as unknown as number;
+  const epoch = Number(formData.get("epoch"));
   const file = formData.get("file") as File;
   let fileName = formData.get("name") as string;
   fileName = fileName.replaceAll(" ", "_");
   const fileAsArrayBuffer = Buffer.from(await fileToArrayBuffer(file));
 
-  if (await checkFileDuplicated(epoch, fileName)) {
+  if (await checkFileDuplicated(s3, epoch, fileName)) {
     const { name, ext } = path.parse(fileName);
     fileName = name + "_" + Date.now() + ext; // already ext has '.'
   }

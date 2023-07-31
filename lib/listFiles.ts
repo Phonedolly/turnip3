@@ -5,15 +5,21 @@ import {
   _Object,
 } from "@aws-sdk/client-s3";
 
-export const listS3Files = async (s3: S3Client, prefix: string) => {
+export const listS3Files = async (
+  s3: S3Client,
+  prefix: string,
+  delimiter?: string,
+) => {
   const params: {
     Bucket: string;
     Prefix: string;
+    Delimiter?: string;
     MaxKeys?: number;
     ContinuationToken?: string;
   } = {
     Bucket: process.env.S3_BUCKET_NAME as string,
     Prefix: prefix,
+    Delimiter: delimiter,
     // MaxKeys: 1000,
   };
   let cycle = true;
