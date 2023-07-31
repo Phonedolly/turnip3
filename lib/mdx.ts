@@ -72,6 +72,6 @@ export const compileMdxSyncCompiledOnly = (newMdx: string) => {
 
   return {
     compiledMdx,
-    frontmatter: { ...frontmatter, epoch: Number(frontmatter?.epoch) },
+    frontmatter: { ...frontmatter as Object, epoch: Number(frontmatter?.epoch) },
   };
 };

@@ -8,6 +8,7 @@ import {
   ListObjectsV2CommandOutput,
   _Object,
 } from "@aws-sdk/client-s3";
+import getImagesSizes from "./getImageSizes";
 
 export const initS3 = () => {
   const s3 = new S3Client({
@@ -100,7 +101,9 @@ export const getAllPosts = async (s3: S3Client, bucket: string) => {
         }
         const post = (await response?.Body?.transformToString()) as string;
 
-        resolve({ post, epoch });
+        const imageSizes = (await getImagesSizes(s3, epoch)) as IImageSizes;
+
+        resolve({ post, epoch, imageSizes });
       }),
   );
   const posts = (

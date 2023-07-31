@@ -1,6 +1,9 @@
 import { cache } from "react";
 import { getAllPosts, getConfig, getEpoches, initS3 } from "./S3";
-import { compileMdx } from "./mdx";
+import { compileMdx, compileMdxSyncCompiledOnly } from "./mdx";
+import MDXComponents from "@/components/MDXComponents";
+import getImagesSizes from "./getImageSizes";
+import { MDXContent } from "mdx/types";
 
 export const getInitDataFromS3 = cache(async () => {
   const bucket = process.env.S3_BUCKET_NAME as string;
@@ -18,23 +21,36 @@ export const getInitDataFromS3 = cache(async () => {
     posts.map(
       (post) =>
         new Promise(async (resolve) => {
-          const compiledPost = await compileMdx(post.post);
-          resolve({ compiledPost, originalPost: post.post, epoch: post.epoch });
+          const compiledPost = compileMdxSyncCompiledOnly(post.post);
+          const compiledPostWithImageSizes = {
+            ...compiledPost,
+            contentWithImageSizes: compiledPost.compiledMdx({
+              components: MDXComponents(
+                (await getImagesSizes(s3, post.epoch)) as IImageSizes,
+              ),
+            }),
+          };
+          resolve({
+            ...compiledPostWithImageSizes,
+            originalPost: post.post,
+            epoch: post.epoch,
+          });
         }),
     ),
   )) as {
     originalPost: string;
     epoch: number;
-    compiledPost: {
-      content: JSX.Element;
-      frontmatter: {
-        title?: string | undefined;
-        category?: string | undefined;
-        thumbnail: string;
+    contentWithImageSizes: JSX.Element;
+    compiledMdx: MDXContent;
+    frontmatter: {
         epoch: number;
-        date?: string | undefined;
-        description?: string | undefined;
-      };
+        constructor: Function;
+        toString(): string;
+        toLocaleString(): string;
+        valueOf(): Object;
+        hasOwnProperty(v: PropertyKey): boolean;
+        isPrototypeOf(v: Object): boolean;
+        propertyIsEnumerable(v: PropertyKey): boolean;
     };
   }[];
   return { config, postKeys, posts, compiledPosts, categories };

@@ -44,6 +44,6 @@ export default function Post(props: {
     ],
   });
 
-  const element = compiledMdx({ components: MDXComponents })
+  const element = compiledMdx({})
   return <div className='flex flex-col items-center w-full h-full'>{element}</div>
 }

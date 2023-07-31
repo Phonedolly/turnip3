@@ -5,6 +5,7 @@ import Image from "next/image";
 import rangeParser from "parse-numeric-range";
 import { Highlight, themes } from "prism-react-renderer";
 import { v4 as uuidv4 } from "uuid";
+import ServerImage from "./ServerImage";
 
 const calculateLinesToHighlight = (raw: string) => {
   const lineNumbers = rangeParser(raw);
@@ -15,21 +16,17 @@ const calculateLinesToHighlight = (raw: string) => {
   }
 };
 
-const components: MDXComponents = {
+const components: (imageSize: IImageSizes) => MDXComponents = (
+  imageSize: IImageSizes,
+) => ({
   h1: (props) => <h1 {...props} className="my-1 py-2 text-3xl font-bold" />,
   h2: (props) => <h2 {...props} className="my-1 py-2 text-2xl font-bold" />,
   h3: (props) => <h3 {...props} className="my-0.5 py-1.5 text-xl font-bold" />,
   h4: (props) => <h4 {...props} className="my-0 py-1 text-lg font-bold " />,
   img: (props) => {
+    console.log(props);
     return (
-      <div className="relative h-auto w-full">
-        <Image
-          src={props.src as string}
-          fill
-          alt={props.alt || ""}
-          style={{ objectFit: "contain" }}
-        />
-      </div>
+      <ServerImage src={props.src} alt={props.alt} imageSize={imageSize} />
     );
   },
   pre: (props) => {
@@ -156,6 +153,6 @@ const components: MDXComponents = {
     }
   },
   a: (props) => <a {...props} />,
-};
+});
 
 export default components;

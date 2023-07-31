@@ -14,12 +14,15 @@ export default async function HomeWithMorePage({
   // if (Number(params.slug) <= 0 || Number.isNaN(Number(params.slug))) {
   //   return <RedirectToHome />;
   // }
-  const { config, postKeys, posts, categories, compiledPosts } = await getInitDataFromS3();
-  const post = compiledPosts.filter(compiledPost => compiledPost.epoch === Number(params.slug))[0];
-  console.log(post.compiledPost)
+  const { config, postKeys, posts, categories, compiledPosts } =
+    await getInitDataFromS3();
+  const post = compiledPosts.filter(
+    (compiledPost) => compiledPost.epoch === Number(params.slug),
+  )[0];
+  const Content = () => post.contentWithImageSizes;
   return (
     <main className="flex h-full w-3/4 flex-col items-center justify-between p-4">
-      {post.compiledPost.content}
+      <Content />
     </main>
   );
 }
