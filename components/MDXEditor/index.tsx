@@ -18,11 +18,6 @@ const MDXEditor = (props: {
   setPost: Dispatch<SetStateAction<IPost>>;
   imageSizes: IImageSizes;
   epoch: number;
-  setFrontmatter: Dispatch<
-    SetStateAction<{
-      [key: string]: any;
-    }>
-  >;
   initialCompiledMdxInfo: {
     mdx: string;
     code: string;
@@ -68,8 +63,6 @@ const MDXEditor = (props: {
             ).json();
             const { code, frontmatter } = result;
             console.log("MDX Compile success!");
-            // const Component = () => getMDXComponent(code);
-            props.setFrontmatter(frontmatter);
             props.setPost((prev) => ({
               ...prev,
               frontmatter,

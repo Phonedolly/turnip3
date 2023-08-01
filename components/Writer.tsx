@@ -41,9 +41,6 @@ export default function Writer(props: {
   const [mediaList, setMediaList] = useState<MediaListWithObjectUrl[]>([]);
   const [isWorking, setIsWorking] = useState<boolean>(false);
   const [imageSizes, setImageSizes] = useState<IImageSizes>(props.imageSizes);
-  const [frontmatter, setFrontmatter] = useState<{
-    [key: string]: any;
-  }>(props.initialCompiledMdxInfo.frontmatter);
   const [previewScrollTop, setPreviewScrollTop] = useState<number>(0);
   const router = useRouter();
 
@@ -52,11 +49,12 @@ export default function Writer(props: {
       <Preview
         code={post.code}
         imageSizes={imageSizes}
+        frontmatter={post.frontmatter}
         previewScrollTop={previewScrollTop}
         setPreviewScrollTop={setPreviewScrollTop}
       />
     ),
-    [imageSizes, post.code],
+    [imageSizes, post.code, post.frontmatter],
   );
 
   const getMediaList = async () => {
@@ -106,12 +104,12 @@ export default function Writer(props: {
   const publish = async () => {
     // TODO check some conditions
     if (
-      frontmatter &&
-      (!frontmatter.title ||
-        !frontmatter.category ||
-        !frontmatter.thumbnail ||
-        !frontmatter.date ||
-        !frontmatter.epoch)
+      post.frontmatter &&
+      (!post.frontmatter.title ||
+        !post.frontmatter.category ||
+        !post.frontmatter.thumbnail ||
+        !post.frontmatter.date ||
+        !post.frontmatter.epoch)
     ) {
       alert("Please fill in all the fields of frontmatter!");
     }
@@ -174,7 +172,6 @@ export default function Writer(props: {
         <MdxEditor
           setPost={setPost}
           imageSizes={imageSizes}
-          setFrontmatter={setFrontmatter}
           epoch={props.epoch}
           initialCompiledMdxInfo={props.initialCompiledMdxInfo}
         />
