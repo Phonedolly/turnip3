@@ -10,7 +10,7 @@ import TrashIcon from "./icons/TrashIcon";
 import PublishIcon from "./icons/PublishIcon";
 import { useRouter } from "next/navigation";
 import { IPost } from "@/types/IPost";
-import Preview from "./Preview";
+import Preview from "./MDXEditor/Preview";
 import Image from "next/image";
 import path from "path";
 

@@ -15,13 +15,13 @@ const PostCardViewer = (props: {
   }[];
 }) => {
   return (
-    <div className="my-2 flex w-full flex-col items-center gap-12 px-4 sm:grid-cols-2 md:grid md:max-w-2xl md:justify-items-center lg:max-w-4xl lg:gap-20 xl:max-w-5xl">
+    <div className="my-2 flex w-full flex-col items-center gap-12 px-2 sm:grid-cols-2 md:grid md:gap-10 md:max-w-2xl md:justify-items-center lg:max-w-4xl lg:gap-20 xl:max-w-5xl">
       {props.cardsData.map((post) => {
         return (
           <Link
             href={`/post/${post.epoch}`}
             key={uuidv4()}
-            className="relative flex h-full w-full cursor-pointer select-none flex-col items-center rounded-2xl bg-neutral-200/20 pt-[75%] shadow-[0px_8px_12px_4px_rgba(0,0,0,0.15)] transition duration-500 ease-in-out hover:scale-105"
+            className="relative flex h-full w-full cursor-pointer select-none flex-col items-center rounded-2xl bg-neutral-200/20 pt-[75%] shadow-[0px_3px_16px_2px_rgba(0,0,0,0.25)] transition duration-[400ms] ease-in-out hover:scale-[1.025]"
           >
             <div
               className="absolute top-0 h-full w-full overflow-hidden rounded-2xl"

@@ -6,7 +6,7 @@ import {
   useRef,
 } from "react";
 import { v4 as uuidv4 } from "uuid";
-import PostWrapper from "./PostWrapper";
+import PostWrapper from "../PostWrapper";
 
 const Preview = (props: {
   code: string;

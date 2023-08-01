@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import Image from "next/image";
 import pre from "./MDXComponents/pre";
 import path from "path";
+import { isValidElement } from "react";
 
 const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
   imageSizes: IImageSizes,
@@ -11,7 +12,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
     return (
       <h1
         {...otherProps}
-        className="mt-4 flex flex-row items-start gap-x-2 py-2 text-4xl font-bold"
+        className="mt-4 flex flex-row items-start gap-x-2 py-2 text-3xl font-bold"
         id={children?.toString()}
       >
         <a
@@ -28,7 +29,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
     return (
       <h2
         {...otherProps}
-        className="mt-2 flex flex-row items-start gap-x-1.5 py-1 text-3xl font-bold"
+        className="mt-2 flex flex-row items-start gap-x-1.5 py-1 text-2xl font-bold"
         id={children?.toString()}
       >
         <a
@@ -45,7 +46,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
     return (
       <h3
         {...otherProps}
-        className="mt-1 flex flex-row items-start gap-x-1 py-0.5 text-2xl font-bold"
+        className="mt-1 flex flex-row items-start gap-x-1 py-0.5 text-xl font-bold"
         id={children?.toString()}
       >
         <a
@@ -62,7 +63,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
     return (
       <h4
         {...otherProps}
-        className="mt-0.5 flex flex-row items-start gap-x-0.5 py-[0.0625] text-xl font-bold"
+        className="mt-0.5 flex flex-row items-start gap-x-0.5 py-[0.0625] text-lg font-bold"
         id={children?.toString()}
       >
         <a
@@ -87,6 +88,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
         decodeURIComponent(path.parse(props.src as string).name) +
           decodeURIComponent(path.parse(props.src as string).ext)
       ];
+    if (!specificImageSize) return null;
     return (
       <Image
         className="my-6 rounded-2xl"
@@ -100,7 +102,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
   pre: pre,
   code: (props) => {
     return (
-      <code {...props} className="inline rounded-md bg-neutral-200/60 p-2" />
+      <code {...props} className="inline rounded-lg bg-neutral-200/60 p-1.5" />
     );
   },
   span: (props) => {
@@ -138,49 +140,77 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
     }
   },
   a: (props) => <a {...props} />,
+  // TODO improve stability of list
   ol: (props) => {
     console.log(props);
     // if (props.children instanceof Array && props.children.length == 0) {
     //   return <ol {...props} />;
     // }
-    return (
-      <div className="flex flex-col">
-        {props.children instanceof Array &&
-          props.children?.map((child, i) => {
+    if (props.children instanceof Array) {
+      return (
+        <div className="flex flex-col">
+          {props.children?.map((child, i) => {
             if (i % 2 == 0) return null;
             return (
-              <div className="flex flex-row gap-x-1.5" key={uuidv4()}>
+              <div
+                className="flex flex-row items-center gap-x-1 text-base"
+                key={uuidv4()}
+              >
                 <p className="inline select-none">{(i + 1) / 2}.</p>
-                <p className="inline">{child}</p>
+                <li className="inline">{child}</li>
+                {/* {child} */}
               </div>
             );
           })}
-      </div>
-    );
+        </div>
+      );
+    } else {
+      return props.children;
+    }
   },
   ul: (props) => {
-    return (
-      <div className="flex flex-col">
-        {props.children instanceof Array &&
-          props.children?.map((child, i) => {
+    if (props.children instanceof Array) {
+      return (
+        <div className="flex flex-col">
+          {props.children?.map((child, i) => {
+            // if (child instanceof Array) {
+            //   // inner ul/ol element or '\n'
+            //   return <ul key={uuidv4()}>{child}</ul>;
+            // }
             if (i % 2 == 0) return null;
             return (
-              <div className="flex flex-row gap-x-1.5" key={uuidv4()}>
-                <p className="inline select-none">•</p>
-                <p className="inline">{child}</p>
+              <div
+                className="flex flex-row items-center gap-x-1.5 text-base"
+                key={uuidv4()}
+              >
+                <p className="select-none">•</p>
+                {/* <li className="inline">{child}</li> */}
+                {child}
               </div>
             );
           })}
-      </div>
-    );
+        </div>
+      );
+    } else {
+      return props.children;
+    }
   },
   li: ({ children, ...otherProps }) => {
     console.log(otherProps.value);
-    return <li className="list-none">{children}</li>;
+    return (
+      <div className="flex flex-col text-base leading-loose">{children}</div>
+    );
   },
   p: (props) => (
     <p {...props} className="my-1 py-0.5 text-base leading-loose" />
   ),
+  blockquote: ({ children, ...otherProps }) => {
+    return (
+      <div className="w-full rounded-xl break-all bg-white px-4 py-2 shadow-[0_12px_32px_4px_rgba(0,0,0,0.26)]">
+        {children}
+      </div>
+    );
+  },
 });
 
 export default componentsGenerator;

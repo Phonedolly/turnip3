@@ -14,8 +14,10 @@ const IconAndName = () => {
       href="/"
       className="relative flex flex-row items-center justify-between gap-0.5"
     >
-      <AppIcon className="h-6 w-6 sm:h-8 sm:w-8" />
-      <h1 className={`select-none font-outfit text-xl font-bold sm:text-2xl`}>
+      <AppIcon className="h-6 w-6 sm:h-8 sm:w-8 md:h-10 md:w-10 lg:h-12 lg:w-12" />
+      <h1
+        className={`select-none font-outfit text-xl font-bold sm:text-2xl md:text-3xl lg:text-4xl `}
+      >
         {process.env.NEXT_PUBLIC_APP_NAME}
       </h1>
     </Link>
@@ -26,7 +28,7 @@ const CategoryDropdown = (props: { categories: string[] }) => {
   const [isOpenCategory, setIsOpenCategory] = useState<boolean>(false);
 
   return (
-    <div className="itmes-center relative flex flex-col">
+    <div className="itmes-center relative flex flex-col lg:hidden">
       <div className="flex select-none flex-row items-center">
         <h1 className={`hidden font-outfit text-lg`}>More</h1>
         <DropDownIcon
@@ -36,10 +38,6 @@ const CategoryDropdown = (props: { categories: string[] }) => {
               : ``
           }`}
           onClick={() => setIsOpenCategory(!isOpenCategory)}
-        />
-        <SearchIcon
-          className="h-9 w-9 cursor-pointer p-1.5 sm:h-11 sm:w-11"
-          onClick={() => {}}
         />
       </div>
       {isOpenCategory === true ? (
@@ -69,14 +67,30 @@ const Header = (props: { categories: string[] }) => {
     return null;
   }
   return (
-    <div
-      className={` z-50 flex h-14 w-11/12 flex-row items-center justify-between rounded-2xl bg-white/60 px-3 shadow-[0px_2.5px_5px_3px_rgba(0,0,0,0.08)] backdrop-blur-xl sm:h-16 sm:px-4 ${
-        pathname?.includes("/post") ? `relative top-4` : `sticky top-4`
+    <header
+      className={`top-6 z-50 flex h-14 w-full flex-row items-center justify-between rounded-2xl bg-white/60 px-3 shadow-[0px_2.5px_16px_rgba(0,0,0,0.15)] backdrop-blur-xl sm:top-8 sm:h-16 sm:px-3 md:top-10 md:h-20 md:px-4 lg:top-12 lg:h-24 lg:max-w-4xl lg:px-5 xl:max-w-6xl ${
+        pathname?.includes("/post") ? `relative` : `sticky`
       }`}
     >
       <IconAndName />
-      <CategoryDropdown categories={props.categories} />
-    </div>
+      <div className="flex flex-row items-center gap-x-6">
+        <div className="hidden flex-row items-center gap-x-8 rounded-xl bg-neutral-100 px-6 py-4 lg:visible lg:flex">
+          {props.categories.map((category) => (
+            <p
+              className="cursor-pointer select-none font-outfit text-2xl font-bold"
+              key={uuidv4()}
+            >
+              {category}
+            </p>
+          ))}
+        </div>
+        <CategoryDropdown categories={props.categories} />
+        <SearchIcon
+          className="h-9 w-9 cursor-pointer p-1.5 sm:h-11 sm:w-11"
+          onClick={() => {}}
+        />
+      </div>
+    </header>
   );
 };
 
