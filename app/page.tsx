@@ -43,10 +43,8 @@ export default async function Home() {
   }[];
 
   return (
-    <main className="flex h-full w-full flex-col items-center justify-between py-2">
-      <div className="m-2 flex h-full w-full flex-col items-center gap-9 py-2">
-        <PostCardViewer cardsData={postsToShowIncludingTitleColor} />
-      </div>
+    <main className="flex h-full w-full flex-col items-center justify-between py-4 my-4">
+      <PostCardViewer cardsData={postsToShowIncludingTitleColor} />
     </main>
   );
 }

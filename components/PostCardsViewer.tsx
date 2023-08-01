@@ -15,16 +15,16 @@ const PostCardViewer = (props: {
   }[];
 }) => {
   return (
-    <div className="flex w-full flex-col items-center gap-10 px-2 md:grid md:max-w-3xl md:grid-cols-2 md:justify-items-center">
+    <div className="my-2 flex w-full flex-col items-center gap-12 px-4 sm:grid-cols-2 md:grid md:max-w-2xl md:justify-items-center lg:max-w-4xl lg:gap-20 xl:max-w-5xl">
       {props.cardsData.map((post) => {
         return (
           <Link
             href={`/post/${post.epoch}`}
             key={uuidv4()}
-            className="relative flex h-[64vw] w-11/12 cursor-pointer select-none flex-col items-center rounded-2xl bg-neutral-200/20 shadow-[0px_8px_12px_4px_rgba(0,0,0,0.15)] sm:h-[56vw] sm:w-3/4"
+            className="relative flex h-full w-full cursor-pointer select-none flex-col items-center rounded-2xl bg-neutral-200/20 pt-[75%] shadow-[0px_8px_12px_4px_rgba(0,0,0,0.15)] transition duration-500 ease-in-out hover:scale-105"
           >
             <div
-              className="relative h-full w-full overflow-hidden rounded-2xl"
+              className="absolute top-0 h-full w-full overflow-hidden rounded-2xl"
               key={uuidv4()}
             >
               <Image
@@ -35,7 +35,7 @@ const PostCardViewer = (props: {
               />
             </div>
             <div
-              className="absolute flex h-full w-full flex-col justify-between"
+              className="absolute top-0 flex h-full w-full flex-col justify-between"
               key={uuidv4()}
             >
               <div
@@ -43,7 +43,7 @@ const PostCardViewer = (props: {
                 key={uuidv4()}
               >
                 <h1
-                  className="mr-2.5 mt-2.5 rounded-lg bg-neutral-100/50 px-2 py-1 text-base font-bold text-neutral-900 backdrop-blur-md sm:text-xl"
+                  className="mr-2.5 mt-2.5 rounded-lg bg-neutral-100/50 px-2 py-1 text-base font-bold text-neutral-900 backdrop-blur-md sm:text-xl md:text-xl lg:text-2xl"
                   style={{ color: post.mostReadableTextColor }}
                 >
                   {post.frontmatter.category}
@@ -51,7 +51,7 @@ const PostCardViewer = (props: {
               </div>
               <div className="flex w-full flex-row items-center" key={uuidv4()}>
                 <h1
-                  className={`mx-2.5 mb-2.5 line-clamp-3 rounded-lg bg-neutral-100/50 px-3 py-1 font-outfit text-lg font-bold leading-7 backdrop-blur-2xl sm:text-3xl`}
+                  className={`mx-2.5 mb-2.5 line-clamp-3 rounded-lg bg-neutral-100/50 px-3 py-1 font-outfit text-lg font-bold leading-7 backdrop-blur-2xl sm:text-3xl md:text-xl lg:px-2.5 lg:py-2.5 lg:text-2xl xl:px-3 xl:py-3 xl:text-3xl`}
                   style={{ color: post.mostReadableTextColor }}
                 >
                   {post.frontmatter.title}

@@ -24,7 +24,7 @@
     "eslint-config-next": "13.4.12",
     "fast-average-color-node": "^2.6.0",
     "file2arraybuffer": "^1.2.2",
-    "framer-motion": "^10.14.0",
+    "framer-motion": "^10.15.0",
     "gm": "^1.25.0",
     "highlight.js": "^11.8.0",
     "image2uri": "^2.0.2",

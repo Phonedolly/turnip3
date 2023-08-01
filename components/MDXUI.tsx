@@ -90,6 +90,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
       ];
     return (
       <Image
+        className="rounded-2xl my-6"
         src={props.src as string}
         alt={props.alt || ""}
         height={specificImageSize.height}
