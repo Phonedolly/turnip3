@@ -23,10 +23,12 @@ export default async function HomeWithMorePage({
   const imageSizes = (await getImagesSizes(s3, epoch)) as IImageSizes;
   const Component = getMDXComponent(post.code);
   return (
-    <main className="flex h-full w-3/4 flex-col items-center justify-between p-4">
-      <div className="flex h-full w-full flex-col items-center">
-        <PostWrapper code={post.code} imageSizes={imageSizes} />
-      </div>
+    <main className="flex h-full w-11/12 flex-col items-center justify-between p-2">
+      <PostWrapper
+        code={post.code}
+        imageSizes={imageSizes}
+        frontmatter={post.frontmatter}
+      />
     </main>
   );
 }

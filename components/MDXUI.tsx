@@ -62,6 +62,11 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
     }
   },
   a: (props) => <a {...props} />,
+  // ol:(props)=>{
+  //   const r = props.children
+  //   return 
+  // },
+  li: (props) => <li dir="" className="list-inside list-disc">{props.children}</li>,
 });
 
 export default componentsGenerator;

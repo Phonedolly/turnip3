@@ -105,7 +105,7 @@ export default async function RootLayout({
       <GoogleAnalytics
         GA_MEASUREMENT_ID={process.env.NEXT_PUBLIC_GA_ID as string}
       />
-      <body className="flex min-h-screen w-full flex-col items-center justify-between">
+      <body className="flex min-h-screen w-full flex-col items-center justify-between gap-y-4">
         <Header categories={categories} />
         {children}
       </body>
