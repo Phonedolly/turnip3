@@ -65,12 +65,15 @@ const CategoryDropdown = (props: { categories: string[] }) => {
 const Header = (props: { categories: string[] }) => {
   const pathname = usePathname();
 
-  console.log(pathname);
   if (pathname?.startsWith("/writer")) {
     return null;
   }
   return (
-    <div className="sticky top-4 z-50 flex h-14 w-11/12 flex-row items-center justify-between rounded-2xl bg-white/60 px-3 shadow-[0px_2.5px_5px_3px_rgba(0,0,0,0.08)] backdrop-blur-xl sm:h-16 sm:px-4">
+    <div
+      className={` z-50 flex h-14 w-11/12 flex-row items-center justify-between rounded-2xl bg-white/60 px-3 shadow-[0px_2.5px_5px_3px_rgba(0,0,0,0.08)] backdrop-blur-xl sm:h-16 sm:px-4 ${
+        pathname?.includes("/post") ? `relative top-4` : `sticky top-4`
+      }`}
+    >
       <IconAndName />
       <CategoryDropdown categories={props.categories} />
     </div>

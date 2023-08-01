@@ -5,6 +5,7 @@ import localFont from "next/font/local";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import Header from "@/components/Header";
 import { getInitDataFromS3 } from "@/lib/getInitData";
+import Footer from "@/components/Footer";
 
 const notoSansKr = Noto_Sans_KR({
   weight: ["400", "700", "900"],
@@ -108,6 +109,7 @@ export default async function RootLayout({
       <body className="flex min-h-screen w-full flex-col items-center justify-between gap-y-4">
         <Header categories={categories} />
         {children}
+        <Footer />
       </body>
     </html>
   );

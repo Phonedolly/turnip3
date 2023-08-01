@@ -11,8 +11,8 @@ const PostWrapper = (props: {
 }) => {
   const Component = useMemo(() => getMDXComponent(props.code), [props.code]);
   return (
-    <div className="flex w-full flex-col gap-y-4 py-6 md:text-lg">
-      <div className="flex w-full flex-col text-center gap-y-4">
+    <div className="flex w-full flex-col gap-y-4 px-1.5 py-6 md:text-lg">
+      <div className="flex w-full flex-col gap-y-4 text-center">
         <h1 className="text-center font-outfit text-4xl font-bold">
           {props.frontmatter.title}
         </h1>
@@ -20,7 +20,9 @@ const PostWrapper = (props: {
           {props.frontmatter.date}
         </h2>
       </div>
-      <Component components={componentsGenerator(props.imageSizes)} />
+      <div className="flex flex-col ">
+        <Component components={componentsGenerator(props.imageSizes)} />
+      </div>
     </div>
   );
 };
