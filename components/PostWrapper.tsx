@@ -15,7 +15,7 @@ const PostWrapper = (props: {
       new Date(
         props.frontmatter.updateTime[props.frontmatter.updateTime.length - 1],
       )) ||
-    Date.now();
+    new Date();
   return (
     <div className="flex w-full flex-col gap-y-4 py-6 md:text-lg">
       <div className="flex w-full flex-col gap-y-4 text-center">
