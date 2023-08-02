@@ -34,7 +34,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
       >
         <a
           href={`#${children}`}
-          className="top-14 text-3xl text-neutral-400 visited:text-neutral-400"
+          className="top-14 text-2xl text-neutral-400 visited:text-neutral-400"
         >
           #
         </a>
@@ -51,7 +51,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
       >
         <a
           href={`#${children}`}
-          className="top-14 text-2xl text-neutral-400 visited:text-neutral-400"
+          className="top-14 text-xl text-neutral-400 visited:text-neutral-400"
         >
           #
         </a>
@@ -68,7 +68,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
       >
         <a
           href={`#${children}`}
-          className="top-14 text-xl text-neutral-400 visited:text-neutral-400"
+          className="top-14 text-lg text-neutral-400 visited:text-neutral-400"
         >
           #
         </a>
