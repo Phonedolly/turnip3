@@ -107,7 +107,7 @@ export default async function RootLayout({
         GA_MEASUREMENT_ID={process.env.NEXT_PUBLIC_GA_ID as string}
       />
       <body className="flex w-11/12 max-w-7xl flex-col items-center justify-between">
-        <div className="xl:gap-y-30 flex w-full flex-col items-center gap-y-8 sm:gap-y-10 md:gap-y-16 lg:gap-y-24">
+        <div className="xl:gap-y-30 flex w-full flex-col items-center gap-y-8 sm:gap-y-10 md:gap-y-16 lg:gap-y-24 xl:gap-y-36">
           <Header categories={categories} />
           {children}
         </div>

@@ -158,19 +158,21 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
     // }
     return (
       <div className="flex flex-col">
-        {props.children?.map((child: React.ReactNode | string, i: number) => {
-          if (i % 2 == 0) return null;
-          return (
-            <div
-              className="flex flex-row items-center gap-x-1 text-base leading-loose md:leading-10"
-              key={uuidv4()}
-            >
-              <span className="w-3" />
-              <p className="select-none">{(i + 1) / 2}.</p>
-              <div key={uuidv4()}>{child.props.children}</div>
-            </div>
-          );
-        })}
+        {/* TODO improve stability of list */}
+        {props.children instanceof Array &&
+          props.children?.map((child: any, i: number) => {
+            if (i % 2 == 0 || !child) return null;
+            return (
+              <div
+                className="flex flex-row items-center gap-x-1 text-base leading-loose md:leading-10"
+                key={uuidv4()}
+              >
+                <span className="w-3" />
+                <p className="select-none">{(i + 1) / 2}.</p>
+                <div key={uuidv4()}>{child.props.children}</div>
+              </div>
+            );
+          })}
       </div>
     );
   },
