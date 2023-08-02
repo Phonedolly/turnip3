@@ -11,7 +11,7 @@ const PostWrapper = (props: {
 }) => {
   const Component = useMemo(() => getMDXComponent(props.code), [props.code]);
   const date = new Date(
-    props.frontmatter.updateTime[props.frontmatter.updateTime.length - 1],
+    props.frontmatter.updateTime[props.frontmatter.updateTime.length - 1] || "",
   );
   return (
     <div className="flex w-full flex-col gap-y-4 py-6 md:text-lg">
