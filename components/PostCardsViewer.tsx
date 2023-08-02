@@ -43,7 +43,7 @@ const PostCardViewer = (props: {
                 key={uuidv4()}
               >
                 <h1
-                  className="mr-2.5 mt-2.5 rounded-lg bg-neutral-100/50 px-2 py-1 text-base font-bold text-neutral-900 backdrop-blur-md sm:text-xl md:text-xl lg:text-2xl"
+                  className="mr-2.5 mt-2.5 rounded-lg bg-neutral-100/20 px-2 py-1 text-base font-bold text-neutral-900 backdrop-blur-md sm:text-xl md:text-xl lg:text-2xl"
                   style={{ color: post.mostReadableTextColor }}
                 >
                   {post.frontmatter.category}
@@ -51,7 +51,7 @@ const PostCardViewer = (props: {
               </div>
               <div className="flex w-full flex-row items-center" key={uuidv4()}>
                 <h1
-                  className={`mx-2.5 mb-2.5 line-clamp-3 rounded-lg bg-neutral-100/50 px-3 py-1 font-outfit text-lg font-bold leading-7 backdrop-blur-2xl sm:text-3xl md:text-xl lg:px-2.5 lg:py-2.5 lg:text-2xl xl:px-3 xl:py-3 xl:text-3xl`}
+                  className={`mx-2.5 mb-2.5 line-clamp-3 rounded-lg bg-neutral-100/20 px-3 py-1 font-outfit text-lg font-bold leading-7 backdrop-blur-2xl sm:text-3xl md:text-xl lg:px-2.5 lg:py-2.5 lg:text-2xl xl:px-3 xl:py-3 xl:text-3xl`}
                   style={{ color: post.mostReadableTextColor }}
                 >
                   {post.frontmatter.title}
