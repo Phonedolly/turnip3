@@ -18,8 +18,11 @@ export async function POST(request: Request) {
   } else if (frontmatter.updateTime) {
     frontmatter.updateTime.push(Date.now());
   }
-  
-  const newContent = `---\r\n${stringify(frontmatter, {defaultStringType:"QUOTE_DOUBLE"})}---\r\n${content}`;
+
+  const newContent = `---\r\n${stringify(frontmatter, {
+    defaultStringType: "QUOTE_DOUBLE",
+    lineWidth: 0,
+  })}---\r\n${content}`;
 
   const params = {
     Bucket: process.env.S3_BUCKET_NAME as string,
