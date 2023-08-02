@@ -232,7 +232,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
   ),
   blockquote: ({ children, ...otherProps }) => {
     return (
-      <div className="m-8 w-full break-all rounded-xl bg-white px-4 py-2 shadow-[0_12px_32px_4px_rgba(0,0,0,0.26)]">
+      <div className="m-8 break-all rounded-xl bg-white px-4 py-2 shadow-[0_12px_32px_4px_rgba(0,0,0,0.26)]">
         {children}
       </div>
     );

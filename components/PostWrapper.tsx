@@ -20,7 +20,7 @@ const PostWrapper = (props: {
           {props.frontmatter?.date}
         </h2>
       </div>
-      <div className="flex flex-col gap-y-2 sm:px-4">
+      <div className="flex w-full flex-col gap-y-2 sm:px-4">
         <Component components={componentsGenerator(props.imageSizes)} />
       </div>
     </div>
