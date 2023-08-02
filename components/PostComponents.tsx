@@ -110,6 +110,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
           display: "inline",
           backgroundColor: "rgb(229 229 229 / 0.6)",
           padding: "0.375rem",
+          borderRadius: "0.5rem",
         }}
       />
     );
@@ -157,13 +158,14 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
     // }
     return (
       <div className="flex flex-col">
-        {props.children?.map((child, i) => {
+        {props.children?.map((child: React.ReactNode | string, i: number) => {
           if (i % 2 == 0) return null;
           return (
             <div
               className="flex flex-row items-center gap-x-1 text-base leading-loose md:leading-10"
               key={uuidv4()}
             >
+              <span className="w-3" />
               <p className="select-none">{(i + 1) / 2}.</p>
               <div key={uuidv4()}>{child.props.children}</div>
             </div>
@@ -190,7 +192,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
                 {/* <p className="select-none">•</p> */}
                 {/* <li className="inline">{child}</li> */}
                 <div className="flex flex-row items-center">
-                  <span className="w-4" />
+                  <span className="w-3" />
                   {child}
                 </div>
               </div>
@@ -214,7 +216,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
     // }
     return (
       // <div className="flex flex-row text-base leading-loose">
-      <div className="flex flex-col text-base leading-loose md:leading-10">
+      <div className="flex flex-col items-start text-base leading-loose md:leading-10">
         <div className="inline">
           <p className="mr-1.5 inline select-none items-center">•</p>
           {children}
@@ -230,7 +232,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
   ),
   blockquote: ({ children, ...otherProps }) => {
     return (
-      <div className="w-full break-all rounded-xl bg-white px-4 py-2 shadow-[0_12px_32px_4px_rgba(0,0,0,0.26)]">
+      <div className="m-8 w-full break-all rounded-xl bg-white px-4 py-2 shadow-[0_12px_32px_4px_rgba(0,0,0,0.26)]">
         {children}
       </div>
     );

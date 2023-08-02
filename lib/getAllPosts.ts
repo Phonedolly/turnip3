@@ -51,5 +51,7 @@ export const getAllPosts = async (s3: S3Client) => {
     ),
   );
 
+  posts.sort((a, b) => b.epoch - a.epoch); // sort by epoches in descending order
+
   return posts;
 };

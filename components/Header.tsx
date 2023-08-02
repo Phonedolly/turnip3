@@ -68,7 +68,7 @@ const Header = (props: { categories: string[] }) => {
   }
   return (
     <header
-      className={`top-6 z-50 flex h-14 w-full flex-row items-center justify-between rounded-2xl bg-white/60 px-3 shadow-[0px_2.5px_16px_rgba(0,0,0,0.15)] backdrop-blur-xl sm:top-8 sm:h-16 sm:px-3 md:top-10 md:h-20 md:px-4 lg:top-12 lg:h-24 lg:max-w-4xl lg:px-5 xl:max-w-6xl ${
+      className={`top-6 z-50 flex h-14 w-full flex-row items-center justify-between rounded-2xl bg-white/60 px-3 shadow-[0px_2.5px_16px_rgba(0,0,0,0.15)] backdrop-blur-xl sm:top-8 sm:h-16 sm:px-3 md:top-10 md:h-20 md:px-4 md:max-w-4xl lg:top-12 lg:h-24 lg:max-w-5xl lg:px-5 xl:max-w-6xl ${
         pathname?.includes("/post") ? `relative` : `sticky`
       }`}
     >
