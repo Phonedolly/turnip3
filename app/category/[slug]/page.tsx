@@ -1,13 +1,16 @@
-import Image from "next/image";
-import Header from "@/components/Header";
-
-import Link from "next/link";
-import RedirectToHome from "./RedirectToHome";
 import { getInitDataFromS3 } from "@/lib/getInitData";
 import { getAverageColor } from "fast-average-color-node";
 import tinycolor from "tinycolor2";
 import image2uri from "image2uri";
 import PostCardViewer from "@/components/PostCardsViewer";
+
+export async function generateStaticParams() {
+  const { categories } = await getInitDataFromS3();
+
+  return categories.map((category) => ({
+    slug: category,
+  }));
+}
 
 export default async function HomeWithMorePage({
   params,
@@ -15,9 +18,10 @@ export default async function HomeWithMorePage({
   params: { slug: string };
 }) {
   const { compiledPosts, categories } = await getInitDataFromS3();
-  const postsToShow = compiledPosts
-    .filter((post) => post.frontmatter.category === decodeURI(params.slug))
-    // .slice(0, 9); // TODO When Post is enough to show, remove this line
+  const postsToShow = compiledPosts.filter(
+    (post) => post.frontmatter.category === decodeURI(params.slug),
+  );
+  // .slice(0, 9); // TODO When Post is enough to show, remove this line
   const postsToShowIncludingTitleColor = (await Promise.all(
     postsToShow.map(
       (post) =>
