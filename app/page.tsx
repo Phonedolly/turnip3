@@ -2,10 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 import { getAverageColor } from "fast-average-color-node";
 import image2uri from "image2uri";
 import tinycolor from "tinycolor2";
-import Image from "next/image";
-import Header from "@/components/Header";
 import { getInitDataFromS3 } from "@/lib/getInitData";
-import Link from "next/link";
 import PostCardViewer from "@/components/PostCardsViewer";
 
 export default async function Home() {

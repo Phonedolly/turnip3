@@ -1,17 +1,9 @@
-import { SessionProvider, signIn, signOut } from "next-auth/react";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "../../api/auth/[...nextauth]/authOptions";
-import SignIn from "@/components/SignIn";
-import SignOut from "@/components/SignOut";
-import Editor from "@/components/MDXEditor";
 import Writer from "@/components/Writer";
 import initNewPost from "@/lib/initNewPost";
 import getImagesSizes from "@/lib/getImageSizes";
 import { initS3Client } from "@/lib/S3";
 import { bundleMDX } from "mdx-bundler";
-import path from "path";
 import { getInitDataFromS3 } from "@/lib/getInitData";
-
 import remarkFrontmatter from "remark-frontmatter";
 import remarkMdxFrontmatter from "remark-mdx-frontmatter";
 import remarkMath from "remark-math";
@@ -19,14 +11,12 @@ import rehypeKatex from "rehype-katex";
 import "katex/dist/katex.min.css";
 import rehypeMdxCodeProps from "rehype-mdx-code-props";
 import remarkGfm from "remark-gfm";
-import { useCallback } from "react";
 
 export default async function WriterWrapper({
   params,
 }: {
   params: { slug: string };
 }) {
-  const session = await getServerSession(authOptions);
   // if (!session || !session.user) {
   //   return <SignIn />
   // } else {
