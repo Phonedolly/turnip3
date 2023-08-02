@@ -12,7 +12,7 @@ const IconAndName = () => {
   return (
     <Link
       href="/"
-      className="relative flex flex-row items-center justify-between gap-0.5"
+      className="relative flex flex-row items-center justify-between gap-1"
     >
       <AppIcon className="h-6 w-6 sm:h-8 sm:w-8 md:h-10 md:w-10 lg:h-12 lg:w-12" />
       <h1
@@ -48,6 +48,7 @@ const CategoryDropdown = (props: { categories: string[] }) => {
                 href={`/category/${category}`}
                 className="flex w-full flex-row items-center justify-center px-8 py-2.5 first:rounded-t-lg last:rounded-b-lg hover:bg-neutral-50"
                 key={uuidv4()}
+                onClick={() => setIsOpenCategory(false)}
               >
                 <h1 className="hover: select-none whitespace-pre text-base font-bold">
                   {category}

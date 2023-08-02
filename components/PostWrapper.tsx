@@ -10,6 +10,9 @@ const PostWrapper = (props: {
   };
 }) => {
   const Component = useMemo(() => getMDXComponent(props.code), [props.code]);
+  const date = new Date(
+    props.frontmatter.updateTime[props.frontmatter.updateTime.length - 1],
+  );
   return (
     <div className="flex w-full flex-col gap-y-4 py-6 md:text-lg">
       <div className="flex w-full flex-col gap-y-4 text-center">
@@ -17,7 +20,10 @@ const PostWrapper = (props: {
           {props.frontmatter?.title}
         </h1>
         <h2 className="font-outfit text-xl font-bold">
-          {props.frontmatter?.date}
+          {/* {`${date.getFullYear()}-${
+            date.getMonth() + 1
+          }-${date.getD()}-${date.getHours()}-${date.getMinutes()}`} */}
+          {`${date.toLocaleDateString()} ${date.toLocaleTimeString()}`}
         </h2>
       </div>
       <div className="flex w-full flex-col gap-y-2 sm:px-4">

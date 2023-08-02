@@ -1,8 +1,9 @@
 import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { getEpoches } from "./getEpoches";
 import getImagesSizes from "./getImageSizes";
+import { cache } from "react";
 
-export const getAllPosts = async (s3: S3Client) => {
+export const getAllPosts = cache(async (s3: S3Client) => {
   const epoches = await getEpoches(s3);
   console.log(epoches);
   console.log("epoches");
@@ -54,4 +55,4 @@ export const getAllPosts = async (s3: S3Client) => {
   posts.sort((a, b) => b.epoch - a.epoch); // sort by epoches in descending order
 
   return posts;
-};
+});

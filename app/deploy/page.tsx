@@ -3,6 +3,7 @@ const Deploy = async () => {
     "__NEXT_PRIVATE_PREBUNDLED_REACT",
 
     "APP_NAME",
+    "APP_CATEGORIES",
     "AWS_ACCESS_KEY_ID",
     "AWS_SECRET_ACCESS_KEY",
     "S3_REGION",
@@ -30,6 +31,7 @@ const Deploy = async () => {
       process.env.__NEXT_PRIVATE_PREBUNDLED_REACT,
 
     APP_NAME: process.env.APP_NAME,
+    APP_CATEGORIES: process.env.APP_CATEGORIES,
     AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
     AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
     S3_REGION: process.env.S3_REGION,

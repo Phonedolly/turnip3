@@ -3,20 +3,22 @@ import {
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
-import { NextResponse } from "next/server";
+import { cache } from "react";
 
-const checkImageSizesConfigExists = async (s3: S3Client, epoch: number) => {
-  const params = {
-    Bucket: process.env.S3_BUCKET_NAME,
-    Key: `posts/${epoch}/imageSizes.json`,
-  };
-  return await s3
-    .send(new GetObjectCommand(params))
-    .then(() => true)
-    .catch(() => false);
-};
+const checkImageSizesConfigExists = cache(
+  async (s3: S3Client, epoch: number) => {
+    const params = {
+      Bucket: process.env.S3_BUCKET_NAME,
+      Key: `posts/${epoch}/imageSizes.json`,
+    };
+    return await s3
+      .send(new GetObjectCommand(params))
+      .then(() => true)
+      .catch(() => false);
+  },
+);
 
-const getImagesSizes = async (s3: S3Client, epoch: number) => {
+const getImagesSizes = cache(async (s3: S3Client, epoch: number) => {
   let res;
   const params = {
     Bucket: process.env.S3_BUCKET_NAME,
@@ -40,6 +42,6 @@ const getImagesSizes = async (s3: S3Client, epoch: number) => {
   return (
     await s3.send(new GetObjectCommand(params))
   ).Body?.transformToString().then((body) => JSON.parse(body) as IImageSizes);
-};
+});
 
 export default getImagesSizes;

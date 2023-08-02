@@ -14,10 +14,10 @@ export default async function HomeWithMorePage({
 }: {
   params: { slug: string };
 }) {
-  const { config, compiledPosts, categories } = await getInitDataFromS3();
+  const { compiledPosts, categories } = await getInitDataFromS3();
   const postsToShow = compiledPosts
     .filter((post) => post.frontmatter.category === decodeURI(params.slug))
-    .slice(0, 9);
+    // .slice(0, 9); // TODO When Post is enough to show, remove this line
   const postsToShowIncludingTitleColor = (await Promise.all(
     postsToShow.map(
       (post) =>
@@ -49,7 +49,10 @@ export default async function HomeWithMorePage({
   }[];
 
   return (
-    <main className="flex h-full w-full flex-col items-center justify-between">
+    <main className="flex h-full w-full flex-col items-center justify-between gap-y-4 lg:gap-y-16">
+      <h1 className="mt-4 font-outfit text-5xl font-bold lg:text-7xl">
+        {decodeURI(params.slug)}
+      </h1>
       <PostCardViewer cardsData={postsToShowIncludingTitleColor} />
     </main>
   );

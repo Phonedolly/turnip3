@@ -7,11 +7,11 @@ import Header from "@/components/Header";
 import { getInitDataFromS3 } from "@/lib/getInitData";
 import Link from "next/link";
 import PostCardViewer from "@/components/PostCardsViewer";
-import Footer from "@/components/Footer";
 
 export default async function Home() {
-  const { config, compiledPosts, categories } = await getInitDataFromS3();
-  const postsToShow = compiledPosts.slice(0, 9);
+  const { compiledPosts, categories } = await getInitDataFromS3();
+  const postsToShow = compiledPosts;
+  // .slice(0, 9); // TODO When Post is enough to show, remove this line
   const postsToShowIncludingTitleColor = (await Promise.all(
     postsToShow.map(
       (post) =>
