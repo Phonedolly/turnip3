@@ -17,13 +17,9 @@ export const getEpoches = cache(async (s3: S3Client) => {
         console.error("Trying to create posts directory failed!");
       });
   }
-  console.log("origin");
-  console.log(epochKeys);
   epochKeys.shift(); // remove directory name
 
   /* manipluate the keys to number epoches */
-  console.log("epoch");
-  console.log(epochKeys);
   const epochesAsNumber = epochKeys.map((postKey) =>
     Number(postKey.Key?.replace("posts/", "")),
   );

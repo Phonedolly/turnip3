@@ -5,8 +5,6 @@ import { cache } from "react";
 
 export const getAllPosts = cache(async (s3: S3Client) => {
   const epoches = await getEpoches(s3);
-  console.log(epoches);
-  console.log("epoches");
   const promises = epoches.map(
     (epoch) =>
       new Promise(async (resolve, reject) => {
@@ -23,7 +21,6 @@ export const getAllPosts = cache(async (s3: S3Client) => {
           return;
         }
         const postAsMdx = (await response.Body.transformToString()) as string;
-        console.log(epoch);
 
         const imageSizes = (await getImagesSizes(s3, epoch)) as IImageSizes;
 

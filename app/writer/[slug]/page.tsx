@@ -27,20 +27,15 @@ export default async function WriterWrapper({
   params: { slug: string };
 }) {
   const session = await getServerSession(authOptions);
-  console.log(session);
   // if (!session || !session.user) {
   //   return <SignIn />
   // } else {
   // const epoch: number | null = await initNewPost();
   const s3 = initS3Client();
   const { compiledPosts } = await getInitDataFromS3();
-  console.log(`slug`);
-  console.log(params.slug);
   const epoch =
     params.slug === "new" ? await initNewPost() : Number(params.slug);
   const post = compiledPosts.find((p) => p.epoch === epoch);
-  console.log(2222);
-  console.log(post);
   const imageSizes = await getImagesSizes(s3, epoch as number);
   const initialMdx = `---
 title: "Trying out new custom code blocks"

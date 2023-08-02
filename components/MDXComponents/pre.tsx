@@ -29,8 +29,6 @@ const pre = (props: any) => {
   if (!language || language.length === 0 || language.includes(" ")) {
     showLang = false;
   }
-  console.log("lang");
-  console.log(className);
   return (
     <div
       className="my-8 flex w-full flex-col rounded-xl bg-white shadow-[0_12px_32px_4px_rgba(0,0,0,0.26)]"

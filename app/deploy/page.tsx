@@ -18,6 +18,8 @@ const Deploy = async () => {
 
     "REPO_URL",
 
+    "VERCEL_DEPLOY_HOOK",
+
     "NEXT_PUBLIC_APP_NAME",
     "NEXT_PUBLIC_APP_URL",
     "NEXT_PUBLIC_GA_ID",
@@ -46,13 +48,17 @@ const Deploy = async () => {
 
     REPO_URL: process.env.REPO_URL,
 
+    VERCEL_DEPLOY_HOOK: process.env.VERCEL_DEPLOY_HOOK,
+
     NEXT_PUBLIC_APP_NAME: process.env.NEXT_PUBLIC_APP_NAME,
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
     NEXT_PUBLIC_GA_ID: process.env.NEXT_PUBLIC_GA_ID,
     NEXT_PUBLIC_LANG: process.env.NEXT_PUBLIC_LANG,
     NEXT_PUBLIC_APP_ICON: process.env.NEXT_PUBLIC_APP_ICON,
   };
-  console.log(env);
+
+  let deploymentInfo = {};
+  let deployed = false;
   return (
     <div className="flex h-full w-11/12 flex-col items-center justify-center rounded-2xl bg-neutral-100/90 px-3">
       <div className="flex h-full w-full flex-col items-center justify-center gap-y-8 p-4">
@@ -77,7 +83,11 @@ const Deploy = async () => {
             {envNames.map((name) => (
               <tr
                 key={name}
-                className={`${name === "REPO_URL" ? `bg-yellow-400` : ``}`}
+                className={`${
+                  name === "REPO_URL" || name === "VERCEL_DEPLOY_HOOK"
+                    ? `bg-yellow-400`
+                    : ``
+                }`}
               >
                 <td className="p-4 text-left font-outfit text-xl font-bold">
                   {name}
@@ -94,9 +104,13 @@ const Deploy = async () => {
             ))}
           </tbody>
         </table>
-        <button className="rounded-full bg-neutral-800 p-10 text-5xl font-extrabold text-white shadow-[0px_8px_32px_rgba(0,0,0,0.5)] transition duration-[400ms] ease-in-out hover:rotate-6 hover:scale-110 hover:shadow-[0px_12px_48px_rgba(0,0,0,0.5)]">
+        <button
+          className="rounded-full bg-neutral-800 p-10 text-5xl font-extrabold text-white shadow-[0px_8px_32px_rgba(0,0,0,0.5)] transition duration-[400ms] ease-in-out hover:rotate-6 hover:scale-110 hover:shadow-[0px_12px_48px_rgba(0,0,0,0.5)]"
+          disabled={deployed}
+        >
           Deploy
         </button>
+        <a>{process.env.VERCEL_DEPLOY_HOOK}</a>
       </div>
     </div>
   );

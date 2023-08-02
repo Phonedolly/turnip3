@@ -94,7 +94,7 @@ export default function Writer(props: {
         getMediaList();
         setIsWorking(false);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
 
     const res = await fetch(`/api/writer/getImageSizes?epoch=${props.epoch}`);
     const sizes = await res.json();

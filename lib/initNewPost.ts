@@ -18,7 +18,6 @@ const shouldMakeNewEpoch = async (s3: S3Client) => {
     s3,
     `posts/${epoches[epoches.length - 1]}`,
   );
-  console.log(objectListInLastEpoch);
   const tryToGetMdx = await s3
     .send(
       new GetObjectCommand({

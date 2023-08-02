@@ -152,7 +152,6 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
   a: (props) => <a {...props} />,
   // TODO improve stability of list
   ol: (props) => {
-    console.log(props);
     // if (props.children instanceof Array && props.children.length == 0) {
     //   return <ol {...props} />;
     // }
