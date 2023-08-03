@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import MdxEditor from "./MDXEditor";
 import ImageIcon from "./icons/ImageIcon";
@@ -13,6 +13,7 @@ import { IPost } from "@/types/IPost";
 import Preview from "./MDXEditor/Preview";
 import Image from "next/image";
 import path from "path";
+import { getTime, parseISO } from "date-fns";
 
 const EpochIsNull = () => (
   <div className="text-bold flex h-full w-full select-none flex-col items-center justify-center bg-red-500 font-outfit text-5xl font-bold">
@@ -42,6 +43,9 @@ export default function Writer(props: {
   const [isWorking, setIsWorking] = useState<boolean>(false);
   const [imageSizes, setImageSizes] = useState<IImageSizes>(props.imageSizes);
   const [previewScrollTop, setPreviewScrollTop] = useState<number>(0);
+  const [sortRule, setSortRule] = useState<
+    "date-asc" | "date-desc" | "name-asc" | "name-desc"
+  >("date-asc");
   const router = useRouter();
 
   const MemoizedPreview = useMemo(
@@ -56,6 +60,58 @@ export default function Writer(props: {
     ),
     [imageSizes, post.code, post.frontmatter],
   );
+
+  useEffect(() => {
+    switch (sortRule) {
+      case "date-asc":
+        setMediaList((prev) =>
+          prev.sort((a: MediaListWithObjectUrl, b: MediaListWithObjectUrl) => {
+            const aTime = getTime(
+              parseISO((a.LastModified as Date).toString()),
+            );
+            const bTime = getTime(
+              parseISO((b.LastModified as Date).toString()),
+            );
+            return aTime - bTime;
+          }),
+        );
+        break;
+      case "date-desc":
+        setMediaList((prev) =>
+          prev.sort((a: MediaListWithObjectUrl, b: MediaListWithObjectUrl) => {
+            const aTime = getTime(
+              parseISO((a.LastModified as Date).toString()),
+            );
+            const bTime = getTime(
+              parseISO((b.LastModified as Date).toString()),
+            );
+            return bTime - aTime;
+          }),
+        );
+        break;
+      case "name-asc":
+        setMediaList((prev) =>
+          prev.sort((a: MediaListWithObjectUrl, b: MediaListWithObjectUrl) => {
+            const aName = a.Key as string;
+            const bName = b.Key as string;
+            return aName.localeCompare(bName);
+          }),
+        );
+        break;
+      case "name-desc":
+        setMediaList((prev) =>
+          prev.sort((a: MediaListWithObjectUrl, b: MediaListWithObjectUrl) => {
+            const aName = a.Key as string;
+            const bName = b.Key as string;
+            return bName.localeCompare(aName);
+          }),
+        );
+        break;
+
+      default:
+        break;
+    }
+  }, [sortRule, mediaList]);
 
   const getMediaList = async () => {
     setIsWorking(true);
@@ -188,7 +244,7 @@ export default function Writer(props: {
             onClick={() => setIsShowImagesPopup(false)}
           >
             <div
-              className="relative flex h-4/5 w-11/12 flex-col items-center justify-center gap-y-2 rounded-2xl bg-white p-6 shadow-[0px_20px_24px_20px_rgba(0,0,0,0.15)] md:max-w-4xl md:gap-y-3"
+              className="relative flex h-4/5 w-11/12 flex-col items-center justify-center gap-y-2 rounded-2xl bg-white p-6 shadow-[0px_20px_24px_20px_rgba(0,0,0,0.15)] md:mx-10 md:max-w-full md:p-8"
               onClick={(e) => e.stopPropagation()}
             >
               <h1 className="w-full text-left font-outfit text-2xl font-bold sm:text-4xl md:text-5xl">
@@ -196,23 +252,74 @@ export default function Writer(props: {
                 <br />
                 Management
               </h1>
-              <input
-                disabled={isWorking}
-                type="file"
-                className="w-full py-4"
-                accept="image/*"
-                multiple
-                onChange={uploadImage}
-              />
-              <div className="flex w-full flex-row items-center justify-start gap-x-3">
-                <h1 className="font-outfit text-lg font-bold sm:text-3xl">
-                  Workspace
-                </h1>
-                <h1 className="relative top-0.5 w-full font-mono text-xs font-bold sm:text-base">
-                  s3:{(mediaList && mediaList[0]?.Key) || ""}
-                </h1>
+              <div className="flex w-full flex-row items-center justify-between">
+                <input
+                  disabled={isWorking}
+                  type="file"
+                  className="w-full py-4"
+                  accept="image/*"
+                  multiple
+                  onChange={uploadImage}
+                />
+                <div className="flex h-auto cursor-pointer select-none flex-col items-center justify-center gap-y-1 rounded-md bg-neutral-200 px-2 font-outfit font-bold">
+                  <h1
+                    className={`rounded-t-md p-1 ${
+                      sortRule === "date-asc" || sortRule === "date-desc"
+                        ? `text-xl font-bold italic`
+                        : `text-neutral-500`
+                    }`}
+                    onClick={() => {
+                      switch (sortRule) {
+                        case "date-asc":
+                          setSortRule("date-desc");
+                          break;
+                        case "date-desc":
+                          setSortRule("date-asc");
+                          break;
+                        case "name-asc":
+                        case "name-desc":
+                          setSortRule("date-asc");
+                        default:
+                          break;
+                      }
+                    }}
+                  >
+                    Date
+                    {sortRule === "date-asc" || sortRule === "date-desc"
+                      ? sortRule.split("-")[1].toUpperCase()
+                      : ""}
+                  </h1>
+                  <h1
+                    className={`whitespace-nowrap ${
+                      sortRule === "name-asc" || sortRule === "name-desc"
+                        ? `text-xl font-bold italic`
+                        : `text-neutral-500`
+                    }`}
+                    onClick={() => {
+                      switch (sortRule) {
+                        case "date-asc":
+                        case "date-desc":
+                          setSortRule("name-asc");
+                          break;
+                        case "name-asc":
+                          setSortRule("name-desc");
+                          break;
+                        case "name-desc":
+                          setSortRule("name-asc");
+                          break;
+                        default:
+                          break;
+                      }
+                    }}
+                  >
+                    Name{" "}
+                    {sortRule === "name-asc" || sortRule === "name-desc"
+                      ? sortRule.split("-")[1].toUpperCase()
+                      : ""}
+                  </h1>
+                </div>
               </div>
-              <div className="flex h-full w-full flex-col gap-y-2 overflow-y-scroll rounded-xl">
+              <div className="flex h-full w-full flex-col gap-y-2 overflow-y-scroll rounded-xl md:grid md:grid-cols-2 md:gap-4 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
                 {mediaList?.slice(1).map((media) => {
                   const specificImageSize =
                     imageSizes[
@@ -225,7 +332,7 @@ export default function Writer(props: {
                     ];
                   return (
                     <div
-                      className="flex flex-col rounded-2xl bg-neutral-200/50"
+                      className="flex aspect-square flex-col rounded-2xl bg-neutral-200/50"
                       onClick={() => {
                         navigator.clipboard.writeText(
                           `![](${media.objectUrl})`,
@@ -241,48 +348,50 @@ export default function Writer(props: {
                           height={specificImageSize.height}
                           width={specificImageSize.width}
                           alt=""
-                          className="rounded-3xl p-3"
+                          className="aspect-[4/3] rounded-3xl object-cover p-3"
                         />
                       ) : null}
 
                       {/* Image Description */}
                       <div
-                        className="flex w-full flex-row items-center justify-between gap-x-2  px-3"
+                        className="flex w-full flex-row items-center justify-between gap-x-2 px-3 md:flex-col md:justify-between"
                         key={uuidv4()}
                       >
-                        <div className="flex w-1/2 flex-row items-center px-4 py-4">
+                        <div className="flex w-1/2 flex-row items-center p-2 md:w-full">
                           <h1 className="break-all font-mono text-sm font-bold sm:text-base md:text-lg">
                             {media.Key?.split("/")[2]}
                           </h1>
                         </div>
-                        <div className="flex w-3/5 flex-col py-4">
-                          <h1 className="p-2 text-xs font-bold italic sm:text-sm md:text-base">
-                            {media.LastModified &&
-                              (media.LastModified as unknown as string)}
-                          </h1>
-                          <h1 className="cursor-pointer break-all rounded-xl bg-neutral-200 px-2.5 py-2 font-mono text-xs sm:text-sm md:text-base">
-                            {media.objectUrl}
-                          </h1>
+                        <div className="flex w-1/2 flex-row items-center justify-end p-2 md:w-full">
+                          <div className="flex w-3/5 flex-col py-4 md:w-full">
+                            <h1 className="p-2 text-xs font-bold italic sm:text-sm md:text-base">
+                              {media.LastModified &&
+                                (media.LastModified as unknown as string)}
+                            </h1>
+                            <h1 className="cursor-pointer break-all rounded-xl bg-neutral-200 px-2.5 py-2 font-mono text-xs sm:text-sm md:text-base">
+                              {media.objectUrl}
+                            </h1>
+                          </div>
+                          <TrashIcon
+                            className="h-9 w-9 cursor-pointer"
+                            onClick={async () => {
+                              setIsWorking(true);
+                              const res = (await (
+                                await fetch(
+                                  `/api/writer/deleteImage?key=${media.Key}`,
+                                )
+                              ).json()) as
+                                | { success: boolean }
+                                | { errReason: any };
+                              if (!res) {
+                                console.error("Failed to Delete Image!");
+                                console.error(res);
+                              }
+                              getMediaList();
+                              setIsWorking(true);
+                            }}
+                          />
                         </div>
-                        <TrashIcon
-                          className="h-9 w-9 cursor-pointer"
-                          onClick={async () => {
-                            setIsWorking(true);
-                            const res = (await (
-                              await fetch(
-                                `/api/writer/deleteImage?key=${media.Key}`,
-                              )
-                            ).json()) as
-                              | { success: boolean }
-                              | { errReason: any };
-                            if (!res) {
-                              console.error("Failed to Delete Image!");
-                              console.error(res);
-                            }
-                            getMediaList();
-                            setIsWorking(true);
-                          }}
-                        />
                       </div>
                     </div>
                   );

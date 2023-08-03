@@ -14,6 +14,10 @@ export default async function Home() {
       (post) =>
         new Promise(async (resolve) => {
           /* prepare data uri of thumbnail */
+          if (!post.frontmatter.thumbnail) {
+            resolve({ ...post, mostReadableTextColor: "#000000" });
+            return;
+          }
           const dataUriOfThumbnail = await image2uri(
             post.frontmatter.thumbnail,
           );
