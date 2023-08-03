@@ -3,7 +3,6 @@
 import Script from "next/script";
 
 export default function GoogleAnalytics() {
-  console.log(process.env.NEXT_PUBLIC_GA_ID);
   return (
     <>
       <Script
