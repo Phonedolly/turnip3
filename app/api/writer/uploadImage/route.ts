@@ -47,14 +47,67 @@ export async function POST(request: Request) {
   const s3 = initS3Client();
   const formData = await request.formData();
   const epoch = Number(formData.get("epoch"));
-  const file = formData.get("file") as File;
-  let fileName = formData.get("name") as string;
-  fileName = fileName.replaceAll(" ", "_");
-  const fileAsArrayBuffer = Buffer.from(await fileToArrayBuffer(file));
+  const numOfFiles = Number(formData.get("numOfFiles"));
 
-  if (await checkFileDuplicated(s3, epoch, fileName)) {
-    const { name, ext } = path.parse(fileName);
-    fileName = name + "_" + Date.now() + ext; // already ext has '.'
+  const failedFiles = [];
+  let imageSizes = (await getImagesSizes(s3, epoch)) as IImageSizes;
+
+  for (let i = 0; i < numOfFiles; i++) {
+    const file = formData.get(`file_${i}`) as File;
+    let fileName = file.name;
+    fileName = fileName.replaceAll(" ", "_");
+    const fileAsArrayBuffer = Buffer.from(await fileToArrayBuffer(file));
+
+    if (await checkFileDuplicated(s3, epoch, fileName)) {
+      const { name, ext } = path.parse(fileName);
+      fileName = name + "_" + Date.now() + ext; // already ext has '.'
+    }
+
+    /* get image size */
+    const imageSize = await Jimp.read(fileAsArrayBuffer).then((image) => {
+      const height = image.getHeight();
+      const width = image.getWidth();
+      return { height, width };
+    });
+
+    if (!imageSize.height || !imageSize.width) {
+      failedFiles.push(file.name);
+      continue;
+    }
+
+    /* upate imageSizes */
+    imageSizes[fileName] = {
+      height: imageSize.height,
+      width: imageSize.width,
+    };
+
+    /* upload image */
+    const paramsForUploadImage = {
+      Bucket: process.env.S3_BUCKET_NAME as string,
+      Body: fileAsArrayBuffer,
+      Key: `posts/${epoch}/${fileName}`,
+    };
+
+    const putObjectCommand = new PutObjectCommand(paramsForUploadImage);
+    s3.send(putObjectCommand)
+      .then((res) => NextResponse.json(res))
+      .catch((errReason) => {
+        console.error(errReason);
+        NextResponse.json({ success: false, errReason });
+      });
+  }
+
+  const paramsForUplaodImageSizes = {
+    Bucket: process.env.S3_BUCKET_NAME as string,
+    Body: JSON.stringify(imageSizes),
+    Key: `posts/${epoch}/imageSizes.json`,
+  };
+  s3.send(new PutObjectCommand(paramsForUplaodImageSizes));
+
+  if (failedFiles.length > 0) {
+    return NextResponse.json({ success: false, failedFiles }, { status: 500 });
+  } else {
+    return NextResponse.json({ success: true });
   }
 
   // const imageSize = (await new Promise((resolve, reject) => {
@@ -78,45 +131,4 @@ export async function POST(request: Request) {
   // if (imageSize instanceof NextResponse) {
   //   return imageSize;
   // }
-  const imageSize = await Jimp.read(fileAsArrayBuffer).then((image) => {
-    const height = image.getHeight();
-    const width = image.getWidth();
-    return { height, width };
-  });
-  
-  if (!imageSize.height || !imageSize.width) {
-    return NextResponse.json(
-      { success: false, reason: "Sharp has failed to identify image size." },
-      { status: 500 },
-    );
-  }
-
-  let imageSizes = (await getImagesSizes(s3, epoch)) as IImageSizes;
-  imageSizes[fileName] = {
-    height: imageSize.height,
-    width: imageSize.width,
-  };
-
-  const paramsForUplaodImageSizes = {
-    Bucket: process.env.S3_BUCKET_NAME as string,
-    Body: JSON.stringify(imageSizes),
-    Key: `posts/${epoch}/imageSizes.json`,
-  };
-
-  s3.send(new PutObjectCommand(paramsForUplaodImageSizes));
-
-  const paramsForUploadImage = {
-    Bucket: process.env.S3_BUCKET_NAME as string,
-    Body: fileAsArrayBuffer,
-    Key: `posts/${epoch}/${fileName}`,
-  };
-  const putObjectCommand = new PutObjectCommand(paramsForUploadImage);
-
-  return s3
-    .send(putObjectCommand)
-    .then((res) => NextResponse.json(res))
-    .catch((errReason) => {
-      console.error(errReason);
-      NextResponse.json({ success: false, errReason });
-    });
 }

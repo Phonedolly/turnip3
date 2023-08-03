@@ -73,8 +73,8 @@ export default function Writer(props: {
   };
 
   const uploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]!;
-    if (!file) {
+    const files = e.target.files;
+    if (!files) {
       return;
     }
     setIsWorking(true);
@@ -83,8 +83,12 @@ export default function Writer(props: {
     // const fileType = encodeURIComponent(file.type);
     const formData = new FormData();
     formData.append("epoch", String(props.epoch as Number));
-    formData.append("file", file);
-    formData.append("name", file.name);
+    formData.append("numOfFiles", String(files.length));
+
+    for (let i = 0; i < files.length; i++) {
+      formData.append(`file_${i}`, files[i]);
+    }
+    // formData.append("file", file);
 
     fetch("/api/writer/uploadImage", {
       method: "POST",
@@ -197,6 +201,7 @@ export default function Writer(props: {
                 type="file"
                 className="w-full py-4"
                 accept="image/*"
+                multiple
                 onChange={uploadImage}
               />
               <div className="flex w-full flex-row items-center justify-start gap-x-3">
