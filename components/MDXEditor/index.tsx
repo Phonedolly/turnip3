@@ -44,7 +44,6 @@ const MDXEditor = (props: {
   }, []);
 
   return (
-    <div className="min-h-[45vh] lg:min-h-[95vh] lg:min-w-[50vw]">
       <Editor
         language="markdown"
         defaultValue={props.initialCompiledMdxInfo.mdx}
@@ -78,7 +77,6 @@ const MDXEditor = (props: {
           }
         }}
       />
-    </div>
   );
 };
 

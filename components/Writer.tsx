@@ -14,6 +14,7 @@ import Preview from "./MDXEditor/Preview";
 import Image from "next/image";
 import path from "path";
 import { getTime, parseISO } from "date-fns";
+import AppIcon from "./icons/AppIcon";
 
 const EpochIsNull = () => (
   <div className="text-bold flex h-full w-full select-none flex-col items-center justify-center bg-red-500 font-outfit text-5xl font-bold">
@@ -194,7 +195,6 @@ export default function Writer(props: {
       .then((resAsJson) => {
         console.log("publish success!");
         console.log(resAsJson);
-        setIsWorking(false);
         router.push(`/`);
       });
   };
@@ -204,14 +204,17 @@ export default function Writer(props: {
   }
 
   return (
-    <div className="flex h-screen w-screen flex-col items-center">
+    <div className="flex h-auto w-screen flex-col items-center lg:w-[97vw]">
       {/* Header */}
       <div
-        className="sticky top-0 flex h-16 w-full flex-row items-center justify-between bg-neutral-200 px-2"
+        className="sticky top-0 z-10 flex h-16 w-full flex-row items-center justify-between rounded-xl bg-white px-2 shadow-[0px_2px_8px_4px_rgba(0,0,0,0.1)]"
         key={uuidv4()}
       >
-        <div>
-          <h1 className="px-2 font-outfit text-xl font-bold">Post Writer</h1>
+        <div className="flex flex-row items-center">
+          <AppIcon className="h-9 w-9" />
+          <h1 className="select-none px-2 font-outfit text-xl font-bold">
+            Post Writer
+          </h1>
         </div>
         <div className="flex flex-row">
           <ImageIcon
@@ -227,24 +230,26 @@ export default function Writer(props: {
           />
         </div>
       </div>
-      <div className="flex h-full w-full flex-col lg:flex-row">
+      <div className="flex h-auto w-full flex-col lg:grid lg:flex-none lg:grid-cols-2">
         {/* Monaco Editor */}
-        <MdxEditor
-          setPost={setPost}
-          imageSizes={imageSizes}
-          epoch={props.epoch}
-          initialCompiledMdxInfo={props.initialCompiledMdxInfo}
-        />
+        <div className="h-full w-full px-4">
+          <MdxEditor
+            setPost={setPost}
+            imageSizes={imageSizes}
+            epoch={props.epoch}
+            initialCompiledMdxInfo={props.initialCompiledMdxInfo}
+          />
+        </div>
         {/* Content Preview */}
-        {MemoizedPreview}
+        <div className="h-full w-full px-4">{MemoizedPreview}</div>
         {/* Image Management Popup */}
         {isShowImagesPopup === true ? (
           <div
-            className="fixed flex h-full w-full flex-row items-center justify-center bg-black/20"
+            className="fixed h-screen left-0 right-0 top-0 z-20 flex flex-row items-center justify-center bg-black/20"
             onClick={() => setIsShowImagesPopup(false)}
           >
             <div
-              className="relative flex h-4/5 w-11/12 flex-col items-center justify-center gap-y-2 rounded-2xl bg-white p-6 shadow-[0px_20px_24px_20px_rgba(0,0,0,0.15)] md:mx-10 md:max-w-full md:p-8"
+              className="relative flex h-5/6 w-11/12 flex-col items-center justify-center gap-y-2 rounded-2xl bg-white p-6 shadow-[0px_20px_24px_20px_rgba(0,0,0,0.15)] md:mx-10 md:max-w-full md:p-8"
               onClick={(e) => e.stopPropagation()}
             >
               <h1 className="w-full text-left font-outfit text-2xl font-bold sm:text-4xl md:text-5xl">

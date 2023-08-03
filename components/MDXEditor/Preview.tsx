@@ -35,7 +35,6 @@ const Preview = (props: {
 
   return (
     <div
-      className="h-[45vh] w-full overflow-y-scroll px-10 py-12 lg:h-[95vh] lg:min-w-[49vw]"
       key={uuidv4()}
       onScroll={(e: any) => props.setPreviewScrollTop(e.target.scrollTop)}
       ref={previewRef}
