@@ -1,9 +1,18 @@
 import { v4 as uuidv4 } from "uuid";
+import { Metadata, ResolvingMetadata } from "next";
 import { getAverageColor } from "fast-average-color-node";
 import image2uri from "image2uri";
 import tinycolor from "tinycolor2";
 import { getInitDataFromS3 } from "@/lib/getInitData";
 import PostCardViewer from "@/components/PostCardsViewer";
+
+// export async function generateMetadata(
+//   parent: ResolvingMetadata,
+// ): Promise<Metadata> {
+//   return {
+//     title: (await parent).title,
+//   };
+// }
 
 export default async function Home() {
   const { compiledPosts, categories } = await getInitDataFromS3();
