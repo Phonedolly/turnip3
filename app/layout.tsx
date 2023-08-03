@@ -98,13 +98,13 @@ export default async function RootLayout({
       lang={process.env.NEXT_PUBLIC_LANG || "en"}
       className={`${spoqaHanSansNeo.variable} ${outfit.variable} ${cascadiaMono.variable} ${cascadiaCode.variable} flex h-auto w-full flex-col items-center bg-white font-spoqa-han-sans-neo`}
     >
+      <GoogleAnalytics />
       <link
         rel="icon"
         href="/icon?<generated>"
         type="image/png"
         sizes="32x32"
       />
-      <GoogleAnalytics />
       <body className="flex h-auto w-11/12 max-w-7xl flex-col items-center gap-y-4">
         {/* <div className="h-full flex w-full flex-col items-center gap-y-10 sm:gap-y-14 md:gap-y-20 lg:gap-y-24 xl:gap-y-36"> */}
         <Header categories={categories} />
