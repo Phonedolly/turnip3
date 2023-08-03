@@ -104,9 +104,7 @@ export default async function RootLayout({
         type="image/png"
         sizes="32x32"
       />
-      <GoogleAnalytics
-        GA_MEASUREMENT_ID={process.env.NEXT_PUBLIC_GA_ID as string}
-      />
+      <GoogleAnalytics />
       <body className="flex h-auto w-11/12 max-w-7xl flex-col items-center gap-y-4">
         {/* <div className="h-full flex w-full flex-col items-center gap-y-10 sm:gap-y-14 md:gap-y-20 lg:gap-y-24 xl:gap-y-36"> */}
         <Header categories={categories} />
