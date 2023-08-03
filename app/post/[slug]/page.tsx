@@ -4,10 +4,8 @@ import PostWrapper from "@/components/PostWrapper";
 
 export async function generateMetadata({
   params,
-  parent,
 }: {
   params: { slug: string };
-  parent: string;
 }): Promise<Metadata> {
   const { compiledPosts } = await getInitDataFromS3();
   const thisPost = compiledPosts.find((p) => p.epoch === Number(params.slug));
