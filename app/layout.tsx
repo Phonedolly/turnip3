@@ -1,6 +1,6 @@
 import "./globals.css";
 import type { Metadata, ResolvingMetadata } from "next";
-import { Outfit, Noto_Sans_KR } from "next/font/google";
+import { Outfit, Noto_Sans_KR , Noto_Serif_KR} from "next/font/google";
 import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/react";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
@@ -12,6 +12,12 @@ const notoSansKr = Noto_Sans_KR({
   weight: ["400", "700", "900"],
   subsets: ["latin"],
   variable: "--font-noto-sans-kr",
+});
+
+const notoSerifKr = Noto_Serif_KR({
+  weight: ["400", "700", "900"],
+  subsets: ["latin"],
+  variable: "--font-noto-serif-kr",
 });
 
 const outfit = Outfit({
@@ -120,7 +126,7 @@ export default async function RootLayout({
   return (
     <html
       lang={process.env.NEXT_PUBLIC_LANG || "en"}
-      className={`${spoqaHanSansNeo.variable} ${outfit.variable} ${cascadiaMono.variable} ${cascadiaCode.variable} flex h-auto w-full flex-col items-center bg-white font-spoqa-han-sans-neo`}
+      className={`${spoqaHanSansNeo.variable} ${outfit.variable} ${cascadiaMono.variable} ${cascadiaCode.variable} ${notoSerifKr.variable} flex h-auto w-full flex-col items-center bg-white font-spoqa-han-sans-neo`}
     >
       <GoogleAnalytics />
       <link

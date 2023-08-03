@@ -10,6 +10,7 @@ module.exports = {
     extend: {
       fontFamily: {
         'spoqa-han-sans-neo': ['var(--font-spoqa-han-sans-neo)'],
+        'noto-serif': ['var(--font-noto-serif-kr)'],
         'outfit': ['var(--font-outfit)', 'var(--font-spoqa-han-sans-neo)'],
         'cascadia-code': ['var(--font-cascadia-code)', 'var(--font-spoqa-han-sans-neo)'],
         'cascadia-mono': ['var(--font-cascadia-mono)', 'var(--font-spoqa-han-sans-neo)'], 'mono': ['var(--font-cascadia-mono)', 'var(--font-spoqa-han-sans-neo)'],

@@ -1,11 +1,8 @@
 "use client";
 
-import {
-  useLayoutEffect,
-  useMemo,
-  useRef,
-} from "react";
+import { useLayoutEffect, useMemo, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { ErrorBoundary } from "react-error-boundary";
 import PostWrapper from "../PostWrapper";
 
 const Preview = (props: {
@@ -20,11 +17,24 @@ const Preview = (props: {
   const previewRef = useRef<HTMLDivElement>(null);
   const MemoizedPostWrapper = useMemo(
     () => (
-      <PostWrapper
-        code={props.code}
-        imageSizes={props.imageSizes}
-        frontmatter={props.frontmatter}
-      />
+      <ErrorBoundary
+        fallback={
+          <h1 className="h-full w-full bg-red-500 m-2 rounded-2xl py-4 text-center font-outfit text-4xl font-bold text-white">
+            MDX Have Problem!
+          </h1>
+        }
+      >
+        <PostWrapper
+          code={props.code}
+          imageSizes={props.imageSizes}
+          frontmatter={props.frontmatter}
+        />
+      </ErrorBoundary>
+      // <PostWrapper
+      //   code={props.code}
+      //   imageSizes={props.imageSizes}
+      //   frontmatter={props.frontmatter}
+      // />
     ),
     [props.code, props.imageSizes, props.frontmatter],
   );

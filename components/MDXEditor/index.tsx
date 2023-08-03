@@ -44,39 +44,42 @@ const MDXEditor = (props: {
   }, []);
 
   return (
-      <Editor
-        language="markdown"
-        defaultValue={props.initialCompiledMdxInfo.mdx}
-        loading={null}
-        theme="turnip3"
-        options={monacoConfig}
-        onChange={async (mdx) => {
-          try {
-            const formData = new FormData();
-            formData.append("mdxSource", mdx || "");
-            const result = await (
-              await fetch("/api/writer/buildMDX", {
-                method: "POST",
-                body: formData,
-              })
-            ).json();
-            const { code, frontmatter } = result;
-            console.log("MDX Compile success!");
-            props.setPost((prev) => ({
-              ...prev,
-              frontmatter,
-              mdxHasProblem: false,
-              code: code,
-              mdx: mdx || "",
-            }));
-            console.log("Apply Success");
-          } catch (e) {
-            props.setPost((prev) => ({ ...prev, mdxHasProblem: true }));
-            console.error(e);
-            console.log("MDX compile error!");
+    <Editor
+      language="markdown"
+      defaultValue={props.initialCompiledMdxInfo.mdx}
+      loading={null}
+      theme="turnip3"
+      options={monacoConfig}
+      onChange={async (mdx) => {
+        try {
+          const formData = new FormData();
+          formData.append("mdxSource", mdx || "");
+          const result = await (
+            await fetch("/api/writer/buildMDX", {
+              method: "POST",
+              body: formData,
+            })
+          ).json();
+          const { code, frontmatter } = result;
+          if (frontmatter.error) {
+            throw new Error(frontmatter.error);
           }
-        }}
-      />
+          console.log("MDX Compile success!");
+          props.setPost((prev) => ({
+            ...prev,
+            frontmatter,
+            mdxHasProblem: false,
+            code: code,
+            mdx: mdx || "",
+          }));
+          console.log("Apply Success");
+        } catch (e) {
+          props.setPost((prev) => ({ ...prev, mdxHasProblem: true }));
+          console.error(e);
+          console.log("MDX compile error!");
+        }
+      }}
+    />
   );
 };
 

@@ -24,9 +24,17 @@ export async function POST(request: Request) {
 
       return options;
     },
-  });
-  return NextResponse.json({
-    code: result.code,
-    frontmatter: result.frontmatter,
-  });
+  })
+    .then((result) => result)
+    .catch((errReason) => {
+      return { code: "", frontmatter: { error: errReason } };
+    });
+
+  return NextResponse.json(
+    {
+      code: result.code,
+      frontmatter: result.frontmatter,
+    },
+    { status: result.frontmatter.error ? 400 : 200 },
+  );
 }

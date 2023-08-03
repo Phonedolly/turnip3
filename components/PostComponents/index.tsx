@@ -1,7 +1,7 @@
 import { MDXComponents } from "mdx/types";
 import { v4 as uuidv4 } from "uuid";
 import Image from "next/image";
-import pre from "./MDXComponents/pre";
+import pre from "./pre";
 import path from "path";
 import React, { isValidElement } from "react";
 
@@ -90,13 +90,15 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
       ];
     if (!specificImageSize) return null;
     return (
-      <Image
-        className="my-6 rounded-2xl"
-        src={props.src as string}
-        alt={props.alt || ""}
-        height={specificImageSize.height}
-        width={specificImageSize.width}
-      />
+      <div className="flex h-auto w-full flex-row justify-center">
+        <Image
+          className="my-6 rounded-2xl"
+          src={props.src as string}
+          alt={props.alt || ""}
+          height={specificImageSize.height}
+          width={specificImageSize.width}
+        />
+      </div>
     );
   },
   pre: pre,
@@ -109,7 +111,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
         style={{
           display: "inline",
           backgroundColor: "rgb(229 229 229 / 0.6)",
-          padding: "0.375rem",
+          padding: "0.25rem 0.375rem",
           borderRadius: "0.5rem",
         }}
       />
@@ -225,16 +227,75 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
       </div>
     );
   },
-  p: (props) => (
-    <p
-      {...props}
-      className="my-1 py-0.5 text-base leading-loose  md:text-lg md:leading-9 xl:text-xl xl:leading-10"
-    />
-  ),
+  p: ({ children, ...otherProps }) => {
+    if (typeof children === "string") {
+      return (
+        <p className="my-1 py-0.5 text-base leading-loose  md:text-lg md:leading-9 xl:text-xl xl:leading-10">
+          {children}
+        </p>
+      );
+    }
+    return <div {...otherProps}>{children}</div>;
+  },
   blockquote: ({ children, ...otherProps }) => {
     return (
       <div className="mx-2 my-6 break-all rounded-xl bg-white px-4 py-2 shadow-[0_12px_32px_4px_rgba(0,0,0,0.26)]">
         {children}
+      </div>
+    );
+  },
+  Image2: (props) => {
+    const specificImageSize =
+      imageSizes[
+        decodeURIComponent(path.parse(props.src as string).name) +
+          decodeURIComponent(path.parse(props.src as string).ext)
+      ];
+    if (!specificImageSize) return null;
+    return (
+      <div
+        className={`${
+          props.className || `flex h-auto w-full flex-row justify-center`
+        }`}
+      >
+        <Image
+          className={`my-6 rounded-2xl`}
+          src={props.src as string}
+          alt={props.alt || ""}
+          height={specificImageSize.height}
+          width={specificImageSize.width}
+        />
+        {props.caption !== undefined ? (
+          <p className="my-2 text-sm text-neutral-700">{props.caption}</p>
+        ) : null}
+      </div>
+    );
+  },
+  Quote2: (props) => {
+    return (
+      <div className="my-8 flex w-full flex-col rounded-3xl bg-white p-4 shadow-[0_12px_32px_4px_rgba(0,0,0,0.26)]">
+        <div className="flex select-none flex-row justify-start">
+          <p>
+            <span className="text-7xl font-bold text-neutral-400">“</span>
+          </p>
+        </div>
+        <div className="-mt-8 ml-4 flex w-full flex-col gap-y-1 mr-4">
+          <div className="flex w-full flex-row">
+            <div
+              className={`text-xl text-neutral-700 break-all ${
+                props.italic ? `italic` : ``
+              } ${props.serif ? `font-noto-serif` : ``}`}
+            >
+              {props.quote}
+            </div>
+          </div>
+          {props.author ? (
+            <div className="flex w-full flex-row">
+              <p className="font-outfit text-base italic text-neutral-500">
+                {props.author}
+              </p>
+            </div>
+          ) : null}
+        </div>
       </div>
     );
   },

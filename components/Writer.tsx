@@ -204,10 +204,10 @@ export default function Writer(props: {
   }
 
   return (
-    <div className="flex h-auto w-screen flex-col items-center lg:w-[97vw]">
+    <div className="flex h-screen w-full flex-col items-center lg:w-[95vw]">
       {/* Header */}
       <div
-        className="sticky top-0 z-10 flex h-16 w-full flex-row items-center justify-between rounded-xl bg-white px-2 shadow-[0px_2px_8px_4px_rgba(0,0,0,0.1)]"
+        className="z-10 my-4 mx-0.5 flex h-14 w-full flex-row items-center justify-between rounded-xl bg-white px-2 shadow-[0px_2px_8px_4px_rgba(0,0,0,0.1)] lg:h-16"
         key={uuidv4()}
       >
         <div className="flex flex-row items-center">
@@ -230,9 +230,9 @@ export default function Writer(props: {
           />
         </div>
       </div>
-      <div className="flex h-auto w-full flex-col lg:grid lg:flex-none lg:grid-cols-2">
+      <div className="grid h-[calc(100vh-5rem)] w-full grid-rows-2 lg:flex-none lg:grid-cols-2 lg:grid-rows-1">
         {/* Monaco Editor */}
-        <div className="h-full w-full px-4">
+        <div className=" w-full border-b-2 border-b-neutral-300 px-6 lg:border-b-0 lg:border-r-2 lg:border-r-neutral-300">
           <MdxEditor
             setPost={setPost}
             imageSizes={imageSizes}
@@ -241,11 +241,13 @@ export default function Writer(props: {
           />
         </div>
         {/* Content Preview */}
-        <div className="h-full w-full px-4">{MemoizedPreview}</div>
+        <div className="h-full w-full overflow-y-scroll border-t-2 border-t-neutral-300 px-6 lg:border-l-2 lg:border-t-0 lg:border-l-neutral-300">
+          {MemoizedPreview}
+        </div>
         {/* Image Management Popup */}
         {isShowImagesPopup === true ? (
           <div
-            className="fixed h-screen left-0 right-0 top-0 z-20 flex flex-row items-center justify-center bg-black/20"
+            className="fixed left-0 right-0 top-0 z-20 flex h-screen flex-row items-center justify-center bg-black/20"
             onClick={() => setIsShowImagesPopup(false)}
           >
             <div
