@@ -40,7 +40,7 @@ export default async function Home() {
   }[];
 
   return (
-    <main className="flex h-full w-full flex-col items-center justify-between">
+    <main className="flex h-auto w-full flex-col items-center justify-between">
       <PostCardViewer cardsData={postsToShowIncludingTitleColor} />
     </main>
   );

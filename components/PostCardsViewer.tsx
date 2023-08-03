@@ -15,7 +15,7 @@ const PostCardViewer = (props: {
   }[];
 }) => {
   return (
-    <div className="my-2 flex w-full flex-col items-center gap-12 px-2 sm:grid-cols-2 md:grid md:gap-10 md:max-w-2xl md:justify-items-center lg:max-w-4xl lg:gap-20 xl:max-w-5xl">
+    <div className="my-2 flex w-full flex-col items-center gap-12 px-2 sm:grid-cols-2 md:grid md:gap-14 md:max-w-3xl md:justify-items-center lg:max-w-4xl lg:gap-20 xl:max-w-5xl">
       {props.cardsData.map((post) => {
         return (
           <Link
