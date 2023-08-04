@@ -239,7 +239,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
   },
   blockquote: ({ children, ...otherProps }) => {
     return (
-      <div className="mx-2 my-6 break-all rounded-xl bg-white px-4 py-2 shadow-[0_12px_32px_4px_rgba(0,0,0,0.26)]">
+      <div className="mx-2 my-6 rounded-xl bg-white px-4 py-2 shadow-[0_12px_32px_4px_rgba(0,0,0,0.26)]">
         {children}
       </div>
     );
@@ -275,13 +275,19 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
       <div className="my-8 flex w-full flex-col rounded-3xl bg-white p-4 shadow-[0_12px_32px_4px_rgba(0,0,0,0.26)]">
         <div className="flex select-none flex-row justify-start">
           <p>
-            <span className="text-7xl font-bold text-neutral-400">“</span>
+            <span
+              className={`${props.serif ? `font-noto-serif` : ``} ${
+                props.italic ? `italic` : ``
+              } text-7xl font-bold text-neutral-400`}
+            >
+              “
+            </span>
           </p>
         </div>
-        <div className="-mt-8 ml-4 flex w-full flex-col gap-y-1 mr-4">
+        <div className="-mt-8 ml-4 flex w-full flex-col gap-y-1 pr-8">
           <div className="flex w-full flex-row">
             <div
-              className={`text-xl text-neutral-700 break-all ${
+              className={`text-xl text-neutral-700 ${
                 props.italic ? `italic` : ``
               } ${props.serif ? `font-noto-serif` : ``}`}
             >
@@ -290,13 +296,57 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
           </div>
           {props.author ? (
             <div className="flex w-full flex-row">
-              <p className="font-outfit text-base italic text-neutral-500">
-                {props.author}
+              <p
+                className={`${props.serif ? `font-noto-serif` : ``} ${
+                  props.italic ? `italic` : ``
+                } text-base text-neutral-500`}
+              >
+                &mdash; {props.author}
               </p>
             </div>
           ) : null}
         </div>
       </div>
+    );
+  },
+  table: ({ children, ...otherProps }) => {
+    return (
+      <div className="rounded-xl bg-white px-4 py-4 shadow-[0_12px_32px_4px_rgba(0,0,0,0.26)]">
+        <table className="h-full w-full border-collapse" {...otherProps}>
+          {children}
+        </table>
+      </div>
+    );
+  },
+  th: ({ children, ...otherProps }) => {
+    return (
+      <th
+        {...otherProps}
+        className="border-b-4 border-b-neutral-400 border-l-neutral-200 border-r-neutral-200 p-2.5 font-outfit text-xl font-bold first:border-l-0 last:border-r-0"
+      >
+        {children}
+      </th>
+    );
+  },
+  // tr: ({ children, ...otherProps }) => {
+  //   <tr className="" {...otherProps}>
+  //     {children}
+  //   </tr>;
+  // },
+  td: ({ children, ...otherProps }) => {
+    return (
+      <td
+        {...otherProps}
+        className={` border-neutral-200 px-4 border-collapse first:border-l-0 last:border-r-0 border-${
+          !otherProps.align ? `text-center` : ``
+        }`}
+      >
+        <div className="flex h-full w-full flex-col">
+          <div className="h-2 w-full bg-green-500" />
+          {children}
+          <div className="h-2 w-full bg-red-500" />
+        </div>
+      </td>
     );
   },
 });

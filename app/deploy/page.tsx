@@ -69,7 +69,7 @@ const Deploy = async () => {
           check your <code>.env</code>
         </h2>
         <table className="w-full rounded-xl bg-neutral-200/50">
-          <thead>
+          <th>
             <tr className="border-b-4 border-b-neutral-800">
               <th className="p-4 text-left font-outfit text-xl font-bold">
                 Name
@@ -78,8 +78,8 @@ const Deploy = async () => {
                 Value
               </th>
             </tr>
-          </thead>
-          <tbody>
+          </th>
+          <td>
             {envNames.map((name) => (
               <tr
                 key={name}
@@ -102,7 +102,7 @@ const Deploy = async () => {
                 </td>
               </tr>
             ))}
-          </tbody>
+          </td>
         </table>
         <button
           className="rounded-full bg-neutral-800 p-10 text-5xl font-extrabold text-white shadow-[0px_8px_32px_rgba(0,0,0,0.5)] transition duration-[400ms] ease-in-out hover:rotate-6 hover:scale-110 hover:shadow-[0px_12px_48px_rgba(0,0,0,0.5)]"
