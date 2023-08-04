@@ -312,7 +312,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
   table: ({ children, ...otherProps }) => {
     return (
       <div className="flex w-full flex-row justify-center my-8">
-        <div className="flex w-fit flex-row items-center justify-center overflow-x-auto rounded-xl bg-white px-4 py-4 shadow-[0_12px_32px_4px_rgba(0,0,0,0.26)]">
+        <div className="flex w-fit flex-row items-center justify-center overflow-x-auto rounded-xl bg-white px-4 py-2 shadow-[0_12px_32px_4px_rgba(0,0,0,0.26)]">
           <table className="" {...otherProps}>
             {children}
           </table>
