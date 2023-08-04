@@ -15,6 +15,7 @@ import Image from "next/image";
 import path from "path";
 import { getTime, parseISO } from "date-fns";
 import AppIcon from "./icons/AppIcon";
+import CloseIcon from "./icons/CloseIcon";
 
 const EpochIsNull = () => (
   <div className="text-bold flex h-full w-full select-none flex-col items-center justify-center bg-red-500 font-outfit text-5xl font-bold">
@@ -33,7 +34,8 @@ export default function Writer(props: {
     mdx: string;
   };
 }) {
-  const [isShowImagesPopup, setIsShowImagesPopup] = useState<boolean>(false);
+  const [isShowManagementPopup, setIsShowManagementPopup] =
+    useState<boolean>(false);
   useState<boolean>(false);
   const [post, setPost] = useState<IPost>({
     code: props.initialCompiledMdxInfo.code,
@@ -44,6 +46,9 @@ export default function Writer(props: {
   const [isWorking, setIsWorking] = useState<boolean>(false);
   const [imageSizes, setImageSizes] = useState<IImageSizes>(props.imageSizes);
   const [previewScrollTop, setPreviewScrollTop] = useState<number>(0);
+  const [isShowImage, setIsShowImage] = useState<
+    { objectUrl: string; imageSize: { height: number; width: number } } | false
+  >(false);
   const [sortRule, setSortRule] = useState<
     "date-asc" | "date-desc" | "name-asc" | "name-desc"
   >("date-asc");
@@ -61,6 +66,18 @@ export default function Writer(props: {
     ),
     [imageSizes, post.code, post.frontmatter],
   );
+
+  useEffect(() => {
+    const beforeUnload = (e) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", beforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", beforeUnload);
+    };
+  }, []);
 
   useEffect(() => {
     switch (sortRule) {
@@ -207,7 +224,7 @@ export default function Writer(props: {
     <div className="flex h-screen w-full flex-col items-center lg:w-[95vw]">
       {/* Header */}
       <div
-        className="z-10 my-4 mx-0.5 flex h-14 w-full flex-row items-center justify-between rounded-xl bg-white px-2 shadow-[0px_2px_8px_4px_rgba(0,0,0,0.1)] lg:h-16"
+        className="z-10 mx-0.5 my-4 flex h-14 w-full flex-row items-center justify-between rounded-xl bg-white px-2 shadow-[0px_2px_8px_4px_rgba(0,0,0,0.1)] lg:h-16"
         key={uuidv4()}
       >
         <div className="flex flex-row items-center">
@@ -221,7 +238,7 @@ export default function Writer(props: {
             className="h-12 w-12 cursor-pointer p-2"
             onClick={() => {
               getMediaList();
-              setIsShowImagesPopup(true);
+              setIsShowManagementPopup(true);
             }}
           />
           <PublishIcon
@@ -245,20 +262,26 @@ export default function Writer(props: {
           {MemoizedPreview}
         </div>
         {/* Image Management Popup */}
-        {isShowImagesPopup === true ? (
+        {isShowManagementPopup === true ? (
           <div
             className="fixed left-0 right-0 top-0 z-20 flex h-screen flex-row items-center justify-center bg-black/20"
-            onClick={() => setIsShowImagesPopup(false)}
+            onClick={() => setIsShowManagementPopup(false)}
           >
             <div
               className="relative flex h-5/6 w-11/12 flex-col items-center justify-center gap-y-2 rounded-2xl bg-white p-6 shadow-[0px_20px_24px_20px_rgba(0,0,0,0.15)] md:mx-10 md:max-w-full md:p-8"
               onClick={(e) => e.stopPropagation()}
             >
-              <h1 className="w-full text-left font-outfit text-2xl font-bold sm:text-4xl md:text-5xl">
-                Content
-                <br />
-                Management
-              </h1>
+              <div className="flex w-full flex-row justify-between">
+                <h1 className="w-full select-none text-left font-outfit text-2xl font-bold sm:text-4xl md:text-5xl">
+                  Content
+                  <br />
+                  Management
+                </h1>
+                <CloseIcon
+                  className="h-12 w-12 cursor-pointer"
+                  onClick={() => setIsShowManagementPopup(false)}
+                />
+              </div>
               <div className="flex w-full flex-row items-center justify-between">
                 <input
                   disabled={isWorking}
@@ -339,29 +362,34 @@ export default function Writer(props: {
                     ];
                   return (
                     <div
-                      className="flex aspect-square flex-col rounded-2xl bg-neutral-200/50"
-                      onClick={() => {
-                        navigator.clipboard.writeText(
-                          `![](${media.objectUrl})`,
-                        );
-                        setIsShowImagesPopup(false);
-                      }}
+                      className="flex aspect-square flex-col rounded-2xl bg-neutral-200/40"
                       key={uuidv4()}
                     >
                       {/* Image Preview */}
                       {specificImageSize ? (
-                        <Image
-                          src={media.objectUrl}
-                          height={specificImageSize.height}
-                          width={specificImageSize.width}
-                          alt=""
-                          className="aspect-[4/3] rounded-3xl object-cover p-3"
-                        />
+                        <>
+                          <Image
+                            src={media.objectUrl}
+                            height={specificImageSize.height}
+                            width={specificImageSize.width}
+                            alt=""
+                            className="aspect-[4/3] rounded-3xl object-cover p-3"
+                            onClick={() => {
+                              setIsShowImage({
+                                objectUrl: media.objectUrl,
+                                imageSize: {
+                                  height: specificImageSize.height,
+                                  width: specificImageSize.width,
+                                },
+                              });
+                            }}
+                          />
+                        </>
                       ) : null}
 
                       {/* Image Description */}
                       <div
-                        className="flex w-full flex-row items-center justify-between gap-x-2 px-3 md:flex-col md:justify-between"
+                        className="flex w-full flex-row items-center justify-between gap-x-2 px-3 md:flex-col md:justify-normal"
                         key={uuidv4()}
                       >
                         <div className="flex w-1/2 flex-row items-center p-2 md:w-full">
@@ -370,12 +398,20 @@ export default function Writer(props: {
                           </h1>
                         </div>
                         <div className="flex w-1/2 flex-row items-center justify-end p-2 md:w-full">
-                          <div className="flex w-3/5 flex-col py-4 md:w-full">
+                          <div className="flex w-3/5 flex-col py-2 md:w-full">
                             <h1 className="p-2 text-xs font-bold italic sm:text-sm md:text-base">
                               {media.LastModified &&
                                 (media.LastModified as unknown as string)}
                             </h1>
-                            <h1 className="cursor-pointer break-all rounded-xl bg-neutral-200 px-2.5 py-2 font-mono text-xs sm:text-sm md:text-base">
+                            <h1
+                              className="line-clamp-3 cursor-pointer break-all rounded-xl bg-neutral-200 px-2.5 py-1 font-mono text-xs sm:text-sm md:text-base"
+                              onClick={() => {
+                                navigator.clipboard.writeText(
+                                  `![](${media.objectUrl})`,
+                                );
+                                setIsShowManagementPopup(false);
+                              }}
+                            >
                               {media.objectUrl}
                             </h1>
                           </div>
@@ -407,16 +443,40 @@ export default function Writer(props: {
             </div>
           </div>
         ) : null}
-        {isWorking === true ? (
-          <div className="absolute flex h-full w-full flex-row items-center justify-center">
-            <div className="rounded-xl bg-neutral-900 px-5 py-5">
-              <h1 className="select-none font-mono text-2xl font-bold text-white">
-                Working...
-              </h1>
-            </div>
-          </div>
-        ) : null}
       </div>
+      {isWorking === true ? (
+        <div className="absolute z-30 flex h-screen w-screen flex-row items-center justify-center">
+          <div className="rounded-xl bg-neutral-900 px-5 py-5">
+            <h1 className="select-none font-mono text-2xl font-bold text-white">
+              Working...
+            </h1>
+          </div>
+        </div>
+      ) : null}
+      {isShowImage && (
+        <div
+          className="fixed z-40 flex h-screen w-screen flex-col items-center justify-center bg-black/30"
+          onClick={(e: React.SyntheticEvent) => {
+            setIsShowImage(false);
+          }}
+        >
+          <div className="flex flex-col items-center gap-y-4">
+            <h1 className="rounded-xl bg-black/50 px-2.5 py-2 font-outfit text-xl text-white">
+              🖐️Tab Outside of Image to Close
+            </h1>
+            <Image
+              src={isShowImage.objectUrl}
+              height={isShowImage.imageSize.height}
+              width={isShowImage.imageSize.width}
+              alt=""
+              className="w-11/12"
+              onClick={(e: React.SyntheticEvent) => {
+                e.stopPropagation();
+              }}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
