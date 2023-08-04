@@ -68,7 +68,7 @@ export default function Writer(props: {
   );
 
   useEffect(() => {
-    const beforeUnload = (e) => {
+    const beforeUnload = (e: BeforeUnloadEvent) => {
       e.preventDefault();
       e.returnValue = "";
     };
