@@ -136,10 +136,8 @@ export default async function RootLayout({
         sizes="32x32"
       />
       <body className="flex h-auto w-11/12 max-w-7xl flex-col items-center gap-y-4">
-        {/* <div className="h-full flex w-full flex-col items-center gap-y-10 sm:gap-y-14 md:gap-y-20 lg:gap-y-24 xl:gap-y-36"> */}
         <Header categories={categories} />
         {children}
-        {/* </div> */}
         <Footer />
         <Analytics />
       </body>
