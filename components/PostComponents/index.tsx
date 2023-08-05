@@ -268,7 +268,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
           width={specificImageSize.width}
         />
         {props.caption !== undefined && typeof props.caption === "string" ? (
-          <p className="my-2 w-full text-center text-sm text-neutral-700 md:text-base">
+          <p className="my-2 w-full break-all text-center text-sm text-neutral-700 md:text-base">
             {props.caption}
           </p>
         ) : null}
