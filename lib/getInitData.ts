@@ -32,7 +32,7 @@ export const getInitDataFromS3 = cache(async () => {
                 remarkFrontmatter,
                 remarkMdxFrontmatter,
               ];
-              options.rehypePlugins = [rehypeMdxCodeProps, rehypeKatex];
+              options.rehypePlugins = [rehypeKatex, rehypeMdxCodeProps];
 
               return options;
             },
