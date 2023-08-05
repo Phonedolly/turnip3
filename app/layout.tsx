@@ -1,6 +1,6 @@
 import "./globals.css";
 import type { Metadata, ResolvingMetadata } from "next";
-import { Outfit, Noto_Sans_KR , Noto_Serif_KR} from "next/font/google";
+import { Outfit, Noto_Sans_KR, Noto_Serif_KR } from "next/font/google";
 import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/react";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
@@ -94,10 +94,7 @@ const cascadiaMono = localFont({
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: {
-      template: `${process.env.APP_NAME}: %s`,
-      default: `${process.env.APP_NAME}`,
-    },
+    title: `${process.env.APP_NAME}`,
     description: `${process.env.APP_DESCRIPTION}`,
     themeColor: "white",
     // themeColor: [
@@ -105,10 +102,7 @@ export async function generateMetadata(): Promise<Metadata> {
     //   { media: "(prefers-color-scheme: dark)", color: "black" },
     // ],
     openGraph: {
-      title: {
-        template: `${process.env.APP_NAME}: %s`,
-        default: `${process.env.APP_NAME}`,
-      },
+      title: `${process.env.APP_NAME}`,
       url: `${process.env.NEXT_PUBLIC_SITE_URL}`,
       description: `${process.env.APP_DESCRIPTION}`,
       locale: "ko_KR",
