@@ -257,7 +257,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
     return (
       <div
         className={`${
-          props.className || `flex h-auto w-full flex-row justify-center`
+          props.className || `flex h-auto w-full flex-col justify-center`
         }`}
       >
         <Image
@@ -267,8 +267,8 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
           height={specificImageSize.height}
           width={specificImageSize.width}
         />
-        {props.caption !== undefined ? (
-          <p className="my-2 text-sm text-neutral-700">{props.caption}</p>
+        {props.caption !== undefined && props.caption instanceof String ? (
+          <p className="my-2 text-sm md:text-base text-neutral-700">{props.caption}</p>
         ) : null}
       </div>
     );
