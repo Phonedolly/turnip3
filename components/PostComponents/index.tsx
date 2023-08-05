@@ -151,7 +151,17 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
       return <div {...props} />;
     }
   },
-  a: (props) => <a {...props} />,
+  a: ({ children, href, ...otherProps }) => {
+    return (
+      <a
+        href={href}
+        {...otherProps}
+        className="border-b-2 border-b-neutral-600 hover:text-neutral-500 font-bold break-all"
+      >
+        {children}
+      </a>
+    );
+  },
   // TODO improve stability of list
   ol: (props) => {
     // if (props.children instanceof Array && props.children.length == 0) {
@@ -237,6 +247,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
     }
     return <div {...otherProps}>{children}</div>;
   },
+
   blockquote: ({ children, ...otherProps }) => {
     return (
       <div className="mx-2 my-6 rounded-xl bg-white px-4 py-2 shadow-[0_12px_32px_4px_rgba(0,0,0,0.26)]">
@@ -268,7 +279,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
           width={specificImageSize.width}
         />
         {props.caption !== undefined && typeof props.caption === "string" ? (
-          <p className="my-2 px-6 w-full break-all text-center text-sm text-neutral-700 md:text-base">
+          <p className="my-2 w-full break-all px-6 text-center text-sm text-neutral-700 md:text-base">
             {props.caption}
           </p>
         ) : null}
