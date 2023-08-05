@@ -25,12 +25,12 @@ export async function GET() {
           changefreq: "weekly",
         };
       })
-      .concat(
-        initData.categories.map((category) => ({
-          loc: `${app_url}/${category}`,
-          lastmod: new Date().toISOString(),
-          changefreq: "hourly",
-        })),
-      ),
+      // .concat(
+      //   initData.categories.map((category) => ({
+      //     loc: `${app_url}/${category}`,
+      //     lastmod: new Date().toISOString(),
+      //     changefreq: "hourly",
+      //   })),
+      // ),
   );
 }
