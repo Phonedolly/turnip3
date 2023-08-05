@@ -92,7 +92,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
     return (
       <div className="flex h-auto w-full flex-row justify-center">
         <Image
-          className="my-6 rounded-2xl"
+          className="my-5 rounded-2xl"
           src={props.src as string}
           alt={props.alt || ""}
           height={specificImageSize.height}
@@ -257,7 +257,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
 
   blockquote: ({ children, ...otherProps }) => {
     return (
-      <div className="mx-2 my-6 rounded-xl bg-white px-4 py-2 shadow-[0_12px_32px_4px_rgba(0,0,0,0.26)]">
+      <div className="mx-2 my-5 rounded-xl bg-white px-4 py-2 shadow-[0_12px_32px_4px_rgba(0,0,0,0.26)]">
         {children}
       </div>
     );
@@ -279,7 +279,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
         }`}
       >
         <Image
-          className={`my-6 rounded-2xl`}
+          className={`my-5 rounded-2xl`}
           src={props.src as string}
           alt={props.alt || ""}
           height={specificImageSize.height}
@@ -295,7 +295,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
   },
   table: ({ children, ...otherProps }) => {
     return (
-      <div className="my-6 flex w-full flex-row justify-center">
+      <div className="my-5 flex w-full flex-row justify-center">
         <div className="flex w-fit flex-row items-center justify-center overflow-x-auto rounded-xl bg-white px-4 py-2 shadow-[0_12px_32px_4px_rgba(0,0,0,0.26)]">
           <table className="" {...otherProps}>
             {children}
@@ -340,7 +340,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
   },
   Quote2: (props) => {
     return (
-      <div className="my-6 flex w-full flex-col rounded-3xl bg-white p-4 shadow-[0_12px_32px_4px_rgba(0,0,0,0.26)]">
+      <div className="my-5 flex w-full flex-col rounded-3xl bg-white p-4 shadow-[0_12px_32px_4px_rgba(0,0,0,0.26)]">
         <div className="flex select-none flex-row justify-start">
           <p>
             <span
