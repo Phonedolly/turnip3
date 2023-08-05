@@ -16,7 +16,9 @@ import PostCardViewer from "@/components/PostCardsViewer";
 
 export default async function Home() {
   const { compiledPosts, categories } = await getInitDataFromS3();
-  const postsToShow = compiledPosts;
+  const postsToShow = compiledPosts.filter(
+    (compiledPost) => compiledPost.frontmatter.complete === true,
+  );
   // .slice(0, 9); // TODO When Post is enough to show, remove this line
   const postsToShowIncludingTitleColor = (await Promise.all(
     postsToShow.map(

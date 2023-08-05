@@ -19,7 +19,9 @@ export default async function HomeWithMorePage({
 }) {
   const { compiledPosts, categories } = await getInitDataFromS3();
   const postsToShow = compiledPosts.filter(
-    (post) => post.frontmatter.category === decodeURI(params.slug),
+    (post) =>
+      post.frontmatter.complete === true &&
+      post.frontmatter.category === decodeURI(params.slug),
   );
   // .slice(0, 9); // TODO When Post is enough to show, remove this line
   const postsToShowIncludingTitleColor = (await Promise.all(

@@ -16,6 +16,8 @@ import path from "path";
 import { getTime, parseISO } from "date-fns";
 import AppIcon from "./icons/AppIcon";
 import CloseIcon from "./icons/CloseIcon";
+import ListIcon from "./icons/ListIcon";
+import Link from "next/link";
 
 const EpochIsNull = () => (
   <div className="text-bold flex h-full w-full select-none flex-col items-center justify-center bg-red-500 font-outfit text-5xl font-bold">
@@ -33,6 +35,7 @@ export default function Writer(props: {
     };
     mdx: string;
   };
+  imcompletePosts: { title?: string; epoch: number }[];
 }) {
   const [isShowManagementPopup, setIsShowManagementPopup] =
     useState<boolean>(false);
@@ -49,6 +52,8 @@ export default function Writer(props: {
   const [isShowImage, setIsShowImage] = useState<
     { objectUrl: string; imageSize: { height: number; width: number } } | false
   >(false);
+  const [isShowincompletePosts, setIsShowIncompletePosts] =
+    useState<boolean>(false);
   const [sortRule, setSortRule] = useState<
     "date-asc" | "date-desc" | "name-asc" | "name-desc"
   >("date-asc");
@@ -234,6 +239,10 @@ export default function Writer(props: {
           </h1>
         </div>
         <div className="flex flex-row">
+          <ListIcon
+            className="h-12 w-12 cursor-pointer p-2"
+            onClick={() => setIsShowIncompletePosts(true)}
+          ></ListIcon>
           <ImageIcon
             className="h-12 w-12 cursor-pointer p-2"
             onClick={() => {
@@ -249,7 +258,7 @@ export default function Writer(props: {
       </div>
       <div className="grid h-[calc(100vh-5rem)] w-full grid-rows-2 lg:flex-none lg:grid-cols-2 lg:grid-rows-1">
         {/* Monaco Editor */}
-        <div className=" w-full lg:w-full border-b-2 border-b-neutral-300 lg:px-6 lg:border-b-0 lg:border-r-2 lg:border-r-neutral-300">
+        <div className=" w-full border-b-2 border-b-neutral-300 lg:w-full lg:border-b-0 lg:border-r-2 lg:border-r-neutral-300 lg:px-6">
           <MdxEditor
             setPost={setPost}
             imageSizes={imageSizes}
@@ -477,6 +486,45 @@ export default function Writer(props: {
           </div>
         </div>
       )}
+      {isShowincompletePosts === true ? (
+        <div
+          className="fixed left-0 right-0 top-0 z-20 flex h-screen flex-row items-center justify-center bg-black/20"
+          onClick={() => setIsShowIncompletePosts(false)}
+        >
+          <div
+            className="relative flex h-5/6 w-3/4 max-w-4xl flex-col items-center justify-center gap-y-8 rounded-2xl bg-white p-6 shadow-[0px_20px_24px_20px_rgba(0,0,0,0.15)] md:mx-10 md:max-w-full md:p-8"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex w-full flex-row justify-between">
+              <h1 className="w-full select-none text-left font-outfit text-2xl font-bold sm:text-4xl md:text-5xl">
+                Incomplete Posts
+              </h1>
+              <CloseIcon
+                className="h-12 w-12 cursor-pointer"
+                onClick={() => setIsShowIncompletePosts(false)}
+              />
+            </div>
+            <div className="flex w-full max-w-3xl flex-col items-center gap-y-4 overflow-y-auto rounded-2xl bg-neutral-200/50 p-4">
+              {props.imcompletePosts.map((post) => {
+                return (
+                  <Link
+                    href={`/writer/${post.epoch}`}
+                    className="flex w-full flex-row justify-between hover:bg-neutral-300 rounded-xl py-2 px-2.5"
+                    key={uuidv4()}
+                  >
+                    <h1 className=" select-none text-left font-outfit text-base font-bold sm:text-lg md:text-xl">
+                      {post.title || ""}
+                    </h1>
+                    <h1 className="select-none text-left font-mono text-base font-bold sm:text-lg md:text-xl">
+                      {post.epoch}
+                    </h1>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

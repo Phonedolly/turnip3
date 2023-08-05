@@ -22,18 +22,22 @@ export default async function WriterWrapper({
   // } else {
   // const epoch: number | null = await initNewPost();
   const s3 = initS3Client();
-  const { compiledPosts } = await getInitDataFromS3();
+  const { compiledPosts: incompiledPosts } = await getInitDataFromS3();
+  const imcompletePosts = incompiledPosts.filter(
+    (compiledPost) => compiledPost.frontmatter.complete !== true,
+  );
   const epoch =
     params.slug === "new" ? await initNewPost() : Number(params.slug);
-  const post = compiledPosts.find((p) => p.epoch === epoch);
+  const post = incompiledPosts.find((p) => p.epoch === epoch);
   const imageSizes = await getImagesSizes(s3, epoch as number);
   const initialMdx = `---
 title: "Trying out new custom code blocks"
 category: "News"
 thumbnail: ""
 date: "2021-11-02"
-epoch: "${epoch}"
+epoch: ${epoch}
 description: "A great way to display your code snippets on your MDX+Gatsby blog."
+complete: false
 ---
 
 Here's an example of my new custom code blocks:
@@ -87,6 +91,10 @@ for (let i = 1; i <= 100; i++) {
       epoch={epoch}
       imageSizes={imageSizes as IImageSizes}
       initialCompiledMdxInfo={{ code, frontmatter, mdx }}
+      imcompletePosts={incompiledPosts.map((p) => ({
+        title: p.frontmatter.title,
+        epoch: p.epoch,
+      }))}
     />
   );
 }
