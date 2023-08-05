@@ -156,7 +156,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
       <a
         href={href}
         {...otherProps}
-        className="border-b-2 border-b-neutral-600 hover:text-neutral-500 font-bold break-all"
+        className="break-all border-b-2 border-b-neutral-600 font-bold hover:text-neutral-500"
       >
         {children}
       </a>
@@ -245,7 +245,14 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
         </p>
       );
     }
-    return <div {...otherProps}>{children}</div>;
+    return (
+      <div
+        {...otherProps}
+        className="my-1 py-0.5 text-base leading-loose  md:text-lg md:leading-9 xl:text-xl xl:leading-10"
+      >
+        {children}
+      </div>
+    );
   },
 
   blockquote: ({ children, ...otherProps }) => {
