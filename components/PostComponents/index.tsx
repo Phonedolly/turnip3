@@ -113,6 +113,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
           backgroundColor: "rgb(229 229 229 / 0.6)",
           padding: "0.25rem 0.375rem",
           borderRadius: "0.5rem",
+          wordBreak: "break-all",
         }}
       />
     );
