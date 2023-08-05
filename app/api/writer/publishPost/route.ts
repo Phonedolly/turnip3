@@ -1,4 +1,4 @@
-import { initS3Client } from "@/lib/S3";
+import initS3Client from "@/lib/S3";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { NextResponse } from "next/server";
 import matter from "gray-matter";

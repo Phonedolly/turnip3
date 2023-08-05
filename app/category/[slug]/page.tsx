@@ -1,4 +1,4 @@
-import { getInitDataFromS3 } from "@/lib/getInitData";
+import getInitDataFromS3 from "@/lib/getInitData";
 import { getAverageColor } from "fast-average-color-node";
 import tinycolor from "tinycolor2";
 import image2uri from "image2uri";

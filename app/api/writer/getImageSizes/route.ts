@@ -1,4 +1,4 @@
-import { initS3Client } from "@/lib/S3";
+import initS3Client from "@/lib/S3";
 import { GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { NextResponse } from "next/server";
 import fileToArrayBuffer from "file2arraybuffer";

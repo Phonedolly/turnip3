@@ -5,7 +5,7 @@ import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/react";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import Header from "@/components/Header";
-import { getInitDataFromS3 } from "@/lib/getInitData";
+import getInitDataFromS3 from "@/lib/getInitData";
 import Footer from "@/components/Footer";
 
 const notoSansKr = Noto_Sans_KR({

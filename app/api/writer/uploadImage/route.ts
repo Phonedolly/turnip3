@@ -1,4 +1,4 @@
-import { initS3Client } from "@/lib/S3";
+import initS3Client from "@/lib/S3";
 import {
   GetObjectCommand,
   PutObjectCommand,

@@ -3,7 +3,7 @@ import { Metadata, ResolvingMetadata } from "next";
 import { getAverageColor } from "fast-average-color-node";
 import image2uri from "image2uri";
 import tinycolor from "tinycolor2";
-import { getInitDataFromS3 } from "@/lib/getInitData";
+import getInitDataFromS3 from "@/lib/getInitData";
 import PostCardViewer from "@/components/PostCardsViewer";
 
 // export async function generateMetadata(

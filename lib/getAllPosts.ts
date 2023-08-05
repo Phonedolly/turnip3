@@ -1,9 +1,9 @@
 import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
-import { getEpoches } from "./getEpoches";
+import getEpoches from "./getEpoches";
 import getImagesSizes from "./getImageSizes";
 import { cache } from "react";
 
-export const getAllPosts = cache(async (s3: S3Client) => {
+const getAllPosts = cache(async (s3: S3Client) => {
   const epoches = await getEpoches(s3);
   const promises = epoches.map(
     (epoch) =>
@@ -53,3 +53,5 @@ export const getAllPosts = cache(async (s3: S3Client) => {
 
   return posts;
 });
+
+export default getAllPosts;

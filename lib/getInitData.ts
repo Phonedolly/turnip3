@@ -1,6 +1,6 @@
 import { cache } from "react";
-import { initS3Client } from "./S3";
-import { getAllPosts } from "./getAllPosts";
+import initS3Client from "./S3";
+import getAllPosts from "./getAllPosts";
 import { bundleMDX } from "mdx-bundler";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
@@ -9,8 +9,7 @@ import remarkMdxFrontmatter from "remark-mdx-frontmatter";
 import rehypeKatex from "rehype-katex";
 import rehypeMdxCodeProps from "rehype-mdx-code-props";
 
-export const getInitDataFromS3 = cache(async () => {
-  const bucket = process.env.S3_BUCKET_NAME as string;
+const getInitData = cache(async () => {
   const s3 = initS3Client();
 
   /* retrieve data */
@@ -50,14 +49,8 @@ export const getInitDataFromS3 = cache(async () => {
           });
         }),
     ),
-  )) as {
-    postAsMdx: string;
-    epoch: number;
-    imageSizes: IImageSizes;
-    code: string;
-    frontmatter: {
-      [key: string]: any;
-    };
-  }[];
-  return { compiledPosts, categories };
+  )) as ICompiledPost[];
+  return { compiledPosts, categories } as IInitData;
 });
+
+export default getInitData;

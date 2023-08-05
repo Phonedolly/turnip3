@@ -5,11 +5,7 @@ import {
   _Object,
 } from "@aws-sdk/client-s3";
 
-export const listS3Files = async (
-  s3: S3Client,
-  prefix: string,
-  delimiter?: string,
-) => {
+const listFiles = async (s3: S3Client, prefix: string, delimiter?: string) => {
   const params: {
     Bucket: string;
     Prefix: string;
@@ -47,3 +43,5 @@ export const listS3Files = async (
   }
   return keys;
 };
+
+export default listFiles;

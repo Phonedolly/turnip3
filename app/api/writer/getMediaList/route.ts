@@ -1,9 +1,9 @@
-import { initS3Client } from "@/lib/S3";
+import initS3Client from "@/lib/S3";
 import { GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { NextResponse } from "next/server";
 import fileToArrayBuffer from "file2arraybuffer";
 import { MediaListWithObjectUrl } from "@/types/MediaListWithObjectUrl";
-import { listS3Files } from "@/lib/listFiles";
+import listS3Files from "@/lib/listFiles";
 
 export async function GET(request: Request) {
   const s3 = initS3Client();

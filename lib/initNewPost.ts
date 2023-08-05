@@ -4,9 +4,9 @@ import {
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
-import { initS3Client } from "./S3";
-import { getEpoches } from "./getEpoches";
-import { listS3Files } from "./listFiles";
+import initS3Client from "./S3";
+import getEpoches from "./getEpoches";
+import listS3Files from "./listFiles";
 
 const shouldMakeNewEpoch = async (s3: S3Client) => {
   const epoches = await getEpoches(s3);

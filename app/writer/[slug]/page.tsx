@@ -1,9 +1,9 @@
 import Writer from "@/components/Writer";
 import initNewPost from "@/lib/initNewPost";
 import getImagesSizes from "@/lib/getImageSizes";
-import { initS3Client } from "@/lib/S3";
+import initS3Client from "@/lib/S3";
 import { bundleMDX } from "mdx-bundler";
-import { getInitDataFromS3 } from "@/lib/getInitData";
+import getInitDataFromS3 from "@/lib/getInitData";
 import remarkFrontmatter from "remark-frontmatter";
 import remarkMdxFrontmatter from "remark-mdx-frontmatter";
 import remarkMath from "remark-math";

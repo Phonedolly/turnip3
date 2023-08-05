@@ -1,10 +1,10 @@
 import { cache } from "react";
 
-import { createPostDir } from "./createPostDir";
+import createPostDir from "./createPostDir";
 import { S3Client, _Object } from "@aws-sdk/client-s3";
-import { listS3Files } from "./listFiles";
+import listS3Files from "./listFiles";
 
-export const getEpoches = cache(async (s3: S3Client) => {
+const getEpoches = cache(async (s3: S3Client) => {
   const epochKeys = (await listS3Files(s3, "posts/", "/")) as _Object[];
   if (epochKeys.length === 0) {
     console.error("posts directory not found. Trying to create the directory.");
@@ -26,3 +26,5 @@ export const getEpoches = cache(async (s3: S3Client) => {
 
   return epochesAsNumber;
 });
+
+export default getEpoches;

@@ -1,5 +1,5 @@
 import { Metadata, ResolvingMetadata } from "next";
-import { getInitDataFromS3 } from "@/lib/getInitData";
+import getInitDataFromS3 from "@/lib/getInitData";
 import PostWrapper from "@/components/PostWrapper";
 
 export async function generateMetadata({

@@ -2,7 +2,7 @@ import { cache } from "react";
 import "server-only";
 import { S3Client } from "@aws-sdk/client-s3";
 
-export const initS3Client = cache(() => {
+const initS3Client = cache(() => {
   const s3 = new S3Client({
     credentials: {
       accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
@@ -13,3 +13,5 @@ export const initS3Client = cache(() => {
 
   return s3;
 });
+
+export default initS3Client;
