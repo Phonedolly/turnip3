@@ -16,12 +16,7 @@ module.exports = {
         process.env.NEXT_PUBLIC_APP_URL.lastIndexOf("/"),
       )
       : process.env.NEXT_PUBLIC_APP_URL}/server-sitemap-index.xml`,
-    `${process.env.NEXT_PUBLIC_APP_URL?.endsWith("/")
-      ? process.env.NEXT_PUBLIC_APP_URL.slice(
-        0,
-        process.env.NEXT_PUBLIC_APP_URL.lastIndexOf("/"),
-      )
-      : process.env.NEXT_PUBLIC_APP_URL}/server-sitemap.xml`],
+    ],
   },
   // ...other options
 }
