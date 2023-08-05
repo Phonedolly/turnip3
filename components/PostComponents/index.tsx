@@ -244,6 +244,9 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
       </div>
     );
   },
+  hr: () => (
+    <div className="my-4 flex h-1 w-full flex-row justify-center rounded-md bg-neutral-300" />
+  ),
   Image2: (props) => {
     const specificImageSize =
       imageSizes[
