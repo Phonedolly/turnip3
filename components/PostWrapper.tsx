@@ -25,11 +25,11 @@ const PostWrapper = (props: {
 
   return (
     <div className="flex w-full flex-col gap-y-4 py-6 md:text-lg">
-      <div className="flex w-full flex-col gap-y-4 text-center">
-        <h1 className="text-center font-outfit text-4xl font-bold">
+      <div className="flex w-full flex-col gap-y-4 lg:gap-y-8 xl:gap-y-12 text-center">
+        <h1 className="text-center font-outfit text-4xl font-bold lg:text-5xl xl:text-6xl">
           {props.frontmatter?.title}
         </h1>
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center gap-y-1">
           {firstPublished && (
             <div className="flex flex-row gap-x-2.5">
               <h2 className="font-outfit">First Published</h2>
