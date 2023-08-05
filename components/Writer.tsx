@@ -221,7 +221,7 @@ export default function Writer(props: {
   }
 
   return (
-    <div className="flex h-screen w-full flex-col items-center lg:w-[95vw]">
+    <div className="flex h-screen w-screen flex-col items-center lg:w-[95vw]">
       {/* Header */}
       <div
         className="z-10 mx-0.5 my-4 flex h-14 w-full flex-row items-center justify-between rounded-xl bg-white px-2 shadow-[0px_2px_8px_4px_rgba(0,0,0,0.1)] lg:h-16"
@@ -249,7 +249,7 @@ export default function Writer(props: {
       </div>
       <div className="grid h-[calc(100vh-5rem)] w-full grid-rows-2 lg:flex-none lg:grid-cols-2 lg:grid-rows-1">
         {/* Monaco Editor */}
-        <div className=" w-full border-b-2 border-b-neutral-300 px-6 lg:border-b-0 lg:border-r-2 lg:border-r-neutral-300">
+        <div className=" w-full lg:w-full border-b-2 border-b-neutral-300 lg:px-6 lg:border-b-0 lg:border-r-2 lg:border-r-neutral-300">
           <MdxEditor
             setPost={setPost}
             imageSizes={imageSizes}

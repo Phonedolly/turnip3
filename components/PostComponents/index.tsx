@@ -311,7 +311,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
   },
   table: ({ children, ...otherProps }) => {
     return (
-      <div className="flex w-full flex-row justify-center my-8">
+      <div className="my-8 flex w-full flex-row justify-center">
         <div className="flex w-fit flex-row items-center justify-center overflow-x-auto rounded-xl bg-white px-4 py-2 shadow-[0_12px_32px_4px_rgba(0,0,0,0.26)]">
           <table className="" {...otherProps}>
             {children}
@@ -354,6 +354,11 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
       </td>
     );
   },
+  Import: ({ className, children }) => (
+    <div className={`${className || `flex h-auto w-full flex-row`}`}>
+      {children}
+    </div>
+  ),
 });
 
 export default componentsGenerator;
