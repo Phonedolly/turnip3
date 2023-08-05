@@ -5,13 +5,35 @@ import rangeParser from "parse-numeric-range";
 import { Highlight, themes } from "prism-react-renderer";
 import { v4 as uuidv4 } from "uuid";
 
-const calculateLinesToHighlight = (raw: string) => {
-  const lineNumbers = rangeParser(raw);
-  if (lineNumbers) {
-    return (index: number) => lineNumbers.includes(index + 1);
-  } else {
-    return () => false;
-  }
+type ColorReferences = {
+  [key in "red" | "yellow" | "green" | "blue"]: string;
+};
+
+const calculateLinesToHighlight = (raw: ColorReferences) => {
+  return (Object.keys(raw) as Array<keyof typeof raw>).reduce(
+    (acc, currKey) => {
+      const lineNumbers = rangeParser(raw[currKey]);
+
+      const returnFunc = lineNumbers
+        ? (index: number) => lineNumbers.includes(index + 1)
+        : () => false;
+
+      return {
+        ...acc,
+        [currKey]: returnFunc,
+      };
+    },
+    {},
+  ) as {
+    [key in "red" | "yellow" | "green" | "blue"]: (index: number) => boolean;
+  };
+
+  // const lineNumbers = rangeParser(raw);
+  // if (lineNumbers) {
+  //   return (index: number) => lineNumbers.includes(index + 1);
+  // } else {
+  //   return () => false;
+  // }
 };
 
 const pre = (props: any) => {
@@ -20,10 +42,14 @@ const pre = (props: any) => {
   const language = className.replace(/language-/, "");
   const fileName = props?.fileName || "";
   const showLineNumber = props?.showLineNumber || false;
-  const highlights =
-    props?.highlights && props.highlights.length > 0
-      ? calculateLinesToHighlight(props.highlights)
-      : () => false;
+
+  const rawHighlights = props.highlights && JSON.parse(props.highlights);
+  // const highlights =
+  //   props?.highlights && props.highlights.length > 0
+  //     ? calculateLinesToHighlight(rawHighlights)
+  //     : () => false;
+
+  const highlights = rawHighlights && calculateLinesToHighlight(rawHighlights);
 
   let showLang = true;
   if (!language || language.length === 0 || language.includes(" ")) {
@@ -70,8 +96,28 @@ const pre = (props: any) => {
                 <div
                   {...getLineProps({ line, key: i })}
                   className={`block px-6 py-0.5 last:rounded-b-xl ${
-                    highlights(i) === true
-                      ? `bg-red-100 hover:saturate-200`
+                    highlights &&
+                    highlights["red"] &&
+                    highlights["red"](i) === true
+                      ? `bg-red-100 hover:saturate-200 hover:bg-red-100/80`
+                      : `hover:bg-neutral-200/70 hover:saturate-200`
+                  } ${
+                    highlights &&
+                    highlights["yellow"] &&
+                    highlights["yellow"](i) === true
+                      ? `bg-yellow-100 hover:saturate-200 hover:bg-yellow-100/80`
+                      : `hover:bg-neutral-200/70 hover:saturate-200`
+                  } ${
+                    highlights &&
+                    highlights["green"] &&
+                    highlights["green"](i) === true
+                      ? `bg-green-100 hover:saturate-200 hover:bg-green-100/80`
+                      : `hover:bg-neutral-200/70 hover:saturate-200`
+                  } ${
+                    highlights &&
+                    highlights["blue"] &&
+                    highlights["blue"](i) === true
+                      ? `bg-blue-100 hover:saturate-200 hover:bg-blue-100/80`
                       : `hover:bg-neutral-200/70 hover:saturate-200`
                   }`}
                   key={uuidv4()}

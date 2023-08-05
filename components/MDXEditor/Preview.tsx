@@ -20,7 +20,7 @@ const Preview = (props: {
       <ErrorBoundary
         fallback={
           <h1 className="h-full w-full bg-red-500 m-2 rounded-2xl py-4 text-center font-outfit text-4xl font-bold text-white">
-            MDX Have Problem!
+            MDX Has a Problem!
           </h1>
         }
       >
