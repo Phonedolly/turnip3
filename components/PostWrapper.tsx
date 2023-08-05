@@ -32,7 +32,7 @@ const PostWrapper = (props: {
         <div className="flex flex-col items-center gap-y-1">
           {firstPublished && (
             <div className="flex flex-row gap-x-2.5 text-sm sm:text-xl">
-              <h2 className="font-outfit">First Published</h2>
+              <h2 className="font-outfit">First Published at</h2>
               <h2 className="font-outfit font-bold">
                 {`${firstPublished.toLocaleDateString()} ${firstPublished.toLocaleTimeString()}`}
               </h2>
@@ -40,7 +40,7 @@ const PostWrapper = (props: {
           )}
           {lastEdited ? (
             <div className="flex flex-row gap-x-2.5 text-sm sm:text-xl">
-              <h2 className="font-outfit">Last Edited</h2>
+              <h2 className="font-outfit">Last Edited at</h2>
               <h2 className="font-outfit font-bold">
                 {`${lastEdited.toLocaleDateString()} ${lastEdited.toLocaleTimeString()}`}
               </h2>
