@@ -57,7 +57,7 @@ const pre = (props: any) => {
   }
   return (
     <div
-      className="my-8 flex w-full flex-col rounded-xl bg-white shadow-[0_12px_32px_4px_rgba(0,0,0,0.26)]"
+      className="my-6 flex w-full flex-col rounded-xl bg-white shadow-[0_12px_32px_4px_rgba(0,0,0,0.26)]"
       key={uuidv4()}
     >
       {showLang === true ? (
