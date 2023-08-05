@@ -34,9 +34,6 @@ const PostWrapper = (props: {
             <div className="flex flex-row gap-x-2.5">
               <h2 className="font-outfit">First Published</h2>
               <h2 className="font-outfit text-xl font-bold">
-                {/* {`${date.getFullYear()}-${
-            date.getMonth() + 1
-          }-${date.getD()}-${date.getHours()}-${date.getMinutes()}`} */}
                 {`${firstPublished.toLocaleDateString()} ${firstPublished.toLocaleTimeString()}`}
               </h2>
             </div>
@@ -45,9 +42,6 @@ const PostWrapper = (props: {
             <div className="flex flex-row gap-x-2.5">
               <h2 className="font-outfit">Last Edited</h2>
               <h2 className="font-outfit text-xl font-bold">
-                {/* {`${date.getFullYear()}-${
-            date.getMonth() + 1
-          }-${date.getD()}-${date.getHours()}-${date.getMinutes()}`} */}
                 {`${lastEdited.toLocaleDateString()} ${lastEdited.toLocaleTimeString()}`}
               </h2>
             </div>
