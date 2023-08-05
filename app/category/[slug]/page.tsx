@@ -54,7 +54,7 @@ export default async function HomeWithMorePage({
 
   return (
     <main className="flex h-full w-full flex-col items-center justify-between gap-y-4 lg:gap-y-16">
-      <h1 className="mt-4 font-outfit text-5xl font-bold lg:text-7xl">
+      <h1 className="my-12 font-outfit text-5xl font-bold lg:text-6xl">
         {decodeURI(params.slug)}
       </h1>
       <PostCardViewer cardsData={postsToShowIncludingTitleColor} />

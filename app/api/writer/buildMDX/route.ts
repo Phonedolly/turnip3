@@ -20,7 +20,7 @@ export async function POST(request: Request) {
         remarkFrontmatter,
         remarkMdxFrontmatter,
       ];
-      options.rehypePlugins = [rehypeMdxCodeProps, rehypeKatex];
+      options.rehypePlugins = [rehypeKatex, rehypeMdxCodeProps];
 
       return options;
     },

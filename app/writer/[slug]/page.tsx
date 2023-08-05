@@ -72,7 +72,7 @@ for (let i = 1; i <= 100; i++) {
             remarkFrontmatter,
             remarkMdxFrontmatter,
           ];
-          options.rehypePlugins = [rehypeMdxCodeProps, rehypeKatex];
+          options.rehypePlugins = [rehypeKatex, rehypeMdxCodeProps];
 
           return options;
         },
