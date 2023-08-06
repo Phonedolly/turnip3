@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { createElement, useEffect, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import MdxEditor from "./MDXEditor";
 import ImageIcon from "./icons/ImageIcon";
@@ -155,6 +155,29 @@ export default function Writer(props: {
     setIsWorking(false);
   };
 
+  const readImageAsDataURL = (image: Blob) => {
+    return new Promise<string>((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.onload = () => {
+        resolve(fileReader.result as string);
+      };
+      fileReader.onerror = reject;
+      fileReader.readAsDataURL(image);
+    });
+  };
+
+  const getImageNaturalSize = (imageDataURL: string) => {
+    return new Promise<{ width: number; height: number }>((resolve, reject) => {
+      const image = document.createElement("img");
+      image.src = imageDataURL;
+      image.onload = () => {
+        const { naturalWidth: width, naturalHeight: height } = image;
+        resolve({ width, height });
+      };
+      image.onerror = reject;
+    });
+  };
+
   const uploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files) {
@@ -169,11 +192,14 @@ export default function Writer(props: {
     formData.append("numOfFiles", String(files.length));
 
     for (let i = 0; i < files.length; i++) {
+      /* get image dimension */
+      const imageDataURL = await readImageAsDataURL(files[i]);
+      const imageSize = await getImageNaturalSize(imageDataURL);
       formData.append(`file_${i}`, files[i]);
+      formData.append(`file_${i}_size`, JSON.stringify(imageSize));
     }
-    // formData.append("file", file);
 
-    fetch("/api/withAuth/writer/uploadImage", {
+    await fetch("/api/withAuth/writer/uploadImage", {
       method: "POST",
       body: formData,
     })
@@ -378,6 +404,9 @@ export default function Writer(props: {
                           path.parse(media.objectUrl as string).ext,
                         )
                     ];
+                  console.log(media.Key);
+                  console.log(1);
+                  console.log(`/posts/${props.epoch}/imageSizes.json`)
                   return (
                     <div
                       className="flex aspect-square flex-col rounded-2xl bg-neutral-200/40"
@@ -385,24 +414,22 @@ export default function Writer(props: {
                     >
                       {/* Image Preview */}
                       {specificImageSize ? (
-                        <>
-                          <Image
-                            src={media.objectUrl}
-                            height={specificImageSize.height}
-                            width={specificImageSize.width}
-                            alt=""
-                            className="aspect-[4/3] rounded-3xl object-cover p-3"
-                            onClick={() => {
-                              setIsShowImage({
-                                objectUrl: media.objectUrl,
-                                imageSize: {
-                                  height: specificImageSize.height,
-                                  width: specificImageSize.width,
-                                },
-                              });
-                            }}
-                          />
-                        </>
+                        <Image
+                          src={media.objectUrl}
+                          height={specificImageSize.height}
+                          width={specificImageSize.width}
+                          alt="image preview"
+                          className="aspect-[4/3] rounded-3xl object-cover p-3"
+                          onClick={() => {
+                            setIsShowImage({
+                              objectUrl: media.objectUrl,
+                              imageSize: {
+                                height: specificImageSize.height,
+                                width: specificImageSize.width,
+                              },
+                            });
+                          }}
+                        />
                       ) : null}
 
                       {/* Image Description */}
@@ -433,26 +460,29 @@ export default function Writer(props: {
                               {media.objectUrl}
                             </h1>
                           </div>
-                          <TrashIcon
-                            className="h-9 w-9 cursor-pointer"
-                            onClick={async () => {
-                              setIsWorking(true);
-                              const res = (await (
-                                await fetch(
-                                  `/api/withAuth/writer/deleteImage?key=${media.Key}`,
-                                  { next: { revalidate: 0 } },
-                                )
-                              ).json()) as
-                                | { success: boolean }
-                                | { errReason: any };
-                              if (!res) {
-                                console.error("Failed to Delete Image!");
-                                console.error(res);
-                              }
-                              getMediaList();
-                              setIsWorking(true);
-                            }}
-                          />
+                          {media.Key !==
+                          `posts/${props.epoch}/imageSizes.json` ? (
+                            <TrashIcon
+                              className="h-9 w-9 cursor-pointer"
+                              onClick={async () => {
+                                setIsWorking(true);
+                                const res = (await (
+                                  await fetch(
+                                    `/api/withAuth/writer/deleteImage?key=${media.Key}`,
+                                    { next: { revalidate: 0 } },
+                                  )
+                                ).json()) as
+                                  | { success: boolean }
+                                  | { errReason: any };
+                                if (!res) {
+                                  console.error("Failed to Delete Image!");
+                                  console.error(res);
+                                }
+                                getMediaList();
+                                setIsWorking(true);
+                              }}
+                            />
+                          ) : null}
                         </div>
                       </div>
                     </div>

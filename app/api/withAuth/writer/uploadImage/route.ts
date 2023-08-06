@@ -64,28 +64,60 @@ export async function POST(request: Request) {
     }
 
     /* get image size */
-    const imageSize = await Jimp.read(fileAsArrayBuffer).then((image) => {
-      const height = image.getHeight();
-      const width = image.getWidth();
-      return { height, width };
-    });
+    const imageSize = JSON.parse(formData.get(`file_${i}_size`) as string);
 
     if (!imageSize.height || !imageSize.width) {
       failedFiles.push(file.name);
       continue;
     }
 
-    /* upate imageSizes */
+    /* update imageSizes */
     imageSizes[fileName] = {
       height: imageSize.height,
       width: imageSize.width,
     };
+
+    /* get content-type */
+    /* ref: https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Image_types#common_image_file_types */
+    let contentType = "";
+    console.log(fileName.split(".")[fileName.split(".").length - 1].toLowerCase())
+    switch (fileName.split(".")[fileName.split(".").length - 1].toLowerCase()) {
+      case "apng":
+        contentType = "image/apng";
+        break;
+      case "avif":
+        contentType = "image/avif";
+        break;
+      case "gif":
+        contentType = "image/gif";
+        break;
+      case "jpg":
+      case "jpeg":
+      case "jfif":
+      case "pjpeg":
+      case "pjp":
+        contentType = "image/jpeg";
+        break;
+      case "png":
+        contentType = "image/png";
+        break;
+      case "svg":
+      case "svgz":
+        contentType = "image/svg+xml";
+        break;
+      case "webp":
+        contentType = "image/webp";
+        break;
+      default:
+        break;
+    }
 
     /* upload image */
     const paramsForUploadImage = {
       Bucket: process.env.S3_BUCKET_NAME as string,
       Body: fileAsArrayBuffer,
       Key: `posts/${epoch}/${fileName}`,
+      ContentType: contentType.length > 0 ? contentType : undefined,
     };
 
     const putObjectCommand = new PutObjectCommand(paramsForUploadImage);

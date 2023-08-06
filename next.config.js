@@ -9,8 +9,11 @@ const nextConfig = {
         }, {
             protocol: "https",
             hostname: `${process.env.S3_BUCKET_NAME}.s3.${process.env.S3_REGION}.amazonaws.com`,
-            pathname: '/posts/**'
-        }]
+            pathname: '/posts/**',
+        }],
+        dangerouslyAllowSVG: true,
+        contentDispositionType: 'attachment',
+        contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     }
 }
 
