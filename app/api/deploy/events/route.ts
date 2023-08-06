@@ -10,6 +10,7 @@ export async function GET(request: NextRequest) {
         Authorization: `Bearer ${process.env.VERCEL_TOKEN}`,
       },
       method: "get",
+      cache: "no-store",
     },
   );
   const data = await result.json();

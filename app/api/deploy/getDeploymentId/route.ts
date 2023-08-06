@@ -8,6 +8,7 @@ export async function GET() {
         Authorization: `Bearer ${process.env.VERCEL_TOKEN}`,
       },
       method: "get",
+      cache: "no-store",
     },
   );
 
