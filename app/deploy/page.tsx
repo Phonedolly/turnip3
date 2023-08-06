@@ -17,7 +17,7 @@ const Deploy = () => {
     }[]
   >([]);
   useEffect(() => {
-    fetch("/api/deploy", { next: { revalidate: 0 } })
+    fetch("/api/withAuth/deploy", { next: { revalidate: 0 } })
       .then(async (res) => await res.json())
       .then((json) => {
         setEnv(json);
@@ -50,7 +50,7 @@ const Deploy = () => {
     const getDeploymentId = async () =>
       new Promise<void>(async (resolve) => {
         const { id } = await fetch(
-          `/api/deploy/getDeploymentId?since=${now}`,
+          `/api/withAuth/deploy/getDeploymentId?since=${now}`,
           { next: { revalidate: 0 } },
         ).then(async (res) => await res.json());
         if (id) {
@@ -68,7 +68,7 @@ const Deploy = () => {
     /* request deployment events until finish deployment */
     const getEventList = async () =>
       new Promise<void>(async (resolve) => {
-        const eventList = await fetch(`/api/deploy/events?id=${deploymentId}`, {
+        const eventList = await fetch(`/api/withAuth/deploy/events?id=${deploymentId}`, {
           next: { revalidate: 0 },
         }).then(async (res) => await res.json());
 
@@ -79,7 +79,7 @@ const Deploy = () => {
             "Build cache uploaded:",
           )
         ) {
-          await fetch(`/api/deploy/submitSitemapToGoogle`, {
+          await fetch(`/api/withAuth/deploy/submitSitemapToGoogle`, {
             next: { revalidate: 0 },
           })
             .then(() => {

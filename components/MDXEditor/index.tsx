@@ -55,7 +55,7 @@ const MDXEditor = (props: {
           const formData = new FormData();
           formData.append("mdxSource", mdx || "");
           const result = await (
-            await fetch("/api/writer/buildMDX", {
+            await fetch("/api/withAuth/writer/buildMDX", {
               method: "POST",
               body: formData,
             })

@@ -140,14 +140,14 @@ export default function Writer(props: {
     setIsWorking(true);
     const mediaList = (
       await (
-        await fetch(`/api/writer/getMediaList?epoch=${props.epoch}`, {
+        await fetch(`/api/withAuth/writer/getMediaList?epoch=${props.epoch}`, {
           next: { revalidate: 0 },
         })
       ).json()
     ).files;
     setMediaList(mediaList);
     const imageSizesFromServer = (await (
-      await fetch(`/api/writer/getImageSizes?epoch=${props.epoch}`, {
+      await fetch(`/api/withAuth/writer/getImageSizes?epoch=${props.epoch}`, {
         next: { revalidate: 0 },
       })
     ).json()) as IImageSizes;
@@ -173,7 +173,7 @@ export default function Writer(props: {
     }
     // formData.append("file", file);
 
-    fetch("/api/writer/uploadImage", {
+    fetch("/api/withAuth/writer/uploadImage", {
       method: "POST",
       body: formData,
     })
@@ -183,7 +183,7 @@ export default function Writer(props: {
       })
       .catch((err) => console.error(err));
 
-    const res = await fetch(`/api/writer/getImageSizes?epoch=${props.epoch}`, {
+    const res = await fetch(`/api/withAuth/writer/getImageSizes?epoch=${props.epoch}`, {
       next: { revalidate: 0 },
     });
     const sizes = await res.json();
@@ -209,7 +209,7 @@ export default function Writer(props: {
     formData.append("epoch", String(props.epoch as Number));
     formData.append("mdx", post.mdx);
 
-    fetch("/api/writer/publishPost", {
+    fetch("/api/withAuth/writer/publishPost", {
       method: "POST",
       body: formData,
     })
@@ -436,7 +436,7 @@ export default function Writer(props: {
                               setIsWorking(true);
                               const res = (await (
                                 await fetch(
-                                  `/api/writer/deleteImage?key=${media.Key}`,
+                                  `/api/withAuth/writer/deleteImage?key=${media.Key}`,
                                   { next: { revalidate: 0 } },
                                 )
                               ).json()) as
