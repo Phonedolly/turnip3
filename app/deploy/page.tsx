@@ -36,6 +36,7 @@ const Deploy = () => {
       .then(() => {
         alert("Deploy Request Submited!");
         // setIsCompleteDeploying(true);
+        setStatus("DEPLOYING");
       })
       .catch((errReason) => {
         console.error(errReason);
@@ -74,7 +75,6 @@ const Deploy = () => {
     const getEventList = async () =>
       new Promise<void>(async (resolve) => {
         const eventList = await fetch(`/api/deploy/events?id=${deploymentId}`, {
-          cache: "no-store",
           next: { revalidate: 0 },
         }).then(async (res) => await res.json());
 
@@ -85,9 +85,7 @@ const Deploy = () => {
             "Build cache uploaded:",
           )
         ) {
-          setStatus("DEPLOYING");
           await fetch(`/api/deploy/submitSitemapToGoogle`, {
-            cache: "no-store",
             next: { revalidate: 0 },
           })
             .then(() => {
