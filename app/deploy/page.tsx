@@ -50,15 +50,13 @@ const Deploy = () => {
     /* until get current deployment */
     const getDeploymentId = async () =>
       new Promise<void>(async (resolve) => {
-        const { id, created } = await fetch(`/api/deploy/getDeploymentId`).then(
-          async (res) => await res.json(),
-        );
+        const { id } = await fetch(
+          `/api/deploy/getDeploymentId?since=${now}`,
+        ).then(async (res) => await res.json());
         console.log(id);
-        console.log(`created, now=====`);
-        console.log(`${created}, ${now}`);
-        if (created > now) {
-          console.log("created > now");
-
+        console.log(`created , now=====`);
+        if (id) {
+          console.log("deploy id is not null");
           deploymentId = id;
           resolve();
         } else {
