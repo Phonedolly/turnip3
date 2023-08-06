@@ -140,12 +140,16 @@ export default function Writer(props: {
     setIsWorking(true);
     const mediaList = (
       await (
-        await fetch(`/api/writer/getMediaList?epoch=${props.epoch}`)
+        await fetch(`/api/writer/getMediaList?epoch=${props.epoch}`, {
+          next: { revalidate: 0 },
+        })
       ).json()
     ).files;
     setMediaList(mediaList);
     const imageSizesFromServer = (await (
-      await fetch(`/api/writer/getImageSizes?epoch=${props.epoch}`)
+      await fetch(`/api/writer/getImageSizes?epoch=${props.epoch}`, {
+        next: { revalidate: 0 },
+      })
     ).json()) as IImageSizes;
     setImageSizes(imageSizesFromServer);
     setIsWorking(false);
@@ -179,7 +183,9 @@ export default function Writer(props: {
       })
       .catch((err) => console.error(err));
 
-    const res = await fetch(`/api/writer/getImageSizes?epoch=${props.epoch}`);
+    const res = await fetch(`/api/writer/getImageSizes?epoch=${props.epoch}`, {
+      next: { revalidate: 0 },
+    });
     const sizes = await res.json();
     setImageSizes(sizes);
   };
@@ -431,6 +437,7 @@ export default function Writer(props: {
                               const res = (await (
                                 await fetch(
                                   `/api/writer/deleteImage?key=${media.Key}`,
+                                  { next: { revalidate: 0 } },
                                 )
                               ).json()) as
                                 | { success: boolean }

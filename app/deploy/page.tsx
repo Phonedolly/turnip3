@@ -17,7 +17,7 @@ const Deploy = () => {
     }[]
   >([]);
   useEffect(() => {
-    fetch("/api/deploy")
+    fetch("/api/deploy", { next: { revalidate: 0 } })
       .then(async (res) => await res.json())
       .then((json) => {
         setEnv(json);
@@ -51,6 +51,7 @@ const Deploy = () => {
       new Promise<void>(async (resolve) => {
         const { id } = await fetch(
           `/api/deploy/getDeploymentId?since=${now}`,
+          { next: { revalidate: 0 } },
         ).then(async (res) => await res.json());
         if (id) {
           deploymentId = id;
