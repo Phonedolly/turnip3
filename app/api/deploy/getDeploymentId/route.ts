@@ -12,5 +12,8 @@ export async function GET() {
   );
 
   const data = await result.json();
-  return NextResponse.json({ id: data.deployments[0].uid });
+  return NextResponse.json({
+    id: data.deployments[0].uid,
+    created: Number(data.deployments[0].created),
+  });
 }

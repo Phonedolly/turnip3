@@ -89,6 +89,7 @@ const Deploy = () => {
               return;
             }
             /* Trigger build using hook */
+            const now = Date.now(); // save current time
             await fetch(env["VERCEL_DEPLOY_HOOK"])
               .then(() => {
                 // alert("Deploy Request Submited!");
@@ -101,16 +102,24 @@ const Deploy = () => {
               });
 
             /* get deployment id */
-            const { id: deploymentId } = await fetch(
-              `/api/deploy/getDeploymentId`,
-            ).then(async (res) => await res.json());
-            console.log(deploymentId);
+            let deploymentId;
+            while (1) {
+              const { id, created } = await fetch(
+                `/api/deploy/getDeploymentId`,
+              ).then(async (res) => await res.json());
+              console.log(deploymentId);
+              if (created > now) {
+                deploymentId = id;
+                break;
+              }
+            }
 
             /* request deployment events until finish deployment */
             while (1) {
               const eventList = await fetch(
                 `/api/deploy/events?id=${deploymentId}`,
               ).then(async (res) => await res.json());
+
               console.log(eventList);
               setBuildEvents(eventList);
               if (
@@ -129,7 +138,7 @@ const Deploy = () => {
                       prev.concat({
                         type: "stdout",
                         payload: {
-                          date: Math.floor(Date.now() / 1000),
+                          date: Date.now(),
                           text: "Upload Sitemap to Google.",
                         },
                       }),
@@ -140,7 +149,7 @@ const Deploy = () => {
                       prev.concat({
                         type: "stderr",
                         payload: {
-                          date: Math.floor(Date.now() / 1000),
+                          date: Date.now(),
                           text: "Failed to Upload Sitemap to Google. Check Sitemap is submitted on Google Search Console.",
                         },
                       }),
