@@ -117,8 +117,8 @@ const Deploy = () => {
                   resolve();
                 } else {
                   console.log("created <= now");
-                  setTimeout(() => {
-                    getDeploymentId();
+                  setTimeout(async () => {
+                    resolve(await getDeploymentId());
                   }, 1000);
                 }
               });
@@ -170,7 +170,7 @@ const Deploy = () => {
                       resolve();
                     });
                 } else {
-                  setTimeout(() => getEventList(), 1000);
+                  setTimeout(async () => resolve(await getEventList()), 1000);
                 }
               });
             await getEventList();
