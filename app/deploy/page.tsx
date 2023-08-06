@@ -103,15 +103,23 @@ const Deploy = () => {
 
             /* get deployment id */
             let deploymentId;
-            while (1) {
-              const { id, created } = await fetch(
-                `/api/deploy/getDeploymentId`,
-              ).then(async (res) => await res.json());
-              console.log(deploymentId);
-              if (created > now) {
-                deploymentId = id;
-                break;
-              }
+            let exit = false;
+            /* until get current deployment */
+            while (exit) {
+              setTimeout(async () => {
+                const { id, created } = await fetch(
+                  `/api/deploy/getDeploymentId`,
+                ).then(async (res) => await res.json());
+                console.log(deploymentId);
+
+                if (created > now) {
+                  console.log("created > now");
+                  deploymentId = id;
+                  exit = true;
+                } else {
+                  console.log("created <= now");
+                }
+              }, 1000);
             }
 
             /* request deployment events until finish deployment */
