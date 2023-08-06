@@ -60,7 +60,7 @@ const Deploy = () => {
           deploymentId = id;
           resolve();
         } else {
-          console.log("created <= now");
+          console.log("last created <= now");
           setTimeout(async () => {
             resolve(await getDeploymentId());
           }, 1000);
