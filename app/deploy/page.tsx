@@ -103,10 +103,9 @@ const Deploy = () => {
 
             /* get deployment id */
             let deploymentId;
-            let canExit = false;
             /* until get current deployment */
-            while (canExit === false) {
-              setTimeout(async () => {
+            const getDeploymentId = async () =>
+              new Promise<void>(async (resolve) => {
                 const { id, created } = await fetch(
                   `/api/deploy/getDeploymentId`,
                 ).then(async (res) => await res.json());
@@ -115,59 +114,66 @@ const Deploy = () => {
                 if (created > now) {
                   console.log("created > now");
                   deploymentId = id;
-                  canExit = true;
+                  resolve();
                 } else {
                   console.log("created <= now");
+                  setTimeout(() => {
+                    getDeploymentId();
+                  }, 1000);
                 }
-              }, 1000);
-            }
+              });
+
+            await getDeploymentId();
 
             /* request deployment events until finish deployment */
-            while (1) {
-              const eventList = await fetch(
-                `/api/deploy/events?id=${deploymentId}`,
-              ).then(async (res) => await res.json());
+            const getEventList = async () =>
+              new Promise<void>(async (resolve) => {
+                const eventList = await fetch(
+                  `/api/deploy/events?id=${deploymentId}`,
+                ).then(async (res) => await res.json());
 
-              console.log(eventList);
-              setBuildEvents(eventList);
-              if (
-                eventList[eventList.length - 1].payload.text.startsWith(
-                  "Build cache uploaded:",
-                )
-              ) {
-                setIsCompleteDeploying(true);
-                await fetch(
-                  `https://www.google.com/ping?sitemap=${
-                    process.env.NEXT_PUBLIC_APP_URL as string
-                  }/sitemap.xml`,
-                )
-                  .then(() => {
-                    setBuildEvents((prev) =>
-                      prev.concat({
-                        type: "stdout",
-                        payload: {
-                          date: Date.now(),
-                          text: "Upload Sitemap to Google.",
-                        },
-                      }),
-                    );
-                  })
-                  .catch(() => {
-                    setBuildEvents((prev) =>
-                      prev.concat({
-                        type: "stderr",
-                        payload: {
-                          date: Date.now(),
-                          text: "Failed to Upload Sitemap to Google. Check Sitemap is submitted on Google Search Console.",
-                        },
-                      }),
-                    );
-                  });
-                break;
-              }
-            }
-
-            //TODO submit sitemap update to google
+                console.log(eventList);
+                setBuildEvents(eventList);
+                if (
+                  eventList[eventList.length - 1].payload.text.startsWith(
+                    "Build cache uploaded:",
+                  )
+                ) {
+                  setIsCompleteDeploying(true);
+                  await fetch(
+                    `https://www.google.com/ping?sitemap=${
+                      process.env.NEXT_PUBLIC_APP_URL as string
+                    }/sitemap.xml`,
+                  )
+                    .then(() => {
+                      setBuildEvents((prev) =>
+                        prev.concat({
+                          type: "stdout",
+                          payload: {
+                            date: Date.now(),
+                            text: "Upload Sitemap to Google.",
+                          },
+                        }),
+                      );
+                      resolve();
+                    })
+                    .catch(() => {
+                      setBuildEvents((prev) =>
+                        prev.concat({
+                          type: "stderr",
+                          payload: {
+                            date: Date.now(),
+                            text: "Failed to Upload Sitemap to Google. Check Sitemap is submitted on Google Search Console.",
+                          },
+                        }),
+                      );
+                      resolve();
+                    });
+                } else {
+                  setTimeout(() => getEventList(), 1000);
+                }
+              });
+            await getEventList();
           }}
         >
           Deploy
