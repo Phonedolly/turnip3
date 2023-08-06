@@ -72,11 +72,11 @@ const Deploy = () => {
         <button
           className="rounded-full bg-neutral-800 p-10 text-5xl font-extrabold text-white shadow-[0px_8px_32px_rgba(0,0,0,0.5)] transition duration-[400ms] ease-in-out hover:rotate-6 hover:scale-110 hover:shadow-[0px_12px_48px_rgba(0,0,0,0.5)]"
           onClick={() => {
-            if (!process.env.VERCEL_DEPLOY_HOOK) {
+            if (!env["VERCEL_DEPLOY_HOOK"]) {
               alert("Vercel Git Hook is Unavailable!");
               return;
             }
-            fetch(`${process.env.VERCEL_DEPLOY_HOOK}`)
+            fetch(env["VERCEL_DEPLOY_HOOK"])
               .then(() => {
                 alert("Deploy Request Submited!");
                 router.replace("/");
