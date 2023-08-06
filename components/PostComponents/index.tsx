@@ -219,7 +219,6 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
     }
   },
   li: ({ children, ...otherProps }) => {
-    console.log(otherProps.value);
     // if (!(children instanceof Array)) {
     //   return (
     //     <div className="flex flex-row items-center gap-x-1.5">

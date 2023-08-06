@@ -64,7 +64,6 @@ const MDXEditor = (props: {
           if (frontmatter.error) {
             throw new Error(frontmatter.error);
           }
-          console.log("MDX Compile success!");
           props.setPost((prev) => ({
             ...prev,
             frontmatter,
@@ -72,7 +71,6 @@ const MDXEditor = (props: {
             code: code,
             mdx: mdx || "",
           }));
-          console.log("Apply Success");
         } catch (e) {
           props.setPost((prev) => ({ ...prev, mdxHasProblem: true }));
           console.error(e);

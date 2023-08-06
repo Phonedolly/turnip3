@@ -72,13 +72,13 @@ export default function Writer(props: {
     [imageSizes, post.code, post.frontmatter],
   );
 
-  useEffect(() => {
-    const beforeUnload = (e: BeforeUnloadEvent) => {
-      e.preventDefault();
-      e.returnValue = "";
-    };
-    window.addEventListener("beforeunload", beforeUnload);
+  const beforeUnload = (e: BeforeUnloadEvent) => {
+    e.preventDefault();
+    e.returnValue = "";
+  };
 
+  useEffect(() => {
+    window.addEventListener("beforeunload", beforeUnload);
     return () => {
       window.removeEventListener("beforeunload", beforeUnload);
     };
@@ -183,9 +183,12 @@ export default function Writer(props: {
       })
       .catch((err) => console.error(err));
 
-    const res = await fetch(`/api/withAuth/writer/getImageSizes?epoch=${props.epoch}`, {
-      next: { revalidate: 0 },
-    });
+    const res = await fetch(
+      `/api/withAuth/writer/getImageSizes?epoch=${props.epoch}`,
+      {
+        next: { revalidate: 0 },
+      },
+    );
     const sizes = await res.json();
     setImageSizes(sizes);
   };

@@ -31,17 +31,8 @@ const shouldMakeNewEpoch = async (s3: S3Client) => {
       console.error("MDX Not Found!");
       return null;
     });
-  if (!tryToGetMdx) {
-    console.log(
-      `shouldMakeNewEpoch: false, lastEpoch: ${epoches[epoches.length - 1]}`,
-    );
-    return false;
-  } else {
-    console.log(
-      `shouldMakeNewEpoch: true, lastEpoch: ${epoches[epoches.length - 1]}`,
-    );
-    return true;
-  }
+
+  return tryToGetMdx ? true : false;
 };
 
 const initNewPost = async () => {

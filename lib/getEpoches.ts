@@ -11,7 +11,6 @@ const getEpoches = cache(async (s3: S3Client) => {
     createPostDir(s3)
       .then((res) => {
         console.log("Successfully created posts directory");
-        console.log(res);
       })
       .catch(() => {
         console.error("Trying to create posts directory failed!");

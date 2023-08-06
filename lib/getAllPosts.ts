@@ -13,8 +13,6 @@ const getAllPosts = cache(async (s3: S3Client) => {
           Key: `posts/${epoch}/${epoch}.mdx`,
         });
         const response = await s3.send(command).catch((err) => {
-          console.error("response.body");
-          console.error(err);
           return reject(err);
         });
         if (!response?.Body) {
