@@ -105,9 +105,9 @@ const Deploy = () => {
               `/api/deploy/getDeploymentId`,
             ).then(async (res) => await res.json());
             console.log(deploymentId);
-            
+
             /* request deployment events until finish deployment */
-            const interval = setInterval(async () => {
+            while (1) {
               const eventList = await fetch(
                 `/api/deploy/events?id=${deploymentId}`,
               ).then(async (res) => await res.json());
@@ -119,8 +119,7 @@ const Deploy = () => {
                 )
               ) {
                 setIsCompleteDeploying(true);
-                clearInterval(interval);
-                fetch(
+                await fetch(
                   `https://www.google.com/ping?sitemap=${
                     process.env.NEXT_PUBLIC_APP_URL as string
                   }/sitemap.xml`,
@@ -147,8 +146,9 @@ const Deploy = () => {
                       }),
                     );
                   });
+                break;
               }
-            }, 1000);
+            }
 
             //TODO submit sitemap update to google
           }}
