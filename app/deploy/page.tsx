@@ -43,7 +43,6 @@ const Deploy = () => {
         alert("Failed to Submit Request.");
         router.replace("/");
       });
-    console.log("trigger build hook");
 
     /* get deployment id */
     let deploymentId;
@@ -53,14 +52,10 @@ const Deploy = () => {
         const { id } = await fetch(
           `/api/deploy/getDeploymentId?since=${now}`,
         ).then(async (res) => await res.json());
-        console.log(id);
-        console.log(`created , now=====`);
         if (id) {
-          console.log("deploy id is not null");
           deploymentId = id;
           resolve();
         } else {
-          console.log("last created <= now");
           setTimeout(async () => {
             resolve(await getDeploymentId());
           }, 1000);
@@ -76,8 +71,8 @@ const Deploy = () => {
           next: { revalidate: 0 },
         }).then(async (res) => await res.json());
 
-        console.log(eventList);
         setBuildEvents(eventList);
+        
         if (
           eventList[eventList.length - 1].payload.text.startsWith(
             "Build cache uploaded:",
