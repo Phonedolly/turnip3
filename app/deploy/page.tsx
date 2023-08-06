@@ -90,10 +90,10 @@ const Deploy = () => {
             }
             /* Trigger build using hook */
             const now = Date.now(); // save current time
-            await fetch(env["VERCEL_DEPLOY_HOOK"])
+            await fetch(env["VERCEL_DEPLOY_HOOK"], { method: "POST" })
               .then(() => {
-                // alert("Deploy Request Submited!");
-                setIsCompleteDeploying(true);
+                alert("Deploy Request Submited!");
+                // setIsCompleteDeploying(true);
               })
               .catch((errReason) => {
                 console.error(errReason);
@@ -101,7 +101,7 @@ const Deploy = () => {
                 router.replace("/");
               });
             console.log("trigger build hook");
-            
+
             /* get deployment id */
             let deploymentId;
             /* until get current deployment */
