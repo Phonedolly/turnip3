@@ -111,9 +111,11 @@ const Deploy = () => {
                   `/api/deploy/getDeploymentId`,
                 ).then(async (res) => await res.json());
                 console.log(id);
-
+                console.log(`created, now=====`);
+                console.log(`${created}, ${now}`);
                 if (created > now) {
                   console.log("created > now");
+
                   deploymentId = id;
                   resolve();
                 } else {
