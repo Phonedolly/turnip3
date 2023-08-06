@@ -103,9 +103,9 @@ const Deploy = () => {
 
             /* get deployment id */
             let deploymentId;
-            let exit = false;
+            let canExit = false;
             /* until get current deployment */
-            while (exit) {
+            while (canExit === false) {
               setTimeout(async () => {
                 const { id, created } = await fetch(
                   `/api/deploy/getDeploymentId`,
@@ -115,7 +115,7 @@ const Deploy = () => {
                 if (created > now) {
                   console.log("created > now");
                   deploymentId = id;
-                  exit = true;
+                  canExit = true;
                 } else {
                   console.log("created <= now");
                 }
