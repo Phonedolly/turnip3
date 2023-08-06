@@ -10,7 +10,7 @@ const Deploy = () => {
   const [env, setEnv] = useState<any>({});
   const [status, setStatus] = useState<
     "INIT" | "READY" | "DEPLOYING" | "DEPLOYED"
-  >("READY");
+  >("INIT");
   const [buildEvents, setBuildEvents] = useState<
     {
       [key: string]: any;
@@ -72,7 +72,7 @@ const Deploy = () => {
         }).then(async (res) => await res.json());
 
         setBuildEvents(eventList);
-        
+
         if (
           eventList[eventList.length - 1].payload.text.startsWith(
             "Build cache uploaded:",
