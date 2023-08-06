@@ -4,7 +4,7 @@ export async function GET(request: NextRequest) {
   const url = new URL(request.url);
   const id = url.searchParams.get("id");
   const result = await fetch(
-    `https://api.vercel.com/v2/deployments/${id}}/events`,
+    `https://api.vercel.com/v2/deployments/${id}/events`,
     {
       headers: {
         Authorization: `Bearer ${process.env.VERCEL_TOKEN}`,
