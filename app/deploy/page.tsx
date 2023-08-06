@@ -109,7 +109,7 @@ const Deploy = () => {
                 const { id, created } = await fetch(
                   `/api/deploy/getDeploymentId`,
                 ).then(async (res) => await res.json());
-                console.log(deploymentId);
+                console.log(id);
 
                 if (created > now) {
                   console.log("created > now");
