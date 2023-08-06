@@ -217,7 +217,7 @@ export default function Writer(props: {
       .then((resAsJson) => {
         console.log("publish success!");
         console.log(resAsJson);
-        router.push(`/`);
+        router.replace("/deploy");
       });
   };
 
@@ -509,7 +509,7 @@ export default function Writer(props: {
                 return (
                   <Link
                     href={`/writer/${post.epoch}`}
-                    className="flex w-full flex-row justify-between hover:bg-neutral-300 rounded-xl py-2 px-2.5"
+                    className="flex w-full flex-row justify-between rounded-xl px-2.5 py-2 hover:bg-neutral-300"
                     key={uuidv4()}
                   >
                     <h1 className=" select-none text-left font-outfit text-base font-bold sm:text-lg md:text-xl">
