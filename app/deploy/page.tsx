@@ -8,9 +8,9 @@ import { v4 as uuidv4 } from "uuid";
 const Deploy = () => {
   const router = useRouter();
   const [env, setEnv] = useState<any>({});
-  const [status, setStatus] = useState<"READY" | "DEPLOYING" | "DEPLOYED">(
-    "READY",
-  );
+  const [status, setStatus] = useState<
+    "INIT" | "READY" | "DEPLOYING" | "DEPLOYED"
+  >("READY");
   const [buildEvents, setBuildEvents] = useState<
     {
       [key: string]: any;
@@ -21,7 +21,7 @@ const Deploy = () => {
       .then(async (res) => await res.json())
       .then((json) => {
         setEnv(json);
-        console.log(json);
+        setStatus("READY");
       });
   }, []);
 
@@ -173,14 +173,14 @@ const Deploy = () => {
         </table>
         <button
           className={`rounded-full  p-10 text-5xl font-extrabold text-white shadow-[0px_8px_32px_rgba(0,0,0,0.5)] transition duration-[400ms] ease-in-out ${
-            status !== "READY"
-              ? `cursor-pointer bg-neutral-300 hover:rotate-6 hover:scale-110 hover:shadow-[0px_12px_48px_rgba(0,0,0,0.5)]`
-              : `cursor-none bg-neutral-800`
+            status === "READY"
+              ? `cursor-pointer bg-neutral-800`
+              : `cursor-not-allowed bg-neutral-300 hover:rotate-6 hover:scale-110 hover:shadow-[0px_12px_48px_rgba(0,0,0,0.5)]`
           }`}
           onClick={handleDeploy}
           disabled={status === "DEPLOYING" || status === "DEPLOYED"}
         >
-          {status === "READY"
+          {status === "INIT" || status === "READY"
             ? "Deploy"
             : status === "DEPLOYING"
             ? "Deploying..."
