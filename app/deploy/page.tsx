@@ -104,12 +104,14 @@ const Deploy = () => {
             const { id: deploymentId } = await fetch(
               `/api/deploy/getDeploymentId`,
             ).then(async (res) => await res.json());
-
+            console.log(deploymentId);
+            
             /* request deployment events until finish deployment */
             const interval = setInterval(async () => {
               const eventList = await fetch(
                 `/api/deploy/events?id=${deploymentId}`,
               ).then(async (res) => await res.json());
+              console.log(eventList);
               setBuildEvents(eventList);
               if (
                 eventList[eventList.length - 1].payload.text.startsWith(
