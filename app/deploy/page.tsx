@@ -3,10 +3,18 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { signOut } from "next-auth/react";
+import { v4 as uuidv4 } from "uuid";
 
 const Deploy = () => {
   const router = useRouter();
   const [env, setEnv] = useState<any>({});
+  const [isCompleteDeploying, setIsCompleteDeploying] =
+    useState<boolean>(false);
+  const [buildEvents, setBuildEvents] = useState<
+    {
+      [key: string]: any;
+    }[]
+  >([]);
   useEffect(() => {
     fetch("/api/deploy")
       .then(async (res) => await res.json())
@@ -15,6 +23,10 @@ const Deploy = () => {
         console.log(json);
       });
   }, []);
+
+  useEffect(() => {
+    if (!isCompleteDeploying) return;
+  }, [isCompleteDeploying, buildEvents]);
 
   return (
     <div className="flex h-full w-11/12 flex-col items-center justify-center rounded-2xl bg-neutral-100/90 px-3">
@@ -71,24 +83,94 @@ const Deploy = () => {
         </table>
         <button
           className="rounded-full bg-neutral-800 p-10 text-5xl font-extrabold text-white shadow-[0px_8px_32px_rgba(0,0,0,0.5)] transition duration-[400ms] ease-in-out hover:rotate-6 hover:scale-110 hover:shadow-[0px_12px_48px_rgba(0,0,0,0.5)]"
-          onClick={() => {
+          onClick={async () => {
             if (!env["VERCEL_DEPLOY_HOOK"]) {
               alert("Vercel Git Hook is Unavailable!");
               return;
             }
-            fetch(env["VERCEL_DEPLOY_HOOK"])
+            /* Trigger build using hook */
+            await fetch(env["VERCEL_DEPLOY_HOOK"])
               .then(() => {
-                alert("Deploy Request Submited!");
-                router.replace("/");
+                // alert("Deploy Request Submited!");
+                setIsCompleteDeploying(true);
               })
               .catch((errReason) => {
                 console.error(errReason);
                 alert("Failed to Submit Request.");
+                router.replace("/");
               });
+
+            /* get deployment id */
+            const { id: deploymentId } = await fetch(
+              `/api/deploy/getDeploymentId`,
+            ).then(async (res) => await res.json());
+
+            /* request deployment events until finish deployment */
+            const interval = setInterval(async () => {
+              const eventList = await fetch(
+                `/api/deploy/events?id=${deploymentId}`,
+              ).then(async (res) => await res.json());
+              setBuildEvents(eventList);
+              if (
+                eventList[eventList.length - 1].payload.text.startsWith(
+                  "Build cache uploaded:",
+                )
+              ) {
+                setIsCompleteDeploying(true);
+                clearInterval(interval);
+                fetch(
+                  `https://www.google.com/ping?sitemap=${
+                    process.env.NEXT_PUBLIC_APP_URL as string
+                  }/sitemap.xml`,
+                )
+                  .then(() => {
+                    setBuildEvents((prev) =>
+                      prev.concat({
+                        type: "stdout",
+                        payload: {
+                          date: Math.floor(Date.now() / 1000),
+                          text: "Upload Sitemap to Google.",
+                        },
+                      }),
+                    );
+                  })
+                  .catch(() => {
+                    setBuildEvents((prev) =>
+                      prev.concat({
+                        type: "stderr",
+                        payload: {
+                          date: Math.floor(Date.now() / 1000),
+                          text: "Failed to Upload Sitemap to Google. Check Sitemap is submitted on Google Search Console.",
+                        },
+                      }),
+                    );
+                  });
+              }
+            }, 1000);
+
+            //TODO submit sitemap update to google
           }}
         >
           Deploy
         </button>
+      </div>
+      <div className="flex h-auto w-full flex-col ">
+        {buildEvents &&
+          buildEvents.map((buildEvent) => {
+            return (
+              <div
+                className={`flex w-full flex-row text-sm ${
+                  buildEvent.type === "stderr" ? `bg-red-400` : `bg-white`
+                }`}
+                key={uuidv4()}
+              >
+                <h1 className="text-black">
+                  {new Date(buildEvent.payload.date as number).toISOString()}
+                </h1>
+                <h1 className="text-neutral-700">{buildEvent.payload.text}</h1>
+              </div>
+            );
+          })}
       </div>
     </div>
   );
