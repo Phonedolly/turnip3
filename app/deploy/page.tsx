@@ -174,8 +174,8 @@ const Deploy = () => {
         <button
           className={`rounded-full  p-10 text-5xl font-extrabold text-white shadow-[0px_8px_32px_rgba(0,0,0,0.5)] transition duration-[400ms] ease-in-out ${
             status !== "READY"
-              ? `cursor-none bg-neutral-300 hover:rotate-6 hover:scale-110 hover:shadow-[0px_12px_48px_rgba(0,0,0,0.5)]`
-              : `cursor-pointer bg-neutral-800`
+              ? `cursor-pointer bg-neutral-300 hover:rotate-6 hover:scale-110 hover:shadow-[0px_12px_48px_rgba(0,0,0,0.5)]`
+              : `cursor-none bg-neutral-800`
           }`}
           onClick={handleDeploy}
           disabled={status === "DEPLOYING" || status === "DEPLOYED"}
