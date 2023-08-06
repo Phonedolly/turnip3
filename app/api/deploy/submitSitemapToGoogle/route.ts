@@ -5,7 +5,7 @@ export async function GET() {
     `https://www.google.com/ping?sitemap=${
       process.env.NEXT_PUBLIC_APP_URL as string
     }/sitemap.xml`,
-    { cache: "no-store" },
+    { cache: "no-store", next: { revalidate: 0 } },
   )
     .then(async (res) => {
       const data = await res.json();

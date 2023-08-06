@@ -11,6 +11,7 @@ export async function GET(request: NextRequest) {
       },
       method: "get",
       cache: "no-store",
+      next: { revalidate: 0 },
     },
   );
   const data = await result.json();

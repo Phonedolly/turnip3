@@ -8,8 +8,9 @@ import { v4 as uuidv4 } from "uuid";
 const Deploy = () => {
   const router = useRouter();
   const [env, setEnv] = useState<any>({});
-  const [isCompleteDeploying, setIsCompleteDeploying] =
-    useState<boolean>(false);
+  const [status, setStatus] = useState<"READY" | "DEPLOYING" | "DEPLOYED">(
+    "READY",
+  );
   const [buildEvents, setBuildEvents] = useState<
     {
       [key: string]: any;
@@ -23,10 +24,6 @@ const Deploy = () => {
         console.log(json);
       });
   }, []);
-
-  useEffect(() => {
-    if (!isCompleteDeploying) return;
-  }, [isCompleteDeploying, buildEvents]);
 
   const handleDeploy = async () => {
     if (!env["VERCEL_DEPLOY_HOOK"]) {
@@ -76,9 +73,10 @@ const Deploy = () => {
     /* request deployment events until finish deployment */
     const getEventList = async () =>
       new Promise<void>(async (resolve) => {
-        const eventList = await fetch(
-          `/api/deploy/events?id=${deploymentId}`,
-        ).then(async (res) => await res.json());
+        const eventList = await fetch(`/api/deploy/events?id=${deploymentId}`, {
+          cache: "no-store",
+          next: { revalidate: 0 },
+        }).then(async (res) => await res.json());
 
         console.log(eventList);
         setBuildEvents(eventList);
@@ -87,9 +85,10 @@ const Deploy = () => {
             "Build cache uploaded:",
           )
         ) {
-          setIsCompleteDeploying(true);
+          setStatus("DEPLOYING");
           await fetch(`/api/deploy/submitSitemapToGoogle`, {
             cache: "no-store",
+            next: { revalidate: 0 },
           })
             .then(() => {
               setBuildEvents((prev) =>
@@ -101,6 +100,7 @@ const Deploy = () => {
                   },
                 }),
               );
+              setStatus("DEPLOYED");
               resolve();
             })
             .catch(() => {
@@ -178,8 +178,13 @@ const Deploy = () => {
         <button
           className="rounded-full bg-neutral-800 p-10 text-5xl font-extrabold text-white shadow-[0px_8px_32px_rgba(0,0,0,0.5)] transition duration-[400ms] ease-in-out hover:rotate-6 hover:scale-110 hover:shadow-[0px_12px_48px_rgba(0,0,0,0.5)]"
           onClick={handleDeploy}
+          disabled={status === "DEPLOYING" || status === "DEPLOYED"}
         >
-          Deploy
+          {status === "READY"
+            ? "Deploy"
+            : status === "DEPLOYING"
+            ? "Deploying..."
+            : "Deployed!"}
         </button>
       </div>
       <div className="flex h-auto w-full flex-col py-4">

@@ -9,6 +9,7 @@ export async function GET() {
       },
       method: "get",
       cache: "no-store",
+      next: { revalidate: 0 },
     },
   );
 
