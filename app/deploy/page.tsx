@@ -100,7 +100,8 @@ const Deploy = () => {
                 alert("Failed to Submit Request.");
                 router.replace("/");
               });
-
+            console.log("trigger build hook");
+            
             /* get deployment id */
             let deploymentId;
             /* until get current deployment */
