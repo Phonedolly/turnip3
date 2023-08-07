@@ -13,9 +13,9 @@ export async function POST(request: Request) {
   /* manage time */
   const { data: frontmatter, content } = matter(mdx);
 
-  if (!frontmatter.updateTime) {
+  if (!frontmatter.updateTime && frontmatter.complete === true) {
     frontmatter.updateTime = [Date.now()];
-  } else if (frontmatter.updateTime) {
+  } else if (frontmatter.updateTime && frontmatter.complete === true) {
     frontmatter.updateTime.push(Date.now());
   }
 
