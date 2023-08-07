@@ -22,13 +22,13 @@ export default async function WriterWrapper({
   // } else {
   // const epoch: number | null = await initNewPost();
   const s3 = initS3Client();
-  const { compiledPosts: incompiledPosts } = await getInitDataFromS3();
-  const imcompletePosts = incompiledPosts.filter(
+  const { compiledPosts } = await getInitDataFromS3();
+  const incompletePosts = compiledPosts.filter(
     (compiledPost) => compiledPost.frontmatter.complete !== true,
   );
   const epoch =
     params.slug === "new" ? await initNewPost() : Number(params.slug);
-  const post = incompiledPosts.find((p) => p.epoch === epoch);
+  const post = compiledPosts.find((p) => p.epoch === epoch);
   const imageSizes = await getImagesSizes(s3, epoch as number);
   const initialMdx = `---
 title: "Trying out new custom code blocks"
@@ -91,7 +91,7 @@ for (let i = 1; i <= 100; i++) {
       epoch={epoch}
       imageSizes={imageSizes as IImageSizes}
       initialCompiledMdxInfo={{ code, frontmatter, mdx }}
-      imcompletePosts={incompiledPosts.map((p) => ({
+      imcompletePosts={incompletePosts.map((p) => ({
         title: p.frontmatter.title,
         epoch: p.epoch,
       }))}
