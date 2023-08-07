@@ -275,11 +275,11 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
     return (
       <div
         className={`${
-          props.className || `flex h-auto w-full flex-col justify-center`
+          props.className || `flex h-auto w-full flex-col justify-center my-5`
         }`}
       >
         <Image
-          className={`my-5 h-auto w-full rounded-2xl`}
+          className={`h-auto w-full rounded-2xl`}
           src={props.src as string}
           alt={props.alt || ""}
           height={specificImageSize.height}
