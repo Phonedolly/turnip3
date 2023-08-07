@@ -272,15 +272,39 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
           decodeURIComponent(path.parse(props.src as string).ext)
       ];
     if (!specificImageSize) return null;
+    let width;
+    switch (props.width) {
+      case "1/1":
+        width = "w-full";
+      case "1/2":
+        width = "w-1/2";
+        break;
+      case "1/3":
+        width = "w-1/3";
+        break;
+      case "1/4":
+        width = "w-1/4";
+        break;
+      case "2/5":
+        width = "w-2/5";
+        break;
+      case "3/5":
+        width = "w-3/5";
+        break;
+      case "4/5":
+        width = "w-4/5";
+        break;
+      default:
+        width = "w-full";
+    }
     return (
       <div
-        className={`${
-          props.className ||
-          `my-5 flex h-auto w-full flex-col items-center justify-center`
-        }`}
+        className={`|
+          my-5 flex h-auto w-full flex-col items-center justify-center`}
+        {...props}
       >
         <Image
-          className={`${props.innerClassName || `h-auto w-full rounded-2xl`}`}
+          className={`h-auto rounded-2xl ${width}`}
           src={props.src as string}
           alt={props.alt || ""}
           height={specificImageSize.height}
