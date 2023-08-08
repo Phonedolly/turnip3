@@ -1,4 +1,4 @@
-import getInitData from '@/lib/getInitData'
+import getInitData from "@/lib/getInitData";
 // eslint-disable @typescript-eslint/no-explicit-any
 import { getServerSideSitemap } from "next-sitemap";
 
@@ -12,11 +12,11 @@ export async function GET() {
     : process.env.NEXT_PUBLIC_APP_URL;
 
   return getServerSideSitemap(
-    initData.compiledPosts
+    initData.posts
       .filter((compiledPost) => compiledPost.frontmatter.complete === true)
       .map((compiledPost) => {
         return {
-          loc: `${app_url}/${compiledPost.epoch}`,
+          loc: `${app_url}/${compiledPost.frontmatter.epoch}`,
           lastmod: `${new Date(
             compiledPost.frontmatter.updateTime[
               compiledPost.frontmatter.updateTime.length - 1
@@ -24,13 +24,13 @@ export async function GET() {
           ).toISOString()}`,
           changefreq: "weekly",
         };
-      })
-      // .concat(
-      //   initData.categories.map((category) => ({
-      //     loc: `${app_url}/${category}`,
-      //     lastmod: new Date().toISOString(),
-      //     changefreq: "hourly",
-      //   })),
-      // ),
+      }),
+    // .concat(
+    //   initData.categories.map((category) => ({
+    //     loc: `${app_url}/${category}`,
+    //     lastmod: new Date().toISOString(),
+    //     changefreq: "hourly",
+    //   })),
+    // ),
   );
 }

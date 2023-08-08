@@ -30,9 +30,7 @@ export default function Writer(props: {
   imageSizes: IImageSizes;
   initialCompiledMdxInfo: {
     code: string;
-    frontmatter: {
-      [key: string]: any;
-    };
+    frontmatter: IFrontmatter;
     mdx: string;
   };
   imcompletePosts: { title?: string; epoch: number }[];
@@ -138,6 +136,13 @@ export default function Writer(props: {
 
   const getMediaList = async () => {
     setIsWorking(true);
+    const imageSizesFromServer = (await (
+      await fetch(`/api/withAuth/writer/getImageSizes?epoch=${props.epoch}`, {
+        next: { revalidate: 0 },
+      })
+    ).json()) as IImageSizes;
+    setImageSizes(imageSizesFromServer);
+
     const mediaList = (
       await (
         await fetch(`/api/withAuth/writer/getMediaList?epoch=${props.epoch}`, {
@@ -146,12 +151,7 @@ export default function Writer(props: {
       ).json()
     ).files;
     setMediaList(mediaList);
-    const imageSizesFromServer = (await (
-      await fetch(`/api/withAuth/writer/getImageSizes?epoch=${props.epoch}`, {
-        next: { revalidate: 0 },
-      })
-    ).json()) as IImageSizes;
-    setImageSizes(imageSizesFromServer);
+    console.log(mediaList);
     setIsWorking(false);
   };
 
@@ -226,10 +226,10 @@ export default function Writer(props: {
       (!post.frontmatter.title ||
         !post.frontmatter.category ||
         !post.frontmatter.thumbnail ||
-        !post.frontmatter.date ||
         !post.frontmatter.epoch)
     ) {
       alert("Please fill in all the fields of frontmatter!");
+      return;
     }
     setIsWorking(true);
 
@@ -394,7 +394,7 @@ export default function Writer(props: {
                 </div>
               </div>
               <div className="flex h-full w-full flex-col gap-y-2 overflow-y-scroll rounded-xl md:grid md:grid-cols-2 md:gap-4 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-                {mediaList?.slice(1).map((media) => {
+                {mediaList?.map((media) => {
                   const specificImageSize =
                     imageSizes[
                       decodeURIComponent(
@@ -404,9 +404,6 @@ export default function Writer(props: {
                           path.parse(media.objectUrl as string).ext,
                         )
                     ];
-                  console.log(media.Key);
-                  console.log(1);
-                  console.log(`/posts/${props.epoch}/imageSizes.json`)
                   return (
                     <div
                       className="flex aspect-square flex-col rounded-2xl bg-neutral-200/40"

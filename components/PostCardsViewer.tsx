@@ -1,25 +1,55 @@
 import Link from "next/link";
 import Image from "next/image";
 import { v4 as uuidv4 } from "uuid";
+import image2uri from "image2uri";
+import { getAverageColor } from "fast-average-color-node";
+import tinycolor from "tinycolor2";
+import { ICompileMDXOutput } from "@/types/ICompileMDXOutput";
 
-const PostCardViewer = (props: {
-  cardsData: {
+const PostCardViewer = async (props: {
+  posts: (ICompileMDXOutput & {
+    mdx: string;
+  } & {
+    imageSizes: IImageSizes;
+  })[];
+}) => {
+  const postsToShowIncludingTitleColor = (await Promise.all(
+    props.posts.map(
+      (post) =>
+        new Promise(async (resolve) => {
+          /* prepare data uri of thumbnail */
+          if (!post.frontmatter.thumbnail) {
+            resolve({ ...post, mostReadableTextColor: "#000000" });
+            return;
+          }
+          const dataUriOfThumbnail = await image2uri(
+            post.frontmatter.thumbnail,
+          );
+          const avgColor = (await getAverageColor(dataUriOfThumbnail)).rgba;
+          const mostReadableTextColor = tinycolor
+            .mostReadable(avgColor, ["#FFFFFF", "#000000"], {
+              includeFallbackColors: true,
+              level: "AA",
+              size: "large",
+            })
+            .toHexString();
+          resolve({ ...post, mostReadableTextColor });
+        }),
+    ),
+  )) as {
     postAsMdx: string;
     epoch: number;
     imageSizes: IImageSizes;
     code: string;
-    frontmatter: {
-      [key: string]: any;
-    };
+    frontmatter: IFrontmatter;
     mostReadableTextColor: string;
   }[];
-}) => {
   return (
-    <div className="my-2 flex w-full flex-col items-center gap-12 px-2 sm:grid-cols-2 md:grid md:gap-14 md:max-w-3xl md:justify-items-center lg:max-w-4xl lg:gap-20 xl:max-w-5xl">
-      {props.cardsData.map((post) => {
+    <div className="my-2 flex w-full flex-col items-center gap-12 px-2 sm:grid-cols-2 md:grid md:max-w-3xl md:justify-items-center md:gap-14 lg:max-w-4xl lg:gap-20 xl:max-w-5xl">
+      {postsToShowIncludingTitleColor.map((post) => {
         return (
           <Link
-            href={`/post/${post.epoch}`}
+            href={`/post/${post.frontmatter.epoch}`}
             key={uuidv4()}
             className="relative flex h-full w-full cursor-pointer select-none flex-col items-center rounded-2xl bg-neutral-200/20 pt-[75%] shadow-[0px_3px_16px_2px_rgba(0,0,0,0.25)] transition duration-[400ms] ease-in-out hover:scale-[1.025]"
           >

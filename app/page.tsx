@@ -15,48 +15,15 @@ import PostCardViewer from "@/components/PostCardsViewer";
 // }
 
 export default async function Home() {
-  const { compiledPosts, categories } = await getInitDataFromS3();
-  const postsToShow = compiledPosts.filter(
-    (compiledPost) => compiledPost.frontmatter.complete === true,
+  const { posts, categories } = await getInitDataFromS3();
+  const postsToShow = posts.filter(
+    (post) => post.frontmatter.complete === true,
   );
   // .slice(0, 9); // TODO When Post is enough to show, remove this line
-  const postsToShowIncludingTitleColor = (await Promise.all(
-    postsToShow.map(
-      (post) =>
-        new Promise(async (resolve) => {
-          /* prepare data uri of thumbnail */
-          if (!post.frontmatter.thumbnail) {
-            resolve({ ...post, mostReadableTextColor: "#000000" });
-            return;
-          }
-          const dataUriOfThumbnail = await image2uri(
-            post.frontmatter.thumbnail,
-          );
-          const avgColor = (await getAverageColor(dataUriOfThumbnail)).rgba;
-          const mostReadableTextColor = tinycolor
-            .mostReadable(avgColor, ["#FFFFFF", "#000000"], {
-              includeFallbackColors: true,
-              level: "AA",
-              size: "large",
-            })
-            .toHexString();
-          resolve({ ...post, mostReadableTextColor });
-        }),
-    ),
-  )) as {
-    postAsMdx: string;
-    epoch: number;
-    imageSizes: IImageSizes;
-    code: string;
-    frontmatter: {
-      [key: string]: any;
-    };
-    mostReadableTextColor: string;
-  }[];
 
   return (
     <main className="flex h-auto w-full flex-col items-center justify-between">
-      <PostCardViewer cardsData={postsToShowIncludingTitleColor} />
+      <PostCardViewer posts={postsToShow} />
     </main>
   );
 }

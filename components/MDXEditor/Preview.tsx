@@ -7,9 +7,7 @@ import PostWrapper from "../PostWrapper";
 
 const Preview = (props: {
   code: string;
-  frontmatter: {
-    [key: string]: any;
-  };
+  frontmatter: IFrontmatter;
   previewScrollTop: number;
   setPreviewScrollTop: React.Dispatch<React.SetStateAction<number>>;
   imageSizes: IImageSizes;
@@ -19,7 +17,7 @@ const Preview = (props: {
     () => (
       <ErrorBoundary
         fallback={
-          <h1 className="h-full w-full bg-red-500 m-2 rounded-2xl py-4 text-center font-outfit text-4xl font-bold text-white">
+          <h1 className="m-2 h-full w-full rounded-2xl bg-red-500 py-4 text-center font-outfit text-4xl font-bold text-white">
             MDX Has a Problem!
           </h1>
         }

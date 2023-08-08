@@ -17,8 +17,8 @@ export default async function HomeWithMorePage({
 }: {
   params: { slug: string };
 }) {
-  const { compiledPosts, categories } = await getInitDataFromS3();
-  const postsToShow = compiledPosts.filter(
+  const { posts, categories } = await getInitDataFromS3();
+  const postsToShow = posts.filter(
     (post) =>
       post.frontmatter.complete === true &&
       post.frontmatter.category === decodeURI(params.slug),
@@ -48,9 +48,7 @@ export default async function HomeWithMorePage({
     epoch: number;
     imageSizes: IImageSizes;
     code: string;
-    frontmatter: {
-      [key: string]: any;
-    };
+    frontmatter: IFrontmatter;
     mostReadableTextColor: string;
   }[];
 

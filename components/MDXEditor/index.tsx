@@ -21,9 +21,7 @@ const MDXEditor = (props: {
   initialCompiledMdxInfo: {
     mdx: string;
     code: string;
-    frontmatter: {
-      [key: string]: any;
-    };
+    frontmatter: IFrontmatter;
   };
 }) => {
   const monaco = useMonaco();

@@ -2,9 +2,7 @@ import { MDXContentProps } from "mdx-bundler/client";
 
 export interface IPost {
   code: string;
-  frontmatter: {
-    [key: string]: any;
-  };
+  frontmatter: IFrontmatter;
   mdx: string;
   category?: string;
   epoch?: number;

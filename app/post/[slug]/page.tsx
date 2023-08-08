@@ -7,8 +7,10 @@ export async function generateMetadata({
 }: {
   params: { slug: string };
 }): Promise<Metadata> {
-  const { compiledPosts } = await getInitDataFromS3();
-  const thisPost = compiledPosts.find((p) => p.epoch === Number(params.slug));
+  const { posts } = await getInitDataFromS3();
+  const thisPost = posts.find(
+    (post) => post.frontmatter.epoch === Number(params.slug),
+  );
   return {
     title: thisPost?.frontmatter.title,
     description: thisPost?.frontmatter.description,
@@ -20,10 +22,10 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
-  const { compiledPosts } = await getInitDataFromS3();
+  const { posts } = await getInitDataFromS3();
 
-  return compiledPosts.map((compiledPost) => ({
-    slug: String(compiledPost.epoch),
+  return posts.map((compiledPost) => ({
+    slug: String(compiledPost.frontmatter.epoch),
   }));
 }
 
@@ -32,9 +34,9 @@ export default async function HomeWithMorePage({
 }: {
   params: { slug: string };
 }) {
-  const { compiledPosts } = await getInitDataFromS3();
+  const { posts } = await getInitDataFromS3();
   const epoch = Number(params.slug);
-  const post = compiledPosts.find((p) => p.epoch === epoch);
+  const post = posts.find((post) => post.frontmatter.epoch === epoch);
 
   if (!post) {
     return <>Not Found</>;

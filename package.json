@@ -23,7 +23,7 @@
     "autoprefixer": "10.4.14",
     "date-fns": "^2.30.0",
     "encoding": "^0.1.13",
-    "esbuild": "^0.18.17",
+    "esbuild": "^0.18.19",
     "eslint": "8.45.0",
     "eslint-config-next": "13.4.12",
     "fast-average-color-node": "^2.6.0",

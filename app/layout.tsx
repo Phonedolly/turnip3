@@ -94,6 +94,7 @@ const cascadiaMono = localFont({
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
+    metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL as string),
     title: `${process.env.APP_NAME}`,
     description: `${process.env.APP_DESCRIPTION}`,
     themeColor: "white",

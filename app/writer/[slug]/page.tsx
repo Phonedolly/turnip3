@@ -1,5 +1,4 @@
 import Writer from "@/components/Writer";
-import initNewPost from "@/lib/initNewPost";
 import getImagesSizes from "@/lib/getImageSizes";
 import initS3Client from "@/lib/S3";
 import { bundleMDX } from "mdx-bundler";
@@ -11,6 +10,8 @@ import rehypeKatex from "rehype-katex";
 import "katex/dist/katex.min.css";
 import rehypeMdxCodeProps from "rehype-mdx-code-props";
 import remarkGfm from "remark-gfm";
+import initNewPost from "@/lib/initNewPost";
+import compileMDX from "@/lib/compileMDX";
 
 export default async function WriterWrapper({
   params,
@@ -22,19 +23,18 @@ export default async function WriterWrapper({
   // } else {
   // const epoch: number | null = await initNewPost();
   const s3 = initS3Client();
-  const { compiledPosts } = await getInitDataFromS3();
-  const incompletePosts = compiledPosts.filter(
+  const { posts, categories } = await getInitDataFromS3();
+  const incompletePosts = posts.filter(
     (compiledPost) => compiledPost.frontmatter.complete !== true,
   );
   const epoch =
     params.slug === "new" ? await initNewPost() : Number(params.slug);
-  const post = compiledPosts.find((p) => p.epoch === epoch);
+  const post = posts.find((p) => p.frontmatter.epoch === epoch);
   const imageSizes = await getImagesSizes(s3, epoch as number);
   const initialMdx = `---
 title: "Trying out new custom code blocks"
 category: "News"
 thumbnail: ""
-date: "2021-11-02"
 epoch: ${epoch}
 description: "A great way to display your code snippets on your MDX+Gatsby blog."
 complete: false
@@ -66,25 +66,10 @@ for (let i = 1; i <= 100; i++) {
 }
 \`\`\`
 `;
-  const result = !post
-    ? await bundleMDX({
-        source: initialMdx,
-        mdxOptions(options, frontmatter) {
-          options.remarkPlugins = [
-            remarkGfm,
-            remarkMath,
-            remarkFrontmatter,
-            remarkMdxFrontmatter,
-          ];
-          options.rehypePlugins = [rehypeKatex, rehypeMdxCodeProps];
-
-          return options;
-        },
-      })
-    : post;
+  const result = !post ? await compileMDX(initialMdx) : post;
   const { code, frontmatter, mdx } = {
     ...result,
-    mdx: !post ? initialMdx : post.postAsMdx,
+    mdx: !post ? initialMdx : post.mdx,
   };
   return (
     <Writer
@@ -93,7 +78,7 @@ for (let i = 1; i <= 100; i++) {
       initialCompiledMdxInfo={{ code, frontmatter, mdx }}
       imcompletePosts={incompletePosts.map((p) => ({
         title: p.frontmatter.title,
-        epoch: p.epoch,
+        epoch: p.frontmatter.epoch,
       }))}
     />
   );

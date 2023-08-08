@@ -13,6 +13,7 @@ import getImagesSizes from "@/lib/getImageSizes";
 import gm from "gm";
 // import sharp from "sharp";
 import Jimp from "jimp";
+import getAllCompiledPostWithImageSizes from "@/lib/getAllCompiledPostWithImageSize";
 
 const checkFileDuplicated = (s3: S3Client, epoch: number, fileName: string) => {
   return s3
@@ -48,6 +49,13 @@ export async function POST(request: Request) {
   const formData = await request.formData();
   const epoch = Number(formData.get("epoch"));
   const numOfFiles = Number(formData.get("numOfFiles"));
+  const posts = await getAllCompiledPostWithImageSizes(s3);
+  const identity = posts.find((post) => post.frontmatter.epoch === epoch);
+  let dirName: string | number = identity?.frontmatter.title as string;
+
+  if (!identity) {
+    dirName = epoch;
+  }
 
   const failedFiles: string[] = [];
   let imageSizes = (await getImagesSizes(s3, epoch)) as IImageSizes;
@@ -55,7 +63,7 @@ export async function POST(request: Request) {
   for (let i = 0; i < numOfFiles; i++) {
     const file = formData.get(`file_${i}`) as File;
     let fileName = file.name;
-    fileName = fileName.replaceAll(" ", "_");
+    fileName = fileName.replaceAll(/ /g, "_");
     const fileAsArrayBuffer = Buffer.from(await fileToArrayBuffer(file));
 
     if (await checkFileDuplicated(s3, epoch, fileName)) {
@@ -80,7 +88,9 @@ export async function POST(request: Request) {
     /* get content-type */
     /* ref: https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Image_types#common_image_file_types */
     let contentType = "";
-    console.log(fileName.split(".")[fileName.split(".").length - 1].toLowerCase())
+    console.log(
+      fileName.split(".")[fileName.split(".").length - 1].toLowerCase(),
+    );
     switch (fileName.split(".")[fileName.split(".").length - 1].toLowerCase()) {
       case "apng":
         contentType = "image/apng";
@@ -113,14 +123,12 @@ export async function POST(request: Request) {
     }
 
     /* upload image */
-    const paramsForUploadImage = {
+    const putObjectCommand = new PutObjectCommand({
       Bucket: process.env.S3_BUCKET_NAME as string,
       Body: fileAsArrayBuffer,
-      Key: `posts/${epoch}/${fileName}`,
+      Key: `posts/${dirName}/${fileName}`,
       ContentType: contentType.length > 0 ? contentType : undefined,
-    };
-
-    const putObjectCommand = new PutObjectCommand(paramsForUploadImage);
+    });
     s3.send(putObjectCommand)
       .then((res) => NextResponse.json(res))
       .catch((errReason) => {
@@ -129,12 +137,13 @@ export async function POST(request: Request) {
       });
   }
 
-  const paramsForUplaodImageSizes = {
-    Bucket: process.env.S3_BUCKET_NAME as string,
-    Body: JSON.stringify(imageSizes),
-    Key: `posts/${epoch}/imageSizes.json`,
-  };
-  s3.send(new PutObjectCommand(paramsForUplaodImageSizes));
+  s3.send(
+    new PutObjectCommand({
+      Bucket: process.env.S3_BUCKET_NAME as string,
+      Body: JSON.stringify(imageSizes),
+      Key: `posts/${dirName}/imageSizes.json`,
+    }),
+  );
 
   if (failedFiles.length > 0) {
     return NextResponse.json({ success: false, failedFiles }, { status: 500 });
