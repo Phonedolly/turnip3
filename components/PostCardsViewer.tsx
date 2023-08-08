@@ -73,7 +73,7 @@ const PostCardViewer = async (props: {
                 key={uuidv4()}
               >
                 <h1
-                  className="mr-2.5 mt-2.5 rounded-lg bg-neutral-100/20 px-2 py-1 text-base font-bold text-neutral-900 backdrop-blur-md sm:text-xl md:text-xl lg:text-2xl"
+                  className="mr-2.5 mt-2.5 rounded-lg bg-neutral-100/20 px-2 py-1 font-outfit text-base font-bold text-neutral-900 backdrop-blur-md sm:text-xl md:text-xl lg:text-2xl"
                   style={{ color: post.mostReadableTextColor }}
                 >
                   {post.frontmatter.category}
