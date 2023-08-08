@@ -17,11 +17,15 @@ export async function GET() {
       .map((compiledPost) => {
         return {
           loc: `${app_url}/${compiledPost.frontmatter.epoch}`,
-          lastmod: `${new Date(
-            compiledPost.frontmatter.updateTime[
-              compiledPost.frontmatter.updateTime.length - 1
-            ],
-          ).toISOString()}`,
+          lastmod: `${
+            compiledPost.frontmatter.updateTime !== undefined
+              ? new Date(
+                  compiledPost.frontmatter.updateTime[
+                    compiledPost.frontmatter.updateTime.length - 1
+                  ],
+                ).toISOString()
+              : Date.now()
+          }`,
           changefreq: "weekly",
         };
       }),

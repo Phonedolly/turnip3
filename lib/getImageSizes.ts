@@ -31,26 +31,28 @@ export const createImageSizes = async (
   );
 };
 
-const getImagesSizes = cache(
-  async (s3: S3Client, titleOrEpoch: number | string) => {
-    const isImageSizesConfigExists = await checkImageSizesConfigExists(
-      s3,
-      titleOrEpoch,
-    );
+const getImagesSizes = async (s3: S3Client, titleOrEpoch: number | string) => {
+  const isImageSizesConfigExists = await checkImageSizesConfigExists(
+    s3,
+    titleOrEpoch,
+  );
 
-    if (!isImageSizesConfigExists) {
-      await createImageSizes(s3, titleOrEpoch);
-    }
+  // if (!isImageSizesConfigExists) {
+  //   await createImageSizes(s3, titleOrEpoch);
+  // }
 
-    return (
-      await s3.send(
-        new GetObjectCommand({
-          Bucket: process.env.S3_BUCKET_NAME as string,
-          Key: `posts/${titleOrEpoch}/imageSizes.json`,
-        }),
-      )
-    ).Body?.transformToString().then((body) => JSON.parse(body) as IImageSizes);
-  },
-);
+  return (
+    await s3.send(
+      new GetObjectCommand({
+        Bucket: process.env.S3_BUCKET_NAME as string,
+        Key: `posts/${
+          typeof titleOrEpoch === "string"
+            ? titleOrEpoch.replaceAll(/ /g, "_")
+            : titleOrEpoch
+        }/imageSizes.json`,
+      }),
+    )
+  ).Body?.transformToString().then((body) => JSON.parse(body) as IImageSizes);
+};
 
 export default getImagesSizes;

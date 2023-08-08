@@ -19,45 +19,14 @@ export default async function HomeWithMorePage({
 }) {
   const { posts, categories } = await getInitDataFromS3();
   const postsToShow = posts.filter(
-    (post) =>
-      post.frontmatter.complete === true &&
-      post.frontmatter.category === decodeURI(params.slug),
+    (post) => post.frontmatter.complete === true,
   );
-  // .slice(0, 9); // TODO When Post is enough to show, remove this line
-  const postsToShowIncludingTitleColor = (await Promise.all(
-    postsToShow.map(
-      (post) =>
-        new Promise(async (resolve) => {
-          /* prepare data uri of thumbnail */
-          const dataUriOfThumbnail = await image2uri(
-            post.frontmatter.thumbnail,
-          );
-          const avgColor = (await getAverageColor(dataUriOfThumbnail)).rgba;
-          const mostReadableTextColor = tinycolor
-            .mostReadable(avgColor, ["#FFFFFF", "#000000"], {
-              includeFallbackColors: true,
-              level: "AA",
-              size: "large",
-            })
-            .toHexString();
-          resolve({ ...post, mostReadableTextColor });
-        }),
-    ),
-  )) as {
-    postAsMdx: string;
-    epoch: number;
-    imageSizes: IImageSizes;
-    code: string;
-    frontmatter: IFrontmatter;
-    mostReadableTextColor: string;
-  }[];
-
   return (
     <main className="flex h-full w-full flex-col items-center justify-between gap-y-4 lg:gap-y-16">
       <h1 className="my-12 font-outfit text-5xl font-bold lg:text-6xl">
         {decodeURI(params.slug)}
       </h1>
-      <PostCardViewer cardsData={postsToShowIncludingTitleColor} />
+      <PostCardViewer posts={postsToShow} />
     </main>
   );
 }

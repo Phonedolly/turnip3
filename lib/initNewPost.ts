@@ -5,16 +5,15 @@ import {
   S3Client,
 } from "@aws-sdk/client-s3";
 import initS3Client from "./S3";
-import listS3Files from "./listFiles";
-import getAllCompiledPostWithImageSizes from "./getAllCompiledPostWithImageSize";
 import listFiles from "./listFiles";
 import { createImageSizes } from "./getImageSizes";
 
 const checkShouldMakeNewEpoch = async (s3: S3Client) => {
-  const getImageSizesList = (await listFiles(s3, "posts/")).filter(
+  const imageSizesList = (await listFiles(s3, "posts/")).filter(
     (file) => file.Key?.split("/")[2] === "imageSizes.json",
   );
-  if (getImageSizesList.length === 0) {
+  console.log(imageSizesList);
+  if (imageSizesList.length === 0) {
     return {
       containingOnlyImageSizesExists: false,
       thatEpoch: null,
@@ -22,11 +21,11 @@ const checkShouldMakeNewEpoch = async (s3: S3Client) => {
   }
   const epochContainingOnlyImageSizes = (
     await Promise.all(
-      getImageSizesList.map(
+      imageSizesList.map(
         (eachImageSizes) =>
           new Promise<{
             onlyImageSizesExists: boolean;
-            thatTitleOrEpoch?: number | string;
+            thatEpoch?: number;
           }>((resolve) => {
             const _titleOrEpoch = eachImageSizes.Key?.split("/")[1] as string;
             const titleOrEpoch = Number.isNaN(Number(_titleOrEpoch))
@@ -42,7 +41,7 @@ const checkShouldMakeNewEpoch = async (s3: S3Client) => {
               .catch(() =>
                 resolve({
                   onlyImageSizesExists: true,
-                  thatTitleOrEpoch: titleOrEpoch,
+                  thatEpoch: Number(titleOrEpoch),
                 }),
               ); // epoch-only directory not exists
           }),
@@ -56,7 +55,7 @@ const checkShouldMakeNewEpoch = async (s3: S3Client) => {
     containingOnlyImageSizesExists,
     thatEpoch:
       containingOnlyImageSizesExists === true
-        ? epochContainingOnlyImageSizes[0].thatTitleOrEpoch
+        ? epochContainingOnlyImageSizes[0].thatEpoch
         : null,
   };
 };

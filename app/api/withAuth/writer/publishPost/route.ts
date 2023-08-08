@@ -69,7 +69,6 @@ export async function POST(request: Request) {
   const isDuplicateTitleOrEpoch =
     exsitingTitleAndEpochs.filter(
       (exsitingTitleAndEpoch) =>
-        exsitingTitleAndEpoch.title === frontmatter.title ||
         exsitingTitleAndEpoch.epoch === frontmatter.epoch,
     ).length > 0;
 

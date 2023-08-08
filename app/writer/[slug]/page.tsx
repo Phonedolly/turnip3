@@ -29,17 +29,19 @@ export default async function WriterWrapper({
   const incompletePosts = posts.filter(
     (compiledPost) => compiledPost.frontmatter.complete !== true,
   );
-  const epoch =
-    params.slug === "new"
-      ? await initNewPost()
-      : Number.isNaN(Number(params.slug))
-      ? undefined
-      : Number(params.slug);
-  if (epoch === undefined) {
-    redirect("/writer/new", RedirectType.replace);
+  if (params.slug === "new" || Number.isNaN(params.slug)) {
+    redirect(`/writer/${await initNewPost()}`, RedirectType.replace);
   }
+  const epoch = Number(params.slug);
+  console.log(epoch);
   const post = posts.find((p) => p.frontmatter.epoch === epoch);
-  const imageSizes = await getImagesSizes(s3, epoch as number);
+  const titleOrEpoch =
+    post?.frontmatter.complete === true
+      ? post?.frontmatter.title
+      : (post?.frontmatter.epoch as string | number);
+  console.log(`titleor`);
+  console.log(titleOrEpoch);
+  const imageSizes = await getImagesSizes(s3, titleOrEpoch);
   const initialMdx = `---
 title: "Trying out new custom code blocks"
 category: "News"
