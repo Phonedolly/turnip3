@@ -131,7 +131,7 @@ export async function POST(request: Request) {
   }
 
   if (shouldUpdateDir === true) {
-    const fileList = await listFiles(s3, `posts/${oldProperDir}/`);
+    const fileList = await listFiles(s3, `posts/${oldProperDir}/`, "/");
     /* copy files */
     await Promise.all(
       fileList.map(
@@ -139,12 +139,12 @@ export async function POST(request: Request) {
           new Promise<CopyObjectCommandOutput>(async (resolve) => {
             const result = await s3.send(
               new CopyObjectCommand({
-                Bucket: process.env.S3_BUCKET_NAME as string,
-                CopySource: file.Key,
+                CopySource: `${process.env.S3_BUCKET_NAME}/${file.Key}`, // SOURCE_BUCKET/SOURCE_OBJECT_KEY
+                Bucket: process.env.S3_BUCKET_NAME as string, // DESTINATION_BUCKET
                 Key: `${file.Key?.replace(oldProperDir, String(properDir))}`,
               }),
             );
-            resolve(result);
+            return resolve(result);
           }),
       ),
     );
@@ -160,6 +160,7 @@ export async function POST(request: Request) {
                 Key: file.Key,
               }),
             );
+            resolve(result);
           }),
       ),
     );
