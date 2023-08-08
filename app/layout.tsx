@@ -123,7 +123,7 @@ export default async function RootLayout({
       lang={process.env.NEXT_PUBLIC_LANG || "en"}
       className={`${spoqaHanSansNeo.variable} ${outfit.variable} ${cascadiaMono.variable} ${cascadiaCode.variable} ${notoSerifKr.variable} flex h-auto w-full flex-col items-center bg-white font-spoqa-han-sans-neo`}
     >
-      <GoogleAnalytics />
+      {process.env.ENV_DEVELOPMENT !== undefined ? <GoogleAnalytics /> : null}
       <link
         rel="icon"
         href="/icon?<generated>"
