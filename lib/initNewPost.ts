@@ -12,9 +12,7 @@ import { createImageSizes } from "./getImageSizes";
 
 const checkShouldMakeNewEpoch = async (s3: S3Client) => {
   const getImageSizesList = (await listFiles(s3, "posts/")).filter(
-    (file) =>
-      file.Key?.split("/")[file.Key.split("/").length - 1] ===
-      "imageSizes.json",
+    (file) => file.Key?.split("/")[2] === "imageSizes.json",
   );
   if (getImageSizesList.length === 0) {
     return {
@@ -26,21 +24,28 @@ const checkShouldMakeNewEpoch = async (s3: S3Client) => {
     await Promise.all(
       getImageSizesList.map(
         (eachImageSizes) =>
-          new Promise<{ onlyImageSizesExists: boolean; thatEpoch?: number }>(
-            (resolve) => {
-              const epoch = Number(eachImageSizes.Key?.split("/")[1]);
-              s3.send(
-                new GetObjectCommand({
-                  Bucket: process.env.S3_BUCKET_NAME as string,
-                  Key: `posts/${epoch}/${epoch}.mdx`,
+          new Promise<{
+            onlyImageSizesExists: boolean;
+            thatTitleOrEpoch?: number | string;
+          }>((resolve) => {
+            const _titleOrEpoch = eachImageSizes.Key?.split("/")[1] as string;
+            const titleOrEpoch = Number.isNaN(Number(_titleOrEpoch))
+              ? _titleOrEpoch
+              : Number(_titleOrEpoch);
+            s3.send(
+              new GetObjectCommand({
+                Bucket: process.env.S3_BUCKET_NAME as string,
+                Key: `posts/${titleOrEpoch}/${titleOrEpoch}.mdx`,
+              }),
+            )
+              .then(() => resolve({ onlyImageSizesExists: false })) // unsaved new post
+              .catch(() =>
+                resolve({
+                  onlyImageSizesExists: true,
+                  thatTitleOrEpoch: titleOrEpoch,
                 }),
-              )
-                .then(() => resolve({ onlyImageSizesExists: false })) // unsaved new post
-                .catch(() =>
-                  resolve({ onlyImageSizesExists: true, thatEpoch: epoch }),
-                ); // epoch-only directory not exists
-            },
-          ),
+              ); // epoch-only directory not exists
+          }),
       ),
     )
   ).filter((res) => res.onlyImageSizesExists === true);
@@ -51,7 +56,7 @@ const checkShouldMakeNewEpoch = async (s3: S3Client) => {
     containingOnlyImageSizesExists,
     thatEpoch:
       containingOnlyImageSizesExists === true
-        ? epochContainingOnlyImageSizes[0].thatEpoch
+        ? epochContainingOnlyImageSizes[0].thatTitleOrEpoch
         : null,
   };
 };
@@ -62,7 +67,8 @@ const initNewPost = async () => {
 
   if (
     shouldMakeNewEpoch.containingOnlyImageSizesExists === true &&
-    typeof shouldMakeNewEpoch.thatEpoch === "number"
+    (typeof shouldMakeNewEpoch.thatEpoch === "number" ||
+      typeof shouldMakeNewEpoch.thatEpoch === "string")
   ) {
     return shouldMakeNewEpoch.thatEpoch;
   }

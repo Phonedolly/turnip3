@@ -12,6 +12,8 @@ import rehypeMdxCodeProps from "rehype-mdx-code-props";
 import remarkGfm from "remark-gfm";
 import initNewPost from "@/lib/initNewPost";
 import compileMDX from "@/lib/compileMDX";
+import { redirect } from "next/navigation";
+import { RedirectType } from "next/dist/client/components/redirect";
 
 export default async function WriterWrapper({
   params,
@@ -28,7 +30,14 @@ export default async function WriterWrapper({
     (compiledPost) => compiledPost.frontmatter.complete !== true,
   );
   const epoch =
-    params.slug === "new" ? await initNewPost() : Number(params.slug);
+    params.slug === "new"
+      ? await initNewPost()
+      : Number.isNaN(Number(params.slug))
+      ? undefined
+      : Number(params.slug);
+  if (epoch === undefined) {
+    redirect("/writer/new", RedirectType.replace);
+  }
   const post = posts.find((p) => p.frontmatter.epoch === epoch);
   const imageSizes = await getImagesSizes(s3, epoch as number);
   const initialMdx = `---

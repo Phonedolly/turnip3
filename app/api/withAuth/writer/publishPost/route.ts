@@ -4,6 +4,8 @@ import {
   CopyObjectCommandOutput,
   DeleteObjectCommand,
   DeleteObjectCommandOutput,
+  DeleteObjectsCommand,
+  GetObjectCommand,
   PutObjectCommand,
 } from "@aws-sdk/client-s3";
 import { NextResponse } from "next/server";
@@ -30,6 +32,53 @@ export async function POST(request: Request) {
   let oldEpoch;
   let newEpochCantidate;
   let properEpoch = epoch;
+
+  /* check title or epoch is duplicated */
+  const exsitingTitleAndEpochs = await Promise.all(
+    (await listFiles(s3, `posts/`))
+      .filter((file) => file.Key?.split("/")[2]?.endsWith(".mdx"))
+      .filter(
+        (file) =>
+          file.Key?.split("/")[2] !== `${frontmatter.title}.mdx` &&
+          file.Key?.split("/")[2] !== `${frontmatter.epoch}.mdx`,
+      )
+      .map(
+        (file) =>
+          new Promise<{ title: string; epoch: number }>(async (resolve) => {
+            return await s3
+              .send(
+                new GetObjectCommand({
+                  Bucket: process.env.S3_BUCKET_NAME,
+                  Key: file.Key,
+                }),
+              )
+              .then(async (res) => {
+                const { data: _existingData } = matter(
+                  (await res.Body?.transformToString()) as string,
+                );
+                const existingFrontmatter = _existingData as IFrontmatter;
+                return resolve({
+                  title: existingFrontmatter.title,
+                  epoch: existingFrontmatter.epoch,
+                });
+              });
+          }),
+      ),
+  );
+
+  const isDuplicateTitleOrEpoch =
+    exsitingTitleAndEpochs.filter(
+      (exsitingTitleAndEpoch) =>
+        exsitingTitleAndEpoch.title === frontmatter.title ||
+        exsitingTitleAndEpoch.epoch === frontmatter.epoch,
+    ).length > 0;
+
+  if (isDuplicateTitleOrEpoch) {
+    return NextResponse.json(
+      { success: false, reason: "duplicate title or epoch" },
+      { status: 500 },
+    );
+  }
 
   /* manage time */
   oldEpoch = frontmatter.epoch;
@@ -102,13 +151,19 @@ export async function POST(request: Request) {
   }
 
   /* update mdx with new frontmatter */
+  const imageURLReplacedFrontmatter = {
+    ...frontmatter,
+    thumbnail: frontmatter.thumbnail.replace(oldProperDir, properDir),
+  };
+  const imageURLReplacedContent = content.replaceAll(oldProperDir, properDir);
+
   const newMDX = `---\r\n${stringify(
-    { ...frontmatter, epoch: properEpoch },
+    { ...imageURLReplacedFrontmatter, epoch: properEpoch },
     {
       defaultStringType: "QUOTE_DOUBLE",
       lineWidth: 0,
     },
-  )}---\r\n${content}`;
+  )}---\r\n${imageURLReplacedContent}`;
 
   /* upload mdx loc */
   const result = await s3
@@ -139,7 +194,9 @@ export async function POST(request: Request) {
           new Promise<CopyObjectCommandOutput>(async (resolve) => {
             const result = await s3.send(
               new CopyObjectCommand({
-                CopySource: `${process.env.S3_BUCKET_NAME}/${file.Key}`, // SOURCE_BUCKET/SOURCE_OBJECT_KEY
+                CopySource: encodeURI(
+                  `${process.env.S3_BUCKET_NAME}/${file.Key}`,
+                ), // SOURCE_BUCKET/SOURCE_OBJECT_KEY
                 Bucket: process.env.S3_BUCKET_NAME as string, // DESTINATION_BUCKET
                 Key: `${file.Key?.replace(oldProperDir, String(properDir))}`,
               }),
@@ -149,21 +206,31 @@ export async function POST(request: Request) {
       ),
     );
 
-    /* delete original files */
-    await Promise.all(
-      fileList.map(
-        (file) =>
-          new Promise<DeleteObjectCommandOutput>(async (resolve) => {
-            const result = await s3.send(
-              new DeleteObjectCommand({
-                Bucket: process.env.S3_BUCKET_NAME,
-                Key: file.Key,
-              }),
-            );
-            resolve(result);
-          }),
-      ),
+    /* delete original files and original mdx on new dir */
+    await s3.send(
+      new DeleteObjectsCommand({
+        Bucket: process.env.S3_BUCKET_NAME,
+        Delete: {
+          Objects: fileList
+            .map((file) => ({ Key: file.Key }))
+            .concat({ Key: `posts/${properDir}/${oldProperDir}.mdx` }),
+        },
+      }),
     );
+    // await Promise.all(
+    //   fileList.map(
+    //     (file) =>
+    //       new Promise<DeleteObjectCommandOutput>(async (resolve) => {
+    //         const result = await s3.send(
+    //           new DeleteObjectCommand({
+    //             Bucket: process.env.S3_BUCKET_NAME,
+    //             Key: file.Key,
+    //           }),
+    //         );
+    //         resolve(result);
+    //       }),
+    //   ),
+    // );
   }
 
   return NextResponse.json({ success: true }, { status: 200 });

@@ -238,21 +238,23 @@ export default function Writer(props: {
     formData.append("epoch", String(props.epoch as Number));
     formData.append("mdx", post.mdx);
 
-    fetch("/api/withAuth/writer/publishPost", {
+    await fetch("/api/withAuth/writer/publishPost", {
       method: "POST",
       body: formData,
     })
-      .then(async (res) => {
-        await res.json();
+      .then(async (response) => {
+        if (response.ok === true) {
+          console.log("publish success!");
+          router.replace("/deploy");
+        } else {
+          throw await response.json();
+        }
       })
-      .catch((errReason) => {
-        console.error("publish failed!");
-        console.error(errReason);
-      })
-      .then((resAsJson) => {
-        console.log("publish success!");
-        console.log(resAsJson);
-        router.replace("/deploy");
+      .catch((response) => {
+        console.log(response);
+        alert("Publish Failed!");
+        alert(response.reason);
+        setIsWorking(false);
       });
   };
 
