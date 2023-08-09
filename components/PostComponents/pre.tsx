@@ -57,7 +57,7 @@ const pre = (props: any) => {
   }
   return (
     <div
-      className="my-6 flex w-full flex-col rounded-xl bg-white shadow-code overflow-hidden"
+      className="my-5 flex w-full flex-col rounded-xl bg-white shadow-code overflow-hidden"
       key={uuidv4()}
     >
       {showLang === true ? (
