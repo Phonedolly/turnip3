@@ -168,7 +168,7 @@ const pre = (props: any) => {
                 return (
                   <div
                     {...getLineProps({ line, key: i })}
-                    className={`block px-6 last:rounded-b-xl ${style}`}
+                    className={`block px-6 last:rounded-b-xl overflow-hidden ${style}`}
                     key={uuidv4()}
                   >
                     <div className="flex flex-row" key={uuidv4()}>
