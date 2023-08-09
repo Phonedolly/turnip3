@@ -38,7 +38,9 @@ export default async function WriterWrapper({
   const titleOrEpoch =
     post?.frontmatter.complete === true
       ? post?.frontmatter.title
-      : (post?.frontmatter.epoch as string | number);
+      : post
+      ? (post?.frontmatter.epoch as string | number)
+      : epoch;
   console.log(`titleor`);
   console.log(titleOrEpoch);
   const imageSizes = await getImagesSizes(s3, titleOrEpoch);
