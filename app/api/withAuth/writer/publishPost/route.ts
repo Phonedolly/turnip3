@@ -33,52 +33,6 @@ export async function POST(request: Request) {
   let newEpochCantidate;
   let properEpoch = epoch;
 
-  /* check title or epoch is duplicated */
-  const exsitingTitleAndEpochs = await Promise.all(
-    (await listFiles(s3, `posts/`))
-      .filter((file) => file.Key?.split("/")[2]?.endsWith(".mdx"))
-      .filter(
-        (file) =>
-          file.Key?.split("/")[2] !== `${frontmatter.title}.mdx` &&
-          file.Key?.split("/")[2] !== `${frontmatter.epoch}.mdx`,
-      )
-      .map(
-        (file) =>
-          new Promise<{ title: string; epoch: number }>(async (resolve) => {
-            return await s3
-              .send(
-                new GetObjectCommand({
-                  Bucket: process.env.S3_BUCKET_NAME,
-                  Key: file.Key,
-                }),
-              )
-              .then(async (res) => {
-                const { data: _existingData } = matter(
-                  (await res.Body?.transformToString()) as string,
-                );
-                const existingFrontmatter = _existingData as IFrontmatter;
-                return resolve({
-                  title: existingFrontmatter.title,
-                  epoch: existingFrontmatter.epoch,
-                });
-              });
-          }),
-      ),
-  );
-
-  const isDuplicateTitleOrEpoch =
-    exsitingTitleAndEpochs.filter(
-      (exsitingTitleAndEpoch) =>
-        exsitingTitleAndEpoch.epoch === frontmatter.epoch,
-    ).length > 0;
-
-  if (isDuplicateTitleOrEpoch) {
-    return NextResponse.json(
-      { success: false, reason: "duplicate title or epoch" },
-      { status: 500 },
-    );
-  }
-
   /* manage time */
   oldEpoch = frontmatter.epoch;
   newEpochCantidate = Date.now();
@@ -99,6 +53,52 @@ export async function POST(request: Request) {
     frontmatter.updateTime === undefined
   ) {
     /* first complete publish */
+    /* check title or epoch is duplicated */
+    const exsitingTitleAndEpochs = await Promise.all(
+      (await listFiles(s3, `posts/`))
+        .filter((file) => file.Key?.split("/")[2]?.endsWith(".mdx"))
+        .filter(
+          (file) =>
+            file.Key?.split("/")[2] !== `${frontmatter.title}.mdx` &&
+            file.Key?.split("/")[2] !== `${frontmatter.epoch}.mdx`,
+        )
+        .map(
+          (file) =>
+            new Promise<{ title: string; epoch: number }>(async (resolve) => {
+              return await s3
+                .send(
+                  new GetObjectCommand({
+                    Bucket: process.env.S3_BUCKET_NAME,
+                    Key: file.Key,
+                  }),
+                )
+                .then(async (res) => {
+                  const { data: _existingData } = matter(
+                    (await res.Body?.transformToString()) as string,
+                  );
+                  const existingFrontmatter = _existingData as IFrontmatter;
+                  return resolve({
+                    title: existingFrontmatter.title,
+                    epoch: existingFrontmatter.epoch,
+                  });
+                });
+            }),
+        ),
+    );
+
+    const isDuplicateTitleOrEpoch =
+      exsitingTitleAndEpochs.filter(
+        (exsitingTitleAndEpoch) =>
+          exsitingTitleAndEpoch.epoch === frontmatter.epoch,
+      ).length > 0;
+
+    if (isDuplicateTitleOrEpoch) {
+      return NextResponse.json(
+        { success: false, reason: "duplicate title or epoch" },
+        { status: 500 },
+      );
+    }
+
     frontmatter.updateTime = [newEpochCantidate];
     oldProperDir = frontmatter.epoch;
 
