@@ -170,7 +170,7 @@ const pre = (props: any) => {
                 return (
                   <div
                     {...getLineProps({ line, key: i })}
-                    className={`block px-6 py-0.5 last:mb-3 ${style}`}
+                    className={`block px-6 last:mb-3 ${style}`}
                     key={uuidv4()}
                   >
                     <div className="flex flex-row" key={uuidv4()}>
