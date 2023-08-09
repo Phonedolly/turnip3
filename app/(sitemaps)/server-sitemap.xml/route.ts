@@ -24,11 +24,36 @@ export async function GET() {
                     compiledPost.frontmatter.updateTime.length - 1
                   ],
                 ).toISOString()
-              : Date.now()
+              : new Date().toISOString()
           }`,
           changefreq: "weekly",
         };
-      }),
+      })
+      .concat(
+        initData.posts.reduce(
+          (acc, _, i) => {
+            if (i === 0) {
+              return acc.concat([
+                {
+                  loc: `${app_url}`,
+                  lastmod: new Date().toISOString(),
+                  changefreq: "hourly",
+                },
+              ]);
+            } else if ((i + 1) % 10 === 0) {
+              return acc.concat([
+                {
+                  loc: `${app_url}/${String(Math.floor((i + 1) / 10))}`,
+                  lastmod: new Date().toISOString(),
+                  changefreq: "hourly",
+                },
+              ]);
+            }
+            return acc;
+          },
+          [] as { loc: string; lastmod: string; changefreq: string }[],
+        ),
+      ),
     // .concat(
     //   initData.categories.map((category) => ({
     //     loc: `${app_url}/${category}`,

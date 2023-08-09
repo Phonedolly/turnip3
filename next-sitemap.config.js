@@ -3,11 +3,11 @@
 module.exports = {
   siteUrl: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
   generateRobotsTxt: true,
-  exclude: ['/deploy', '/writer/*', '/post/*', '/server-sitemap-index.xml', '/server-sitemap.xml'],
+  exclude: ['/api/withAuth/*', '/deploy', '/writer', '/writer/*', '/post/*', '/server-sitemap-index.xml', '/server-sitemap.xml'],
   robotsTxtOptions: {
     policies: [{
       userAgent: "*",
-      disallow: ["/deploy", "/wrtier/*",],
+      disallow: ["/api/*, /deploy", "/wrtier/*",],
       allow: ["/", "/category/*", "/post/*"],
     }],
     additionalSitemaps: [`${process.env.NEXT_PUBLIC_APP_URL?.endsWith("/")
