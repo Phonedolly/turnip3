@@ -57,7 +57,7 @@ const pre = (props: any) => {
   }
   return (
     <div
-      className="my-6 flex w-full flex-col rounded-xl bg-white shadow-[0_12px_32px_4px_rgba(0,0,0,0.26)]"
+      className="my-6 flex w-full flex-col rounded-xl bg-white shadow-code"
       key={uuidv4()}
     >
       {showLang === true ? (
@@ -92,62 +92,113 @@ const pre = (props: any) => {
                 minWidth: "100%",
               }}
             >
-              {tokens.map((line, i) => (
-                <div
-                  {...getLineProps({ line, key: i })}
-                  className={`block px-6 py-0.5 last:rounded-b-xl ${
-                    highlights &&
-                    highlights["red"] &&
-                    highlights["red"](i) === true
-                      ? `bg-red-100 hover:saturate-200 hover:bg-red-100/80`
-                      : `hover:bg-neutral-200/70 hover:saturate-200`
-                  } ${
-                    highlights &&
-                    highlights["yellow"] &&
-                    highlights["yellow"](i) === true
-                      ? `bg-yellow-100 hover:saturate-200 hover:bg-yellow-100/80`
-                      : `hover:bg-neutral-200/70 hover:saturate-200`
-                  } ${
-                    highlights &&
-                    highlights["green"] &&
-                    highlights["green"](i) === true
-                      ? `bg-green-100 hover:saturate-200 hover:bg-green-100/80`
-                      : `hover:bg-neutral-200/70 hover:saturate-200`
-                  } ${
-                    highlights &&
-                    highlights["blue"] &&
-                    highlights["blue"](i) === true
-                      ? `bg-blue-100 hover:saturate-200 hover:bg-blue-100/80`
-                      : `hover:bg-neutral-200/70 hover:saturate-200`
-                  }`}
-                  key={uuidv4()}
-                >
-                  <div className="flex flex-row" key={uuidv4()}>
-                    {showLineNumber === true ? (
-                      <div className="flex flex-row">
-                        <h1 className="mr-4 select-none text-neutral-400">
-                          {`${i + 1}`}
-                          {Array(
-                            String(tokens.length).length - String(i + 1).length,
-                          ).fill(<span>{` `}</span>)}
-                        </h1>
+              {tokens.map((line, i) => {
+                /* Do you think there is a better approach? ☹️ */
+                let style = `hover:bg-neutral-200/70`;
+                if (highlights?.slate && highlights.slate(i) === true) {
+                  style = `bg-slate-100 hover:saturate-200`;
+                } else if (highlights?.gray && highlights.gray(i) === true) {
+                  style = `bg-gray-100 hover:saturate-200`;
+                } else if (highlights?.zinc && highlights.zinc(i) === true) {
+                  style = `bg-zinc-100 hover:saturate-200`;
+                } else if (
+                  highlights?.neutral &&
+                  highlights.neutral(i) === true
+                ) {
+                  style = `bg-neutral-100 hover:saturate-200`;
+                } else if (highlights?.stone && highlights.stone(i) === true) {
+                  style = `bg-stone-100 hover:saturate-200`;
+                } else if (highlights?.red && highlights.red(i) === true) {
+                  style = `bg-red-100 hover:saturate-200`;
+                } else if (
+                  highlights?.ogrange &&
+                  highlights.ogrange(i) === true
+                ) {
+                  style = `bg-ogrange-100 hover:saturate-200`;
+                } else if (highlights?.amber && highlights.amber(i) === true) {
+                  style = `bg-amber-100 hover:saturate-200`;
+                } else if (
+                  highlights?.yellow &&
+                  highlights.yellow(i) === true
+                ) {
+                  style = `bg-yellow-100 hover:saturate-200`;
+                } else if (highlights?.lime && highlights.lime(i) === true) {
+                  style = `bg-lime-100 hover:saturate-200`;
+                } else if (highlights?.green && highlights.green(i) === true) {
+                  style = `bg-green-100 hover:saturate-200`;
+                } else if (
+                  highlights?.emerald &&
+                  highlights.emerald(i) === true
+                ) {
+                  style = `bg-emerald-100 hover:saturate-200`;
+                } else if (highlights?.teal && highlights.teal(i) === true) {
+                  style = `bg-teal-100 hover:saturate-200`;
+                } else if (highlights?.cyan && highlights.cyan(i) === true) {
+                  style = `bg-cyan-100 hover:saturate-200`;
+                } else if (highlights?.sky && highlights.sky(i) === true) {
+                  style = `bg-sky-100 hover:saturate-200`;
+                } else if (highlights?.blue && highlights.blue(i) === true) {
+                  style = `bg-blue-100 hover:saturate-200`;
+                } else if (
+                  highlights?.indigo &&
+                  highlights.indigo(i) === true
+                ) {
+                  style = `bg-indigo-100 hover:saturate-200`;
+                } else if (
+                  highlights?.violet &&
+                  highlights.violet(i) === true
+                ) {
+                  style = `bg-violet-100 hover:saturate-200`;
+                } else if (
+                  highlights?.purple &&
+                  highlights.purple(i) === true
+                ) {
+                  style = `bg-purple-100 hover:saturate-200`;
+                } else if (
+                  highlights?.fuchsia &&
+                  highlights.fuchsia(i) === true
+                ) {
+                  style = `bg-fuchsia-100 hover:saturate-200`;
+                } else if (highlights?.pink && highlights.pink(i) === true) {
+                  style = `bg-pink-100 hover:saturate-200`;
+                } else if (highlights?.rose && highlights.rose(i) === true) {
+                  style = `bg-rose-100 hover:saturate-200`;
+                }
+
+                return (
+                  <div
+                    {...getLineProps({ line, key: i })}
+                    className={`block px-6 last:rounded-b-xl ${style}`}
+                    key={uuidv4()}
+                  >
+                    <div className="flex flex-row" key={uuidv4()}>
+                      {showLineNumber === true ? (
+                        <div className="flex flex-row">
+                          <h1 className="mr-4 select-none text-neutral-400">
+                            {`${i + 1}`}
+                            {Array(
+                              String(tokens.length).length -
+                                String(i + 1).length,
+                            ).fill(<span>{` `}</span>)}
+                          </h1>
+                        </div>
+                      ) : null}
+                      <div
+                        className="px-1 lg:whitespace-pre-wrap lg:break-all"
+                        key={uuidv4()}
+                      >
+                        {line.map((token, key) => (
+                          <span
+                            {...getTokenProps({ token, key })}
+                            key={uuidv4()}
+                            className=" rounded-none font-mono text-[0.9rem]"
+                          />
+                        ))}
                       </div>
-                    ) : null}
-                    <div
-                      className="px-1 lg:whitespace-pre-wrap lg:break-all"
-                      key={uuidv4()}
-                    >
-                      {line.map((token, key) => (
-                        <span
-                          {...getTokenProps({ token, key })}
-                          key={uuidv4()}
-                          className=" rounded-none font-mono text-[0.9rem]"
-                        />
-                      ))}
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </pre>
           )}
         </Highlight>
