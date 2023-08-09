@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  const result = fetch(
+  return await fetch(
     `https://www.google.com/ping?sitemap=${
       process.env.NEXT_PUBLIC_APP_URL as string
     }/sitemap.xml`,
@@ -13,6 +13,4 @@ export async function GET() {
     }
     return NextResponse.json({}, { status: 500 });
   });
-
-  return result;
 }
