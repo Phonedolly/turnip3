@@ -164,7 +164,7 @@ const pre = (props: any) => {
                 } else if (highlights?.rose && highlights.rose(i) === true) {
                   style = `bg-rose-100 hover:saturate-200`;
                 } else {
-                  style = `hover:bg-neutral-200/50`;
+                  style = `hover:bg-neutral-200/50 hover:saturate-200`;
                 }
 
                 return (
