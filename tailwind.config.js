@@ -8,6 +8,11 @@ module.exports = {
   ],
   theme: {
     extend: {
+      boxShadow: {
+        'code': '2px 4px 12px rgba(0,0,0,.16)',
+        'card': '2px 4px 12px rgba(0,0,0,.18)',
+        'card-hover': '2px 4px 12px rgba(0,0,0,.24)'
+      },
       fontFamily: {
         'spoqa-han-sans-neo': ['var(--font-spoqa-han-sans-neo)'],
         'noto-serif': ['var(--font-noto-serif-kr)'],
