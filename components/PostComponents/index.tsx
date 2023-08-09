@@ -365,7 +365,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
   },
   Quote2: (props) => {
     return (
-      <div className="my-5 flex w-full flex-col rounded-3xl bg-white p-4 shadow-[0_12px_32px_4px_rgba(0,0,0,0.26)]">
+      <div className="my-5 flex w-full flex-col rounded-3xl bg-white p-4 shadow-card">
         <div className="flex select-none flex-row justify-start">
           <p>
             <span
@@ -380,7 +380,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
         <div className="-mt-8 ml-4 flex w-full flex-col gap-y-1 pr-8">
           <div className="flex w-full flex-row">
             <div
-              className={`text-xl text-neutral-700 ${
+              className={`text-lg leading-relaxed text-neutral-700 ${
                 props.italic ? `italic` : ``
               } ${props.serif ? `font-noto-serif` : ``}`}
             >
