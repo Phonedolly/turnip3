@@ -68,9 +68,12 @@ const Deploy = () => {
     /* request deployment events until finish deployment */
     const getEventList = async () =>
       new Promise<void>(async (resolve) => {
-        const eventList = await fetch(`/api/withAuth/deploy/events?id=${deploymentId}`, {
-          next: { revalidate: 0 },
-        }).then(async (res) => await res.json());
+        const eventList = await fetch(
+          `/api/withAuth/deploy/events?id=${deploymentId}`,
+          {
+            next: { revalidate: 0 },
+          },
+        ).then(async (res) => await res.json());
 
         setBuildEvents(eventList);
 
@@ -81,8 +84,8 @@ const Deploy = () => {
         ) {
           await fetch(`/api/withAuth/deploy/submitSitemapToGoogle`, {
             next: { revalidate: 0 },
-          })
-            .then(() => {
+          }).then((response) => {
+            if (response.ok) {
               setBuildEvents((prev) =>
                 prev.concat({
                   type: "stdout",
@@ -94,8 +97,7 @@ const Deploy = () => {
               );
               setStatus("DEPLOYED");
               resolve();
-            })
-            .catch(() => {
+            } else {
               setBuildEvents((prev) =>
                 prev.concat({
                   type: "stderr",
@@ -106,7 +108,8 @@ const Deploy = () => {
                 }),
               );
               resolve();
-            });
+            }
+          });
         } else {
           setTimeout(async () => resolve(await getEventList()), 1000);
         }

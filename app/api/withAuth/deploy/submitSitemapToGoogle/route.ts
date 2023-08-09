@@ -8,9 +8,8 @@ export async function GET() {
     { next: { revalidate: 0 } },
   ).then(async (response) => {
     if (response.ok) {
-      const data = await response.json();
-      return NextResponse.json({ ...data }, { status: 200 });
+      return NextResponse.json({ ok: true }, { status: 200 });
     }
-    return NextResponse.json({}, { status: 500 });
+    return NextResponse.json({ ok: false }, { status: 500 });
   });
 }
