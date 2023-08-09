@@ -57,7 +57,7 @@ const pre = (props: any) => {
   }
   return (
     <div
-      className="my-6 flex w-full flex-col rounded-xl bg-white shadow-code"
+      className="my-6 flex w-full flex-col rounded-xl bg-white shadow-code overflow-hidden"
       key={uuidv4()}
     >
       {showLang === true ? (
@@ -163,12 +163,14 @@ const pre = (props: any) => {
                   style = `bg-pink-100 hover:saturate-200`;
                 } else if (highlights?.rose && highlights.rose(i) === true) {
                   style = `bg-rose-100 hover:saturate-200`;
+                } else {
+                  style = `hover:bg-neutral-200/50`;
                 }
 
                 return (
                   <div
                     {...getLineProps({ line, key: i })}
-                    className={`block px-6 last:rounded-b-xl overflow-hidden ${style}`}
+                    className={`block px-6 last:rounded-b-xl ${style}`}
                     key={uuidv4()}
                   >
                     <div className="flex flex-row" key={uuidv4()}>
