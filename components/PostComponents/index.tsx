@@ -17,7 +17,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
       >
         <a
           href={`#${children}`}
-          className="top-14 text-3xl text-neutral-400 visited:text-neutral-400"
+          className="top-14 text-3xl text-neutral-400 visited:text-neutral-400 hover:underline hover:decoration-neutral-500"
         >
           {/* 🔗 */}#
         </a>
@@ -34,7 +34,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
       >
         <a
           href={`#${children}`}
-          className="top-14 text-2xl text-neutral-400 visited:text-neutral-400"
+          className="top-14 text-2xl text-neutral-400 visited:text-neutral-400 hover:underline hover:decoration-neutral-500"
         >
           #
         </a>
@@ -51,7 +51,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
       >
         <a
           href={`#${children}`}
-          className="top-14 text-xl text-neutral-400 visited:text-neutral-400"
+          className="top-14 text-xl text-neutral-400 visited:text-neutral-400 hover:underline hover:decoration-neutral-500"
         >
           #
         </a>
@@ -68,7 +68,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
       >
         <a
           href={`#${children}`}
-          className="top-14 text-lg text-neutral-400 visited:text-neutral-400"
+          className="top-14 text-lg text-neutral-400 visited:text-neutral-400 hover:underline hover:decoration-neutral-500"
         >
           #
         </a>
@@ -92,7 +92,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
     return (
       <div className="flex h-auto w-full flex-row justify-center">
         <Image
-          className="my-5 rounded-2xl"
+          className="my-5"
           src={props.src as string}
           alt={props.alt || ""}
           height={specificImageSize.height}
@@ -157,7 +157,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
       <a
         href={href}
         {...otherProps}
-        className="break-all border-b-2 border-b-neutral-600 font-bold hover:text-neutral-500"
+        className="break-all font-bold underline underline-offset-4 hover:text-neutral-500 hover:decoration-neutral-500"
       >
         {children}
       </a>

@@ -51,7 +51,7 @@ const PostCardViewer = async (props: {
           <Link
             href={`/post/${post.frontmatter.epoch}`}
             key={uuidv4()}
-            className="relative flex h-full w-full cursor-pointer select-none flex-col items-center rounded-2xl bg-neutral-200/20 pt-[75%] shadow-[0px_3px_16px_2px_rgba(0,0,0,0.25)] transition duration-[400ms] ease-in-out hover:scale-[1.025]"
+            className="relative flex h-full w-full cursor-pointer select-none flex-col items-center rounded-2xl bg-neutral-200/20 pt-[75%] shadow-card transition duration-[400ms] hover:scale-[1.02] hover:shadow-card-hover"
           >
             <div
               className="absolute top-0 h-full w-full overflow-hidden rounded-2xl"
@@ -60,7 +60,7 @@ const PostCardViewer = async (props: {
               <Image
                 src={post.frontmatter.thumbnail}
                 fill
-                style={{ objectFit: "cover" }}
+                className="object-cover"
                 alt="Thumbnail of Post"
               />
             </div>
