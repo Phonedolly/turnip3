@@ -257,7 +257,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
 
   blockquote: ({ children, ...otherProps }) => {
     return (
-      <div className="mx-2 my-5 rounded-xl bg-white px-4 py-2 shadow-[0_12px_32px_4px_rgba(0,0,0,0.26)]">
+      <div className="mx-2 my-5 rounded-lg bg-white px-4 py-2 shadow-[0_12px_32px_4px_rgba(0,0,0,0.26)]">
         {children}
       </div>
     );
@@ -304,7 +304,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
         {...props}
       >
         <Image
-          className={`h-auto rounded-2xl ${width}`}
+          className={`h-auto ${width}`}
           src={props.src as string}
           alt={props.alt || ""}
           height={specificImageSize.height}
@@ -321,7 +321,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
   table: ({ children, ...otherProps }) => {
     return (
       <div className="my-5 flex w-full flex-row justify-center">
-        <div className="flex w-fit flex-row items-center justify-center overflow-x-auto rounded-xl bg-white px-4 py-2 shadow-[0_12px_32px_4px_rgba(0,0,0,0.26)]">
+        <div className="flex w-fit flex-row items-center justify-center overflow-x-auto rounded-lg bg-white px-4 py-2 shadow-card">
           <table className="" {...otherProps}>
             {children}
           </table>
@@ -365,7 +365,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
   },
   Quote2: (props) => {
     return (
-      <div className="my-5 flex w-full flex-col rounded-3xl bg-white p-4 shadow-card">
+      <div className="my-5 flex w-full flex-col rounded-lg bg-white p-4 shadow-card">
         <div className="flex select-none flex-row justify-start">
           <p>
             <span
