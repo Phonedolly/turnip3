@@ -16,7 +16,7 @@ export async function GET() {
       .filter((compiledPost) => compiledPost.frontmatter.complete === true)
       .map((compiledPost) => {
         return {
-          loc: `${app_url}/${compiledPost.frontmatter.epoch}`,
+          loc: `${app_url}/post/${compiledPost.frontmatter.epoch}`,
           lastmod: `${
             compiledPost.frontmatter.updateTime !== undefined
               ? new Date(
