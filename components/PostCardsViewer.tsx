@@ -12,6 +12,8 @@ const PostCardViewer = async (props: {
   } & {
     imageSizes: IImageSizes;
   })[];
+  slug?: [number] | [string, string, number?];
+  hasNext: boolean;
 }) => {
   const postsToShowIncludingTitleColor = (await Promise.all(
     props.posts.map(
@@ -44,53 +46,121 @@ const PostCardViewer = async (props: {
     frontmatter: IFrontmatter;
     mostReadableTextColor: string;
   }[];
+
+  let prevButton;
+  let nextButton;
+  const buttonStyle =
+    "text-2xl sm:text-3xl px-3.5 py-2.5 font-outfit shadow-card rounded-xl";
+  /* Home Page */
+  if (!props.slug) {
+    prevButton = null;
+    nextButton = props.hasNext ? (
+      <Link href={`/1`} className={buttonStyle}>
+        next
+      </Link>
+    ) : null;
+  } else if (props.slug && typeof props.slug[0] === "number") {
+    /* Explore by Post */
+    prevButton = (
+      <Link href={`/${props.slug[0] - 1}`} className={buttonStyle}>
+        prev
+      </Link>
+    );
+    nextButton = props.hasNext ? (
+      <Link href={`/${props.slug[0] + 1}`} className={buttonStyle}>
+        next
+      </Link>
+    ) : null;
+  } else if (
+    props.slug &&
+    typeof props.slug[0] === "string" &&
+    props.slug.length >= 3
+  ) {
+    /* Explore by Category */
+    prevButton = (
+      <Link
+        href={`/${props.slug[0]}/${props.slug[1]}/${
+          props.slug[2] && props.slug[2] > 1 ? props.slug[2] - 1 : ``
+        }`}
+        className={buttonStyle}
+      >
+        prev
+      </Link>
+    );
+    nextButton = props.hasNext ? (
+      <Link
+        href={`/${props.slug[0]}/${props.slug[1] ? props.slug[1] + 1 : `1`}`}
+        className={buttonStyle}
+      >
+        next
+      </Link>
+    ) : null;
+  }
   return (
-    <div className="my-2 flex w-full flex-col items-center gap-12 px-2 sm:grid-cols-2 md:grid md:max-w-3xl md:justify-items-center md:gap-14 lg:max-w-4xl lg:gap-20 xl:max-w-5xl">
-      {postsToShowIncludingTitleColor.map((post) => {
-        return (
-          <Link
-            href={`/post/${post.frontmatter.epoch}`}
-            key={uuidv4()}
-            className="relative flex h-full w-full cursor-pointer select-none flex-col items-center rounded-2xl bg-neutral-200/20 pt-[75%] shadow-card transition duration-[400ms] hover:scale-[1.02] hover:shadow-card-hover"
-          >
-            <div
-              className="absolute top-0 h-full w-full overflow-hidden rounded-2xl"
-              key={uuidv4()}
-            >
-              <Image
-                src={post.frontmatter.thumbnail}
-                fill
-                className="object-cover"
-                alt="Thumbnail of Post"
-              />
-            </div>
-            <div
-              className="absolute top-0 flex h-full w-full flex-col justify-between"
-              key={uuidv4()}
-            >
-              <div
-                className="flex flex-row items-center justify-end"
+    <div className="my-2 flex w-full flex-col items-center gap-y-16">
+      {postsToShowIncludingTitleColor.length > 0 ? (
+        <div className=" w-full flex-col items-center gap-12 px-2 sm:grid-cols-2 md:grid md:max-w-3xl md:justify-items-center md:gap-14 lg:max-w-4xl lg:gap-20 xl:max-w-5xl">
+          {postsToShowIncludingTitleColor.map((post) => {
+            return (
+              <Link
+                href={`/post/${post.frontmatter.epoch}`}
                 key={uuidv4()}
+                className="relative flex h-full w-full cursor-pointer select-none flex-col items-center overflow-hidden rounded-3xl pt-[75%] shadow-card  transition duration-[400ms]  hover:scale-[1.02] hover:shadow-card-hover"
               >
-                <h1
-                  className="mr-2.5 mt-2.5 rounded-lg bg-neutral-100/20 px-2 py-1 font-outfit text-base font-bold text-neutral-900 backdrop-blur-md sm:text-xl md:text-xl lg:text-2xl"
-                  style={{ color: post.mostReadableTextColor }}
+                <div className="absolute top-0 h-full w-full" key={uuidv4()}>
+                  <Image
+                    src={post.frontmatter.thumbnail}
+                    fill
+                    className="object-cover"
+                    alt="Thumbnail of Post"
+                  />
+                </div>
+                <div
+                  className="absolute top-0 flex h-full w-full flex-col justify-between"
+                  key={uuidv4()}
                 >
-                  {post.frontmatter.category}
-                </h1>
-              </div>
-              <div className="flex w-full flex-row items-center" key={uuidv4()}>
-                <h1
-                  className={`mx-2.5 mb-2.5 line-clamp-3 rounded-lg bg-neutral-100/20 px-3 py-1 font-outfit text-lg font-bold leading-7 backdrop-blur-2xl sm:text-3xl md:text-xl lg:px-2.5 lg:py-2.5 lg:text-2xl xl:px-3 xl:py-3 xl:text-3xl`}
-                  style={{ color: post.mostReadableTextColor }}
-                >
-                  {post.frontmatter.title}
-                </h1>
-              </div>
-            </div>
-          </Link>
-        );
-      })}
+                  <div
+                    className="flex flex-row items-center justify-end"
+                    key={uuidv4()}
+                  >
+                    <h1
+                      className="mr-2.5 mt-2.5 rounded-xl bg-neutral-100/20 px-2 py-1 font-outfit text-base font-bold text-neutral-900 backdrop-blur-md sm:text-xl md:text-xl lg:text-2xl"
+                      style={{ color: post.mostReadableTextColor }}
+                    >
+                      {post.frontmatter.category}
+                    </h1>
+                  </div>
+                  <div
+                    className="flex w-full flex-row items-center"
+                    key={uuidv4()}
+                  >
+                    <h1
+                      className={`mx-2.5 mb-2.5 line-clamp-3 rounded-2xl bg-neutral-100/20 px-3 py-1 font-outfit text-lg font-bold leading-7 backdrop-blur-2xl sm:text-3xl md:text-xl lg:px-2.5 lg:py-2.5 lg:text-2xl xl:px-3 xl:py-3 xl:text-3xl`}
+                      style={{ color: post.mostReadableTextColor }}
+                    >
+                      {post.frontmatter.title}
+                    </h1>
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="flex w-full flex-row justify-center">
+          <h1 className="select-none rounded-3xl p-8 text-center font-outfit text-7xl leading-loose transition duration-300 hover:cursor-pointer hover:shadow-card-hover hover:scale-110">
+            ~~&gt;_&lt;~~
+            <br />
+            No Posts!
+          </h1>
+        </div>
+      )}
+      <div className="flex w-full flex-row justify-center">
+        <div className="flex flex-row gap-x-3">
+          {prevButton}
+          {nextButton}
+        </div>
+      </div>
     </div>
   );
 };

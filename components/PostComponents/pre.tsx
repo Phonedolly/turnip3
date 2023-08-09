@@ -57,13 +57,13 @@ const pre = (props: any) => {
   }
   return (
     <div
-      className="my-5 flex w-full flex-col rounded-xl bg-white shadow-code overflow-hidden"
+      className="my-5 flex w-full flex-col rounded-xl bg-white shadow-code"
       key={uuidv4()}
     >
       {showLang === true ? (
         <div className="flex flex-row items-center py-3">
           <div
-            className="text-md mx-3 rounded-lg bg-neutral-200/50 px-3 py-0.5 text-center font-outfit font-bold text-black shadow-[0_2px_8px_0.5px_rgba(0,0,0,0.26)]"
+            className="text-md mx-3 rounded-lg bg-neutral-200/50 px-2 py-0.5 text-center font-outfit font-bold text-black shadow-[0_2px_6px_0.5px_rgba(0,0,0,0.26)]"
             key={uuidv4()}
           >{`${language}`}</div>
           <div
@@ -74,7 +74,10 @@ const pre = (props: any) => {
           </div>
         </div>
       ) : null}
-      <div className="overflow-auto" key={uuidv4()}>
+      <div
+        className="mb-3 overflow-x-auto"
+        key={uuidv4()}
+      >
         <Highlight
           // {...defaultProps}
           code={code}
@@ -170,7 +173,7 @@ const pre = (props: any) => {
                 return (
                   <div
                     {...getLineProps({ line, key: i })}
-                    className={`block px-6 last:rounded-b-xl ${style}`}
+                    className={`block px-6 ${style}`}
                     key={uuidv4()}
                   >
                     <div className="flex flex-row" key={uuidv4()}>
@@ -186,14 +189,14 @@ const pre = (props: any) => {
                         </div>
                       ) : null}
                       <div
-                        className="px-1 lg:whitespace-pre-wrap lg:break-all"
+                        className="px-1 md:whitespace-pre-wrap"
                         key={uuidv4()}
                       >
                         {line.map((token, key) => (
                           <span
                             {...getTokenProps({ token, key })}
                             key={uuidv4()}
-                            className=" rounded-none font-mono text-[0.9rem]"
+                            className="rounded-none font-mono text-[0.9rem] "
                           />
                         ))}
                       </div>

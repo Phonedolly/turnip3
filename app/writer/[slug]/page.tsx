@@ -41,8 +41,6 @@ export default async function WriterWrapper({
       : post
       ? (post?.frontmatter.epoch as string | number)
       : epoch;
-  console.log(`titleor`);
-  console.log(titleOrEpoch);
   const imageSizes = await getImagesSizes(s3, titleOrEpoch);
   const initialMdx = `---
 title: "Trying out new custom code blocks"
