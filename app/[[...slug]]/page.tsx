@@ -18,24 +18,20 @@ import PostCardViewer from "@/components/PostCardsViewer";
 export async function generateStaticParams() {
   const { posts } = await getInitDataFromS3();
 
-  const result = posts.reduce(
-    (slugsAcc, _, i) => {
-      if (i === 0) {
-        return slugsAcc.concat([[undefined]]);
-      } else if ((i + 1) % 10 === 0) {
-        return slugsAcc.concat([String(Math.floor((i + 1) / 10))]);
-      }
-      return slugsAcc;
-    },
-    [] as (string | undefined)[][],
-  );
+  const slugs = posts.reduce((acc, _, i) => {
+    if ((i + 1) % 10 === 0) {
+      return acc.concat([String(Math.floor((i + 1) / 10))]);
+    }
+    return acc;
+  }, [] as string[]);
+  const result = slugs.map((slug) => ({ slug }));
 
   return result;
 }
 
-export default async function Home(params: { slug?: string[] }) {
+export default async function Home({ params }: { params?: { slug: string } }) {
   const slugToSend =
-    params.slug &&
+    params?.slug &&
     params.slug.length === 1 &&
     !Number.isNaN(params.slug.length[1])
       ? ([Number(params.slug)] as [number])

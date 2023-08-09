@@ -1,7 +1,5 @@
 import getInitDataFromS3 from "@/lib/getInitData";
 import PostCardViewer from "@/components/PostCardsViewer";
-import { redirect } from "next/navigation";
-import { RedirectType } from "next/dist/client/components/redirect";
 
 export async function generateStaticParams() {
   const { posts, categories } = await getInitDataFromS3();
