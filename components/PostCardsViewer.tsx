@@ -97,9 +97,9 @@ const PostCardViewer = async (props: {
     ) : null;
   }
   return (
-    <div className="my-2 flex w-full flex-col items-center gap-y-16">
+    <div className="my-2 flex h-full w-full flex-col items-center gap-y-16">
       {postsToShowIncludingTitleColor.length > 0 ? (
-        <div className=" w-full flex-col items-center gap-12 px-2 sm:grid-cols-2 md:grid md:max-w-3xl md:justify-items-center md:gap-14 lg:max-w-4xl lg:gap-20 xl:max-w-5xl">
+        <div className="h-full w-full items-center gap-y-9 px-2 sm:grid-cols-2 flex flex-col md:grid md:max-w-3xl md:justify-items-center md:gap-14 lg:max-w-4xl lg:gap-20 xl:max-w-5xl">
           {postsToShowIncludingTitleColor.map((post) => {
             return (
               <Link
@@ -148,7 +148,7 @@ const PostCardViewer = async (props: {
         </div>
       ) : (
         <div className="flex w-full flex-row justify-center">
-          <h1 className="select-none rounded-3xl p-8 text-center font-outfit text-7xl leading-loose transition duration-300 hover:cursor-pointer hover:shadow-card-hover hover:scale-110">
+          <h1 className="select-none rounded-3xl p-8 text-center font-outfit text-7xl leading-loose transition duration-300 hover:scale-110 hover:cursor-pointer hover:shadow-card-hover">
             ~~&gt;_&lt;~~
             <br />
             No Posts!

@@ -380,7 +380,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
         <div className="-mt-8 ml-4 flex w-full flex-col gap-y-1 pr-8">
           <div className="flex w-full flex-row">
             <div
-              className={`text-lg leading-relaxed text-neutral-700 ${
+              className={`text-lg leading-relaxed text-neutral-700 break-all ${
                 props.italic ? `italic` : ``
               } ${props.serif ? `font-noto-serif` : ``}`}
             >
@@ -392,7 +392,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
               <p
                 className={`${props.serif ? `font-noto-serif` : ``} ${
                   props.italic ? `italic` : ``
-                } text-base text-neutral-500`}
+                } text-base text-neutral-500 break-all`}
               >
                 &mdash; {props.author}
               </p>
