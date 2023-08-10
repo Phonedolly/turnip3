@@ -34,11 +34,9 @@ export async function generateMetadata({
   params: { slug: string[] };
 }): Promise<Metadata> {
   const { posts } = await getInitDataFromS3();
-  const thisCategory = decodeURI(params.slug[0]);
   return {
     openGraph: {
-      title: `${process.env.NEXT_PUBLIC_APP_NAME} | ${thisCategory}`,
-      description: `${process.env.NEXT_PUBLIC_APP_NAME} | ${thisCategory}`,
+      title: `${process.env.NEXT_PUBLIC_APP_NAME} | Home`,
       url: `${process.env.NEXT_PUBLIC_APP_URL}${
         params.slug.length === 1 ? params.slug[0] : ``
       }`,
