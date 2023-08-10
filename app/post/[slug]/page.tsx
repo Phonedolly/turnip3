@@ -18,6 +18,7 @@ export async function generateMetadata({
       title: thisPost?.frontmatter.title,
       description: thisPost?.frontmatter.description,
       url: `${process.env.NEXT_PUBLIC_APP_URL}/post/${thisPost?.frontmatter.epoch}`,
+      images: thisPost?.frontmatter.thumbnail,
     },
   };
 }
