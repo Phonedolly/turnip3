@@ -12,7 +12,7 @@ export async function GET(request: Request) {
   const epoch = Number(url.searchParams.get("epoch"));
   const posts = await getAllCompiledPostWithImageSizes(s3);
   const identity = posts.find((post) => post.frontmatter.epoch === epoch);
-  let dirName: string | number = identity?.frontmatter.complete === true ? identity?.frontmatter.title as string : identity?.frontmatter.epoch;
+  let dirName: string | number = identity?.frontmatter.complete === true ? identity?.frontmatter.title as string : identity?.frontmatter.epoch as number;
 
   if (!identity) {
     dirName = epoch;
