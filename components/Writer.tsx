@@ -214,10 +214,7 @@ export default function Writer(props: {
       {
         next: { revalidate: 0 },
       },
-    ).catch((res) => {
-      console.error(111);
-      console.error(res);
-    });
+    );
     const sizes = await res.json();
     setImageSizes(sizes);
     setIsWorking(false);
