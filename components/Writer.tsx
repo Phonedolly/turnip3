@@ -151,7 +151,6 @@ export default function Writer(props: {
       ).json()
     ).files;
     setMediaList(mediaList);
-    console.log(mediaList);
     setIsWorking(false);
   };
 

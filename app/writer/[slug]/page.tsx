@@ -33,7 +33,6 @@ export default async function WriterWrapper({
     redirect(`/writer/${await initNewPost()}`, RedirectType.replace);
   }
   const epoch = Number(params.slug);
-  console.log(epoch);
   const post = posts.find((p) => p.frontmatter.epoch === epoch);
   const titleOrEpoch =
     post?.frontmatter.complete === true

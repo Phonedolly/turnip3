@@ -88,9 +88,6 @@ export async function POST(request: Request) {
     /* get content-type */
     /* ref: https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Image_types#common_image_file_types */
     let contentType = "";
-    console.log(
-      fileName.split(".")[fileName.split(".").length - 1].toLowerCase(),
-    );
     switch (fileName.split(".")[fileName.split(".").length - 1].toLowerCase()) {
       case "apng":
         contentType = "image/apng";
