@@ -10,7 +10,6 @@ export async function GET(request: NextRequest) {
         Authorization: `Bearer ${process.env.VERCEL_TOKEN}`,
       },
       method: "get",
-      cache: "no-store",
       next: { revalidate: 0 },
     },
   );
@@ -18,9 +17,10 @@ export async function GET(request: NextRequest) {
   const data = await result.json();
 
   if (data.deployments.length === 0) {
-    return NextResponse.json({ id: null });
+    return NextResponse.json({ deployStarted: false, id: null });
   } else {
     return NextResponse.json({
+      deployStarted: true,
       id: data.deployments[0].uid,
       // created: Number(data.deployments[0].created),
     });

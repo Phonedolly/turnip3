@@ -44,18 +44,16 @@ const Deploy = () => {
         router.replace("/");
       });
 
-    /* get deployment id */
-    let deploymentId;
-    /* until get current deployment */
-    const getDeploymentId = async () =>
-      new Promise<void>(async (resolve) => {
-        const { id } = await fetch(
+    /* get deployment id until get current deployment */
+    const getDeploymentId = () =>
+      new Promise<string>(async (resolve) => {
+        const { id, deployStarted } = await fetch(
           `/api/withAuth/deploy/getDeploymentId?since=${now}`,
           { next: { revalidate: 0 } },
         ).then(async (res) => await res.json());
-        if (id) {
-          deploymentId = id;
-          resolve();
+        if (deployStarted === true) {
+          id;
+          resolve(id);
         } else {
           setTimeout(async () => {
             resolve(await getDeploymentId());
@@ -63,10 +61,10 @@ const Deploy = () => {
         }
       });
 
-    await getDeploymentId();
+    const deploymentId = await getDeploymentId();
 
     /* request deployment events until finish deployment */
-    const getEventList = async () =>
+    const getEventList = () =>
       new Promise<void>(async (resolve) => {
         const eventList = await fetch(
           `/api/withAuth/deploy/events?id=${deploymentId}`,
