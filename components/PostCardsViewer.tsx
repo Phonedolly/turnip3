@@ -135,7 +135,7 @@ const PostCardViewer = async (props: {
                     key={uuidv4()}
                   >
                     <h1
-                      className={`mx-3 mb-3 line-clamp-3 rounded-2xl bg-neutral-100/20 px-3 py-1 font-outfit text-lg font-bold leading-7 backdrop-blur-2xl transition duration-[400ms] group-hover/Link:bg-white/40 sm:text-3xl md:text-xl lg:px-2.5 lg:py-2.5 lg:text-2xl xl:px-3 xl:py-3 xl:text-3xl`}
+                      className={`mx-3 mb-3 line-clamp-3 rounded-2xl bg-neutral-100/20 px-3 py-1 font-outfit text-lg font-bold leading-7 backdrop-blur-2xl transition-all duration-[400ms] group-hover/Link:bg-white/40 sm:text-3xl md:text-xl lg:px-2.5 lg:py-2.5 lg:text-2xl xl:px-3 xl:py-3 xl:text-3xl`}
                       style={{ color: post.mostReadableTextColor }}
                     >
                       {post.frontmatter.title}
