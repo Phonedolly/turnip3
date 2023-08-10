@@ -99,13 +99,13 @@ const PostCardViewer = async (props: {
   return (
     <div className="my-2 flex h-full w-full flex-col items-center gap-y-16">
       {postsToShowIncludingTitleColor.length > 0 ? (
-        <div className="h-full w-full items-center gap-y-9 px-2 sm:grid-cols-2 flex flex-col md:grid md:max-w-3xl md:justify-items-center md:gap-14 lg:max-w-4xl lg:gap-20 xl:max-w-5xl">
+        <div className="flex h-full w-full flex-col items-center gap-y-9 px-2 sm:grid-cols-2 md:grid md:max-w-3xl md:justify-items-center md:gap-14 lg:max-w-4xl lg:gap-20 xl:max-w-5xl">
           {postsToShowIncludingTitleColor.map((post) => {
             return (
               <Link
                 href={`/post/${post.frontmatter.epoch}`}
                 key={uuidv4()}
-                className="relative flex h-full w-full cursor-pointer select-none flex-col items-center overflow-hidden rounded-3xl pt-[75%] shadow-card  transition duration-[400ms]  hover:scale-[1.02] hover:shadow-card-hover"
+                className="group/Link relative flex h-full w-full cursor-pointer select-none flex-col items-center overflow-hidden rounded-3xl pt-[75%] shadow-card transition duration-[400ms] hover:scale-[1.02] hover:shadow-card-hover hover:saturate-150"
               >
                 <div className="absolute top-0 h-full w-full" key={uuidv4()}>
                   <Image
@@ -124,7 +124,7 @@ const PostCardViewer = async (props: {
                     key={uuidv4()}
                   >
                     <h1
-                      className="mr-2.5 mt-2.5 rounded-xl bg-neutral-100/20 px-2 py-1 font-outfit text-base font-bold text-neutral-900 backdrop-blur-md sm:text-xl md:text-xl lg:text-2xl"
+                      className="mr-3 mt-3 rounded-2xl bg-neutral-100/20 px-3 py-2 font-outfit text-base font-bold text-neutral-900 backdrop-blur-md sm:text-xl md:text-xl lg:text-2xl"
                       style={{ color: post.mostReadableTextColor }}
                     >
                       {post.frontmatter.category}
@@ -135,7 +135,7 @@ const PostCardViewer = async (props: {
                     key={uuidv4()}
                   >
                     <h1
-                      className={`mx-2.5 mb-2.5 line-clamp-3 rounded-2xl bg-neutral-100/20 px-3 py-1 font-outfit text-lg font-bold leading-7 backdrop-blur-2xl sm:text-3xl md:text-xl lg:px-2.5 lg:py-2.5 lg:text-2xl xl:px-3 xl:py-3 xl:text-3xl`}
+                      className={`mx-3 mb-3 line-clamp-3 rounded-2xl bg-neutral-100/20 px-3 py-1 font-outfit text-lg font-bold leading-7 backdrop-blur-2xl transition duration-[400ms] group-hover/Link:bg-white/40 sm:text-3xl md:text-xl lg:px-2.5 lg:py-2.5 lg:text-2xl xl:px-3 xl:py-3 xl:text-3xl`}
                       style={{ color: post.mostReadableTextColor }}
                     >
                       {post.frontmatter.title}
