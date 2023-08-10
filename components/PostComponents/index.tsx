@@ -13,10 +13,10 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
       <h1
         {...otherProps}
         className="mt-4 flex flex-row items-start gap-x-2 py-2 text-3xl font-bold"
-        id={children?.toString()}
+        id={typeof children === "string" ? children?.toString() : ``}
       >
         <a
-          href={`#${children}`}
+          href={`#${typeof children === "string" ? children?.toString() : ``}`}
           className="top-14 text-3xl text-neutral-400 visited:text-neutral-400 hover:text-neutral-500 hover:underline hover:decoration-neutral-500"
         >
           {/* 🔗 */}#
@@ -30,10 +30,10 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
       <h2
         {...otherProps}
         className="mt-2 flex flex-row items-start gap-x-1.5 py-1 text-2xl font-bold"
-        id={children?.toString()}
+        id={typeof children === "string" ? children?.toString() : ``}
       >
         <a
-          href={`#${children}`}
+          href={`#${typeof children === "string" ? children?.toString() : ``}`}
           className="top-14 text-2xl text-neutral-400 visited:text-neutral-400 hover:text-neutral-500 hover:underline hover:decoration-neutral-500"
         >
           #
@@ -47,10 +47,10 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
       <h3
         {...otherProps}
         className="mt-1 flex flex-row items-start gap-x-1 py-0.5 text-xl font-bold"
-        id={children?.toString()}
+        id={typeof children === "string" ? children?.toString() : ``}
       >
         <a
-          href={`#${children}`}
+          href={`#${typeof children === "string" ? children?.toString() : ``}`}
           className="top-14 text-xl text-neutral-400 visited:text-neutral-400 hover:text-neutral-500 hover:underline hover:decoration-neutral-500"
         >
           #
@@ -64,10 +64,10 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
       <h4
         {...otherProps}
         className="mt-0.5 flex flex-row items-start gap-x-0.5 py-[0.0625] text-lg font-bold"
-        id={children?.toString()}
+        id={typeof children === "string" ? children?.toString() : ``}
       >
         <a
-          href={`#${children}`}
+          href={`#${typeof children === "string" ? children?.toString() : ``}`}
           className="top-14 text-lg text-neutral-400 visited:text-neutral-400 hover:text-neutral-500  hover:underline hover:decoration-neutral-500"
         >
           #
@@ -380,7 +380,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
         <div className="-mt-8 ml-4 flex w-full flex-col gap-y-1 pr-8">
           <div className="flex w-full flex-row">
             <div
-              className={`text-lg leading-relaxed text-neutral-700 break-all ${
+              className={`break-all text-lg leading-relaxed text-neutral-700 ${
                 props.italic ? `italic` : ``
               } ${props.serif ? `font-noto-serif` : ``}`}
             >
@@ -392,7 +392,7 @@ const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
               <p
                 className={`${props.serif ? `font-noto-serif` : ``} ${
                   props.italic ? `italic` : ``
-                } text-base text-neutral-500 break-all`}
+                } break-all text-base text-neutral-500`}
               >
                 &mdash; {props.author}
               </p>
