@@ -103,7 +103,8 @@ export async function generateMetadata(): Promise<Metadata> {
     //   { media: "(prefers-color-scheme: dark)", color: "black" },
     // ],
     openGraph: {
-      title: `${process.env.APP_NAME}`,
+      siteName: process.env.APP_NAME,
+      title: `Home`,
       url: `${process.env.NEXT_PUBLIC_SITE_URL}`,
       description: `${process.env.APP_DESCRIPTION}`,
       locale: "ko_KR",
