@@ -104,8 +104,8 @@ export async function generateMetadata(): Promise<Metadata> {
     // ],
     openGraph: {
       siteName: process.env.APP_NAME,
-      title: `Home`,
-      url: `${process.env.NEXT_PUBLIC_SITE_URL}`,
+      title: `${process.env.APP_NAME} | Home`,
+      url: `${process.env.NEXT_PUBLIC_APP_URL}`,
       description: `${process.env.APP_DESCRIPTION}`,
       locale: "ko_KR",
       type: "website",

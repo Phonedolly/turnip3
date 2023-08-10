@@ -1,5 +1,6 @@
 import getInitDataFromS3 from "@/lib/getInitData";
 import PostCardViewer from "@/components/PostCardsViewer";
+import { Metadata } from "next";
 
 export async function generateStaticParams() {
   const { posts, categories } = await getInitDataFromS3();
@@ -27,6 +28,26 @@ export async function generateStaticParams() {
   );
 
   return result;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string[] };
+}): Promise<Metadata> {
+  const { posts } = await getInitDataFromS3();
+  const thisCategory = decodeURI(params.slug[0]);
+  return {
+    title: `${process.env.NEXT_PUBLIC_APP_NAME} | ${thisCategory}`,
+    description: `${process.env.NEXT_PUBLIC_APP_NAME} | ${thisCategory}`,
+    openGraph: {
+      title: `${process.env.NEXT_PUBLIC_APP_NAME} | ${thisCategory}`,
+      description: `${process.env.NEXT_PUBLIC_APP_NAME} | ${thisCategory}`,
+      url: `${process.env.NEXT_PUBLIC_APP_URL}/category/${thisCategory}${
+        params.slug.length === 2 ? params.slug[1] : ``
+      }`,
+    },
+  };
 }
 
 export default async function HomeWithMorePage({

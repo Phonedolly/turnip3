@@ -17,6 +17,7 @@ export async function generateMetadata({
     openGraph: {
       title: thisPost?.frontmatter.title,
       description: thisPost?.frontmatter.description,
+      url: `${process.env.NEXT_PUBLIC_APP_URL}/post/${thisPost?.frontmatter.epoch}`,
     },
   };
 }
