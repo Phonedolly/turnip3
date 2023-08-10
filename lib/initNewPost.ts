@@ -12,7 +12,6 @@ const checkShouldMakeNewEpoch = async (s3: S3Client) => {
   const imageSizesList = (await listFiles(s3, "posts/")).filter(
     (file) => file.Key?.split("/")[2] === "imageSizes.json",
   );
-  console.log(imageSizesList);
   if (imageSizesList.length === 0) {
     return {
       containingOnlyImageSizesExists: false,

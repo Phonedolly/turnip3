@@ -34,7 +34,6 @@ export async function generateMetadata({
   params: { slug: string[] };
 }): Promise<Metadata> {
   const { posts } = await getInitDataFromS3();
-  console.log(params);
   return {
     openGraph: {
       title: `${process.env.NEXT_PUBLIC_APP_NAME} | Home`,
