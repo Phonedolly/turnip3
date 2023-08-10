@@ -5,7 +5,7 @@ import {
   RestoreStatus,
 } from "@aws-sdk/client-s3";
 
-export type MediaListWithObjectUrl = {
+export type MediaInfo = {
   /**
    * <p>The name that you assign to an object. You use the object key to retrieve the
    *          object.</p>
@@ -14,7 +14,7 @@ export type MediaListWithObjectUrl = {
   /**
    * <p>Creation date of the object.</p>
    */
-  LastModified?: Date;
+  LastModified?: string;
   /**
    * <p>The entity tag is a hash of the object. The ETag reflects changes only to the contents
    *          of an object, not its metadata. The ETag may or may not be an MD5 digest of the object

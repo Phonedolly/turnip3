@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import MdxEditor from "./MDXEditor";
 import ImageIcon from "./icons/ImageIcon";
 import { _Object } from "@aws-sdk/client-s3";
-import { MediaListWithObjectUrl } from "@/types/MediaListWithObjectUrl";
+import { MediaInfo } from "@/types/MediaListWithObjectUrl";
 import TrashIcon from "./icons/TrashIcon";
 import PublishIcon from "./icons/PublishIcon";
 import { useRouter } from "next/navigation";
@@ -33,6 +33,7 @@ export default function Writer(props: {
     frontmatter: IFrontmatter;
     mdx: string;
   };
+  initialMediaList: MediaInfo[];
   imcompletePosts: { title?: string; epoch: number }[];
 }) {
   const [isShowManagementPopup, setIsShowManagementPopup] =
@@ -43,7 +44,9 @@ export default function Writer(props: {
     frontmatter: props.initialCompiledMdxInfo.frontmatter,
     mdx: props.initialCompiledMdxInfo.mdx,
   });
-  const [mediaList, setMediaList] = useState<MediaListWithObjectUrl[]>([]);
+  const [mediaList, setMediaList] = useState<MediaInfo[]>(
+    props.initialMediaList,
+  );
   const [isWorking, setIsWorking] = useState<boolean>(false);
   const [imageSizes, setImageSizes] = useState<IImageSizes>(props.imageSizes);
   const [previewScrollTop, setPreviewScrollTop] = useState<number>(0);
@@ -86,33 +89,25 @@ export default function Writer(props: {
     switch (sortRule) {
       case "date-asc":
         setMediaList((prev) =>
-          prev.sort((a: MediaListWithObjectUrl, b: MediaListWithObjectUrl) => {
-            const aTime = getTime(
-              parseISO((a.LastModified as Date).toString()),
-            );
-            const bTime = getTime(
-              parseISO((b.LastModified as Date).toString()),
-            );
+          prev.sort((a: MediaInfo, b: MediaInfo) => {
+            const aTime = getTime(new Date(a.LastModified as string));
+            const bTime = getTime(new Date(b.LastModified as string));
             return aTime - bTime;
           }),
         );
         break;
       case "date-desc":
         setMediaList((prev) =>
-          prev.sort((a: MediaListWithObjectUrl, b: MediaListWithObjectUrl) => {
-            const aTime = getTime(
-              parseISO((a.LastModified as Date).toString()),
-            );
-            const bTime = getTime(
-              parseISO((b.LastModified as Date).toString()),
-            );
+          prev.sort((a: MediaInfo, b: MediaInfo) => {
+            const aTime = getTime(new Date(a.LastModified as string));
+            const bTime = getTime(new Date(b.LastModified as string));
             return bTime - aTime;
           }),
         );
         break;
       case "name-asc":
         setMediaList((prev) =>
-          prev.sort((a: MediaListWithObjectUrl, b: MediaListWithObjectUrl) => {
+          prev.sort((a: MediaInfo, b: MediaInfo) => {
             const aName = a.Key as string;
             const bName = b.Key as string;
             return aName.localeCompare(bName);
@@ -121,7 +116,7 @@ export default function Writer(props: {
         break;
       case "name-desc":
         setMediaList((prev) =>
-          prev.sort((a: MediaListWithObjectUrl, b: MediaListWithObjectUrl) => {
+          prev.sort((a: MediaInfo, b: MediaInfo) => {
             const aName = a.Key as string;
             const bName = b.Key as string;
             return bName.localeCompare(aName);
@@ -150,6 +145,7 @@ export default function Writer(props: {
         })
       ).json()
     ).files;
+    console.log(mediaList);
     setMediaList(mediaList);
     setIsWorking(false);
   };
@@ -182,6 +178,12 @@ export default function Writer(props: {
     if (!files) {
       return;
     }
+    for (let i = 0; i < files.length; i++) {
+      if (files[i].name.slice(0, files[i].name.lastIndexOf(".")).length === 0) {
+        alert(`Invalid File Name: ${files[i].name}`);
+        return;
+      }
+    }
     setIsWorking(true);
 
     // const filename = encodeURIComponent(file.name);
@@ -204,7 +206,6 @@ export default function Writer(props: {
     })
       .then(async () => {
         getMediaList();
-        setIsWorking(false);
       })
       .catch((err) => console.error(err));
 
@@ -213,9 +214,13 @@ export default function Writer(props: {
       {
         next: { revalidate: 0 },
       },
-    );
+    ).catch((res) => {
+      console.error(111);
+      console.error(res);
+    });
     const sizes = await res.json();
     setImageSizes(sizes);
+    setIsWorking(false);
   };
 
   const publish = async () => {
@@ -282,7 +287,6 @@ export default function Writer(props: {
           <ImageIcon
             className="h-12 w-12 cursor-pointer p-2"
             onClick={() => {
-              getMediaList();
               setIsShowManagementPopup(true);
             }}
           />
@@ -396,6 +400,7 @@ export default function Writer(props: {
               </div>
               <div className="flex h-full w-full flex-col gap-y-2 overflow-y-scroll rounded-xl md:grid md:grid-cols-2 md:gap-4 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
                 {mediaList?.map((media) => {
+                  console.log(media);
                   const specificImageSize =
                     imageSizes[
                       decodeURIComponent(
@@ -443,8 +448,9 @@ export default function Writer(props: {
                         <div className="flex w-1/2 flex-row items-center justify-end p-2 md:w-full">
                           <div className="flex w-3/5 flex-col py-2 md:w-full">
                             <h1 className="p-2 text-xs font-bold italic sm:text-sm md:text-base">
-                              {media.LastModified &&
-                                (media.LastModified as unknown as string)}
+                              {new Date(
+                                media.LastModified as string,
+                              ).toLocaleString()}
                             </h1>
                             <h1
                               className="line-clamp-3 cursor-pointer break-all rounded-xl bg-neutral-200 px-2.5 py-1 font-mono text-xs sm:text-sm md:text-base"

@@ -14,6 +14,7 @@ import initNewPost from "@/lib/initNewPost";
 import compileMDX from "@/lib/compileMDX";
 import { redirect } from "next/navigation";
 import { RedirectType } from "next/dist/client/components/redirect";
+import getMediaList from "@/lib/getMediaList";
 
 export default async function WriterWrapper({
   params,
@@ -41,6 +42,7 @@ export default async function WriterWrapper({
       ? (post?.frontmatter.epoch as string | number)
       : epoch;
   const imageSizes = await getImagesSizes(s3, titleOrEpoch);
+  const initialMediaList = await getMediaList(s3, epoch);
   const initialMdx = `---
 title: "Trying out new custom code blocks"
 category: "News"
@@ -86,6 +88,7 @@ for (let i = 1; i <= 100; i++) {
       epoch={epoch}
       imageSizes={imageSizes as IImageSizes}
       initialCompiledMdxInfo={{ code, frontmatter, mdx }}
+      initialMediaList={initialMediaList}
       imcompletePosts={incompletePosts.map((p) => ({
         title: p.frontmatter.title,
         epoch: p.frontmatter.epoch,

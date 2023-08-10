@@ -6,7 +6,7 @@ import {
 } from "@aws-sdk/client-s3";
 import { NextResponse } from "next/server";
 import fileToArrayBuffer from "file2arraybuffer";
-import { MediaListWithObjectUrl } from "@/types/MediaListWithObjectUrl";
+import { MediaInfo } from "@/types/MediaListWithObjectUrl";
 
 const s3 = initS3Client();
 
