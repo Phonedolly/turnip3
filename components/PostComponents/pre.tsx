@@ -6,17 +6,23 @@ import { Highlight, themes } from "prism-react-renderer";
 import { v4 as uuidv4 } from "uuid";
 
 type ColorReferences = {
-  [key in "red" | "yellow" | "green" | "blue"]: string;
+  [key in string]: string;
 };
 
-const calculateLinesToHighlight = (raw: ColorReferences) => {
+const checkThisLineSelected = (range: string) => {
+  const lineNumbers = rangeParser(range);
+
+  const returnFunc = lineNumbers
+    ? (index: number) => lineNumbers.includes(index + 1)
+    : () => false;
+
+  return returnFunc;
+};
+
+const calculateHighlights = (raw: ColorReferences) => {
   return (Object.keys(raw) as Array<keyof typeof raw>).reduce(
     (acc, currKey) => {
-      const lineNumbers = rangeParser(raw[currKey]);
-
-      const returnFunc = lineNumbers
-        ? (index: number) => lineNumbers.includes(index + 1)
-        : () => false;
+      const returnFunc = checkThisLineSelected(raw[currKey]);
 
       return {
         ...acc,
@@ -25,7 +31,7 @@ const calculateLinesToHighlight = (raw: ColorReferences) => {
     },
     {},
   ) as {
-    [key in "red" | "yellow" | "green" | "blue"]: (index: number) => boolean;
+    [key in string]: (index: number) => boolean;
   };
 
   // const lineNumbers = rangeParser(raw);
@@ -40,7 +46,8 @@ const pre = (props: any) => {
   const className = props.children?.props?.className || "";
   const code = props.children?.props.children?.trim() || "";
   const language = className.replace(/language-/, "");
-  const fileName = props?.fileName || "";
+  const fileName = props?.fileName;
+  const skip = props?.skip ? checkThisLineSelected(props.skip) : () => false;
   const showLineNumber = props?.showLineNumber || false;
 
   const rawHighlights = props.highlights && JSON.parse(props.highlights);
@@ -49,7 +56,7 @@ const pre = (props: any) => {
   //     ? calculateLinesToHighlight(rawHighlights)
   //     : () => false;
 
-  const highlights = rawHighlights && calculateLinesToHighlight(rawHighlights);
+  const highlights = rawHighlights && calculateHighlights(rawHighlights);
 
   let showLang = true;
   if (!language || language.length === 0 || language.includes(" ")) {
@@ -63,7 +70,7 @@ const pre = (props: any) => {
       {showLang === true ? (
         <div className="flex flex-row items-center py-3">
           <div
-            className="text-md mx-3 rounded-lg bg-neutral-200/50 px-2 py-0.5 text-center font-outfit font-bold text-black shadow-[0_2px_6px_0.5px_rgba(0,0,0,0.26)]"
+            className="text-md white text-neutral- mx-3 rounded-lg px-2 py-0.5 text-center font-outfit font-bold text-neutral-600 shadow-card"
             key={uuidv4()}
           >{`${language}`}</div>
           <div
@@ -94,7 +101,7 @@ const pre = (props: any) => {
             >
               {tokens.map((line, i) => {
                 /* Do you think there is a better approach? ☹️ */
-                let style = `hover:bg-neutral-200/70`;
+                let style;
                 if (highlights?.slate && highlights.slate(i) === true) {
                   style = `bg-slate-100 hover:saturate-200`;
                 } else if (highlights?.gray && highlights.gray(i) === true) {
@@ -167,7 +174,11 @@ const pre = (props: any) => {
                   style = `hover:bg-neutral-200/50 hover:saturate-200`;
                 }
 
-                return (
+                const alsoSkipNextLine =
+                  props?.skip && i < tokens.length && skip(i + 1) === true;
+                const skipThisLine = props?.skip && skip(i) === true;
+
+                const thisLine = (
                   <div
                     {...getLineProps({ line, key: i })}
                     className={`block px-6 last:mb-3 ${style}`}
@@ -200,6 +211,38 @@ const pre = (props: any) => {
                     </div>
                   </div>
                 );
+                if (skipThisLine && alsoSkipNextLine) return null;
+                else if (skipThisLine && !alsoSkipNextLine)
+                  return (
+                    <div
+                      {...getLineProps({ line, key: i })}
+                      className={`block bg-neutral-200 px-6 last:mb-3`}
+                      key={uuidv4()}
+                    >
+                      <div className="flex flex-row" key={uuidv4()}>
+                        {showLineNumber === true ? (
+                          <div className="flex flex-row">
+                            <h1 className="mr-4 select-none text-neutral-400">
+                              {`···`}
+                              {Array(String(tokens.length).length).fill(
+                                <span>{` `}</span>,
+                              )}
+                            </h1>
+                          </div>
+                        ) : null}
+                        <div
+                          className="px-1 md:whitespace-pre-wrap"
+                          key={uuidv4()}
+                        >
+                          <span
+                            key={uuidv4()}
+                            className="rounded-none font-mono text-[0.9rem] italic"
+                          ></span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                else return thisLine;
               })}
             </pre>
           )}
