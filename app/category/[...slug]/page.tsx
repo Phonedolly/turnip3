@@ -36,10 +36,13 @@ export default async function HomeWithMorePage({
 }) {
   const { posts, categories } = await getInitDataFromS3();
   const decodedSlug = params.slug.map((s) => decodeURI(s));
-  let slugToSend;
+  let slugToSend: [string, string] | [string, string, number] = [
+    "category",
+    "",
+  ];
 
   if (decodedSlug && decodedSlug.length === 1) {
-    slugToSend = ["category", decodedSlug[1]];
+    slugToSend = ["category", decodedSlug[0]];
   } else if (
     decodedSlug &&
     decodedSlug.length === 2 &&
@@ -48,13 +51,16 @@ export default async function HomeWithMorePage({
   ) {
     slugToSend = ["category", decodedSlug[0], Number(decodedSlug[1])];
   }
-
   let hasNext;
   const postsToShow = posts
-    .filter((post) => post.frontmatter.complete === true)
+    .filter(
+      (post) =>
+        post.frontmatter.complete === true &&
+        post.frontmatter.category === decodeURI(params.slug[0]),
+    )
     .slice(
-      slugToSend ? slugToSend[0] * 10 : 0,
-      slugToSend ? slugToSend[0] * 10 + 10 : 10,
+      slugToSend.length === 3 ? slugToSend[2] * 10 : 0,
+      slugToSend.length === 3 ? slugToSend[2] * 10 + 10 : 10,
     );
   if (!slugToSend) {
     if (posts.length > 10) {
@@ -62,7 +68,10 @@ export default async function HomeWithMorePage({
     } else {
       hasNext = false;
     }
-  } else if (slugToSend && slugToSend[0] * 10 + 10 < posts.length) {
+  } else if (
+    slugToSend.length === 3 &&
+    slugToSend[2] * 10 + 10 < posts.length
+  ) {
     hasNext = true;
   } else {
     hasNext = false;
