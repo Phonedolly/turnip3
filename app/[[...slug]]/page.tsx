@@ -34,11 +34,12 @@ export async function generateMetadata({
   params: { slug: string[] };
 }): Promise<Metadata> {
   const { posts } = await getInitDataFromS3();
+  console.log(params);
   return {
     openGraph: {
       title: `${process.env.NEXT_PUBLIC_APP_NAME} | Home`,
       url: `${process.env.NEXT_PUBLIC_APP_URL}${
-        params.slug.length === 1 ? params.slug[0] : ``
+        params.slug && params.slug.length === 1 ? params.slug[0] : ``
       }`,
     },
   };
