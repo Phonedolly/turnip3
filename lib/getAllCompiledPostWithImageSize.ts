@@ -54,7 +54,7 @@ const getAllCompiledPostWithImageSizes = cache(async (s3: S3Client) => {
             const imageSizes = (await getImagesSizes(
               s3,
               compiledPost.frontmatter.complete === true
-                ? specialCharToEscape(compiledPost.frontmatter.title)
+                ? compiledPost.frontmatter.title
                 : compiledPost.frontmatter.epoch,
             )) as IImageSize;
 

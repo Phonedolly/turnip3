@@ -133,7 +133,7 @@ const Deploy = () => {
           check your <code>.env</code>
         </h2>
         <table className="w-full rounded-xl bg-neutral-200/50">
-          <thead>
+          <th>
             <tr className="border-b-4 border-b-neutral-800">
               <th className="p-4 text-left font-outfit text-xl font-bold">
                 Name
@@ -142,31 +142,29 @@ const Deploy = () => {
                 Value
               </th>
             </tr>
-          </thead>
-          <tbody>
-            {Object.keys(env).map((key) => (
-              <tr
-                key={key}
-                className={`${
-                  key === "REPO_URL" || key === "VERCEL_DEPLOY_HOOK"
-                    ? `bg-yellow-400`
-                    : ``
-                }`}
-              >
-                <td className="p-4 text-left font-outfit text-xl font-bold">
-                  {key}
-                </td>
-                <td className="p-4 text-left font-mono text-xl">
-                  <input
-                    type="text"
-                    className="w-full break-all rounded-md bg-black p-1 text-black hover:bg-neutral-300/50"
-                    value={env[key]}
-                    disabled
-                  />
-                </td>
-              </tr>
-            ))}
-          </tbody>
+          </th>
+          {Object.keys(env).map((key) => (
+            <tr
+              key={key}
+              className={`${
+                key === "REPO_URL" || key === "VERCEL_DEPLOY_HOOK"
+                  ? `bg-yellow-400`
+                  : ``
+              }`}
+            >
+              <td className="p-4 text-left font-outfit text-xl font-bold">
+                {key}
+              </td>
+              <td className="p-4 text-left font-mono text-xl">
+                <input
+                  type="text"
+                  className="w-full break-all rounded-md bg-black p-1 text-black hover:bg-neutral-300/50"
+                  value={env[key]}
+                  disabled
+                />
+              </td>
+            </tr>
+          ))}
         </table>
         <button
           className={`rounded-full  p-10 text-5xl font-extrabold text-white shadow-[0px_8px_32px_rgba(0,0,0,0.5)] transition duration-[400ms] ease-in-out ${

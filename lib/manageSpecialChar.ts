@@ -20,7 +20,7 @@ export const specialCharToEscape = (title: string) => {
 
 const withSpecialCare = needSpecialCare.reduce((acc, curr) => {
     return acc.replaceAll(curr.regex, encodeURIComponent(curr.char));
-  }, title);
+  }, withMustAvoid);
 
   return withSpecialCare;
 };

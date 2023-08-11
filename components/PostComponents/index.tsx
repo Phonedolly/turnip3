@@ -349,7 +349,7 @@ const componentsGenerator: (imageSize: IImageSize) => MDXComponents = (
       </tr>
     );
   },
-  td: ({ children, ...otherProps }) => {
+  td: ({ children, ...otherProps }: any) => {
     return (
       <td
         {...otherProps}
