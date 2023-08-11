@@ -4,6 +4,7 @@ import {
   S3Client,
 } from "@aws-sdk/client-s3";
 import { cache } from "react";
+import { specialCharToEscape } from "./manageSpecialChar";
 
 const checkImageSizesConfigExists = cache(
   async (s3: S3Client, titleOrEpoch: number | string) => {
@@ -47,7 +48,7 @@ const getImagesSizes = async (s3: S3Client, titleOrEpoch: number | string) => {
         Bucket: process.env.S3_BUCKET_NAME as string,
         Key: `posts/${
           typeof titleOrEpoch === "string"
-            ? titleOrEpoch.replaceAll(/ /g, "_")
+            ? specialCharToEscape(titleOrEpoch)
             : titleOrEpoch
         }/imageSizes.json`,
       }),

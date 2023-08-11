@@ -14,6 +14,7 @@ import { stringify } from "yaml";
 import checkMDXExists from "@/lib/checkMDXExists";
 import listFiles from "@/lib/listFiles";
 import getAllCompiledPostWithImageSizes from "@/lib/getAllCompiledPostWithImageSize";
+import { specialCharToEscape } from "@/lib/manageSpecialChar";
 
 export async function POST(request: Request) {
   const s3 = initS3Client();
@@ -105,7 +106,7 @@ export async function POST(request: Request) {
     shouldUpdateDir = true;
     shouldUpdateEpoch = true;
     oldProperDir = oldEpoch;
-    properDir = frontmatter.title.replaceAll(/ /g, "_");
+    properDir = specialCharToEscape(frontmatter.title);
     properEpoch = newEpochCantidate;
   } else if (
     frontmatter.complete === true &&
@@ -131,19 +132,19 @@ export async function POST(request: Request) {
           Key: `posts/${oldPost.frontmatter.title.replaceAll(
             / /g,
             "_",
-          )}/${oldPost.frontmatter.title.replaceAll(/ /g, "_")}.mdx`,
+          )}/${specialCharToEscape(oldPost.frontmatter.title)}.mdx`,
         }),
       );
       shouldUpdateDir = true; // already updated
       shouldUpdateEpoch = false;
-      oldProperDir = oldPost.frontmatter.title.replaceAll(/ /g, "_");
-      properDir = frontmatter.title.replaceAll(/ /g, "_");
+      oldProperDir = specialCharToEscape(oldPost.frontmatter.title);
+      properDir = specialCharToEscape(frontmatter.title);
       properEpoch = frontmatter.epoch;
     } else {
       /* title has not changed */
       shouldUpdateDir = false;
       shouldUpdateEpoch = false;
-      oldProperDir = frontmatter.title.replaceAll(/ /g, "_");
+      oldProperDir = specialCharToEscape(frontmatter.title);
       properDir = oldProperDir;
       properEpoch = frontmatter.epoch;
     }

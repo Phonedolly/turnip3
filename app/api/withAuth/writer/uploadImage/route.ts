@@ -14,6 +14,7 @@ import gm from "gm";
 // import sharp from "sharp";
 import Jimp from "jimp";
 import getAllCompiledPostWithImageSizes from "@/lib/getAllCompiledPostWithImageSize";
+import { specialCharToEscape } from "@/lib/manageSpecialChar";
 
 const checkFileDuplicated = (s3: S3Client, epoch: number, fileName: string) => {
   return s3
@@ -63,7 +64,7 @@ export async function POST(request: Request) {
   for (let i = 0; i < numOfFiles; i++) {
     const file = formData.get(`file_${i}`) as File;
     let fileName = file.name;
-    fileName = fileName.replaceAll(/ /g, "_");
+    fileName = specialCharToEscape(fileName);
     const fileAsArrayBuffer = Buffer.from(await fileToArrayBuffer(file));
 
     if (await checkFileDuplicated(s3, epoch, fileName)) {
