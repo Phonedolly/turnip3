@@ -18,7 +18,7 @@ export const specialCharToEscape = (title: string) => {
   
   const withMustAvoid = title.replaceAll(mustAvoid, "_");
 
-const withSpecialCare = withMustAvoid.reduce((acc, curr) => {
+const withSpecialCare = needSpecialCare.reduce((acc, curr) => {
     return acc.replaceAll(curr.regex, encodeURIComponent(curr.char));
   }, title);
 
