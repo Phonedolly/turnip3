@@ -16,7 +16,9 @@ const getMediaList = async (s3: S3Client, epoch: number) => {
   }
   const files = (await listFiles(s3, `posts/${dirName}/`)).map((media) => ({
     ...media,
-    objectUrl: `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.S3_REGION}.amazonaws.com/${media.Key}`,
+    objectUrl: encodeURI(
+      `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.S3_REGION}.amazonaws.com/${media.Key}`,
+    ),
   })) as MediaInfo[];
   return files;
 };
