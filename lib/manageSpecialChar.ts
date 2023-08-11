@@ -15,14 +15,13 @@ const needSpecialCare = [
 const mustAvoid = /\\|\{|[\x80-\xff]|\^|\}|\%|\`|\]|\"|\'|\>|\[|\~|\<|\#|\|/g;
 
 export const specialCharToEscape = (title: string) => {
-  
   const withMustAvoid = title.replaceAll(mustAvoid, "_");
 
-const withSpecialCare = needSpecialCare.reduce((acc, curr) => {
-    return acc.replaceAll(curr.regex, encodeURIComponent(curr.char));
-  }, withMustAvoid);
+  // const withSpecialCare = needSpecialCare.reduce((acc, curr) => {
+  // return acc.replaceAll(curr.regex, encodeURIComponent(curr.char));
+  // }, withMustAvoid);
 
-  return withSpecialCare;
+  return withMustAvoid;
 };
 
 export const escapeToSpecialChar = (title: string) => {
