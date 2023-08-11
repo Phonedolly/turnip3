@@ -16,7 +16,7 @@ const mustAvoid = /\\|\{|[\x80-\xff]|\^|\}|\%|\`|\]|\"|\'|\>|\[|\~|\<|\#|\|/g;
 
 export const specialCharToEscape = (title: string) => {
   
-  const withMustAvoid = withSpecialCare.replaceAll(mustAvoid, "_");
+  const withMustAvoid = title.replaceAll(mustAvoid, "_");
 
 const withSpecialCare = withMustAvoid.reduce((acc, curr) => {
     return acc.replaceAll(curr.regex, encodeURIComponent(curr.char));
