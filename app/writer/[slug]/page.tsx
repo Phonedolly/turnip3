@@ -39,7 +39,7 @@ export default async function WriterWrapper({
     post?.frontmatter.complete === true
       ? post?.frontmatter.title
       : post
-      ? (post?.frontmatter.epoch as string | number)
+      ? Number(post?.frontmatter.epoch)
       : epoch;
   const imageSizes = await getImagesSizes(s3, titleOrEpoch);
   const initialMediaList = await getMediaList(s3, epoch);
