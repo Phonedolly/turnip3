@@ -1,7 +1,7 @@
 interface ICompiledPost {
   postAsMdx: string;
   epoch: number;
-  imageSizes: IImageSizes;
+  imageSizes: IImageSize;
   code: string;
   frontmatter: IFrontmatter;
 }

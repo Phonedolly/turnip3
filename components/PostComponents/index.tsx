@@ -5,8 +5,8 @@ import pre from "./pre";
 import path from "path";
 import React, { isValidElement } from "react";
 
-const componentsGenerator: (imageSize: IImageSizes) => MDXComponents = (
-  imageSizes: IImageSizes,
+const componentsGenerator: (imageSize: IImageSize) => MDXComponents = (
+  imageSizes: IImageSize,
 ) => ({
   h1: ({ children, ...otherProps }) => {
     return (

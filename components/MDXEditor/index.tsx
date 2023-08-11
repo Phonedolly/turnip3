@@ -16,7 +16,7 @@ import { IPost } from "@/types/IPost";
 
 const MDXEditor = (props: {
   setPost: Dispatch<SetStateAction<IPost>>;
-  imageSizes: IImageSizes;
+  imageSizes: IImageSize;
   epoch: number;
   initialCompiledMdxInfo: {
     mdx: string;

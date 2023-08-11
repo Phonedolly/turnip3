@@ -10,7 +10,7 @@ const Preview = (props: {
   frontmatter: IFrontmatter;
   previewScrollTop: number;
   setPreviewScrollTop: React.Dispatch<React.SetStateAction<number>>;
-  imageSizes: IImageSizes;
+  imageSizes: IImageSize;
 }) => {
   const previewRef = useRef<HTMLDivElement>(null);
   const MemoizedPostWrapper = useMemo(

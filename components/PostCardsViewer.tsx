@@ -10,7 +10,7 @@ const PostCardViewer = async (props: {
   posts: (ICompileMDXOutput & {
     mdx: string;
   } & {
-    imageSizes: IImageSizes;
+    imageSizes: IImageSize;
   })[];
   slug?: [number] | [string, string, number?];
   hasNext: boolean;
@@ -41,7 +41,7 @@ const PostCardViewer = async (props: {
   )) as {
     postAsMdx: string;
     epoch: number;
-    imageSizes: IImageSizes;
+    imageSizes: IImageSize;
     code: string;
     frontmatter: IFrontmatter;
     mostReadableTextColor: string;

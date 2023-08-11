@@ -12,6 +12,6 @@ export async function GET(request: Request) {
   const url = new URL(request.url);
   const epoch = Number(url.searchParams.get("epoch"));
 
-  let imageSizes = (await getImagesSizes(s3, epoch)) as IImageSizes;
+  let imageSizes = (await getImagesSizes(s3, epoch)) as IImageSize;
   return NextResponse.json(imageSizes);
 }

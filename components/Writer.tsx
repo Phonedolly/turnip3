@@ -27,7 +27,7 @@ const EpochIsNull = () => (
 
 export default function Writer(props: {
   epoch: number;
-  imageSizes: IImageSizes;
+  imageSizes: IImageSize;
   initialCompiledMdxInfo: {
     code: string;
     frontmatter: IFrontmatter;
@@ -48,7 +48,7 @@ export default function Writer(props: {
     props.initialMediaList,
   );
   const [isWorking, setIsWorking] = useState<boolean>(false);
-  const [imageSizes, setImageSizes] = useState<IImageSizes>(props.imageSizes);
+  const [imageSizes, setImageSizes] = useState<IImageSize>(props.imageSizes);
   const [previewScrollTop, setPreviewScrollTop] = useState<number>(0);
   const [isShowImage, setIsShowImage] = useState<
     { objectUrl: string; imageSize: { height: number; width: number } } | false
@@ -135,7 +135,7 @@ export default function Writer(props: {
       await fetch(`/api/withAuth/writer/getImageSizes?epoch=${props.epoch}`, {
         next: { revalidate: 0 },
       })
-    ).json()) as IImageSizes;
+    ).json()) as IImageSize;
     setImageSizes(imageSizesFromServer);
 
     const mediaList = (

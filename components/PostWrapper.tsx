@@ -4,7 +4,7 @@ import componentsGenerator from "./PostComponents";
 
 const PostWrapper = (props: {
   code: string;
-  imageSizes: IImageSizes;
+  imageSizes: IImageSize;
   frontmatter: IFrontmatter;
 }) => {
   const Component = useMemo(() => getMDXComponent(props.code), [props.code]);

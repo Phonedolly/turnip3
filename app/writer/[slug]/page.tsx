@@ -86,7 +86,7 @@ for (let i = 1; i <= 100; i++) {
   return (
     <Writer
       epoch={epoch}
-      imageSizes={imageSizes as IImageSizes}
+      imageSizes={imageSizes as IImageSize}
       initialCompiledMdxInfo={{ code, frontmatter, mdx }}
       initialMediaList={initialMediaList}
       imcompletePosts={incompletePosts.map((p) => ({

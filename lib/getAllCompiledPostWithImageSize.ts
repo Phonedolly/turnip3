@@ -48,14 +48,14 @@ const getAllCompiledPostWithImageSizes = cache(async (s3: S3Client) => {
       allCompiledPost.map(
         (compiledPost) =>
           new Promise<
-            ICompileMDXOutput & { mdx: string } & { imageSizes: IImageSizes }
+            ICompileMDXOutput & { mdx: string } & { imageSizes: IImageSize }
           >(async (resolve) => {
             const imageSizes = (await getImagesSizes(
               s3,
               compiledPost.frontmatter.complete === true
                 ? compiledPost.frontmatter.title.replace(/ /g, "_")
                 : compiledPost.frontmatter.epoch,
-            )) as IImageSizes;
+            )) as IImageSize;
 
             return resolve({ ...compiledPost, imageSizes });
           }),

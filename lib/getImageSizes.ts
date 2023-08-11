@@ -25,7 +25,7 @@ export const createImageSizes = async (
   await s3.send(
     new PutObjectCommand({
       Bucket: process.env.S3_BUCKET_NAME as string,
-      Body: JSON.stringify({} as IImageSizes),
+      Body: JSON.stringify({} as IImageSize),
       Key: `posts/${titleOrEpoch}/imageSizes.json`,
     }),
   );
@@ -52,7 +52,7 @@ const getImagesSizes = async (s3: S3Client, titleOrEpoch: number | string) => {
         }/imageSizes.json`,
       }),
     )
-  ).Body?.transformToString().then((body) => JSON.parse(body) as IImageSizes);
+  ).Body?.transformToString().then((body) => JSON.parse(body) as IImageSize);
 };
 
 export default getImagesSizes;

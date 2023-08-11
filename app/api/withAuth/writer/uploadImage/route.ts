@@ -58,7 +58,7 @@ export async function POST(request: Request) {
   }
 
   const failedFiles: string[] = [];
-  let imageSizes = (await getImagesSizes(s3, epoch)) as IImageSizes;
+  let imageSizes = (await getImagesSizes(s3, epoch)) as IImageSize;
 
   for (let i = 0; i < numOfFiles; i++) {
     const file = formData.get(`file_${i}`) as File;
