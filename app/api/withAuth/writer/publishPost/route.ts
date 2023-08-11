@@ -129,9 +129,8 @@ export async function POST(request: Request) {
       await s3.send(
         new DeleteObjectCommand({
           Bucket: process.env.S3_BUCKET_NAME as string,
-          Key: `posts/${oldPost.frontmatter.title.replaceAll(
-            / /g,
-            "_",
+          Key: `posts/${specialCharToEscape(
+            oldPost.frontmatter.title,
           )}/${specialCharToEscape(oldPost.frontmatter.title)}.mdx`,
         }),
       );

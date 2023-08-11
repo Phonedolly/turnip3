@@ -5,6 +5,7 @@ import listFiles from "./listFiles";
 import compileMDX from "./compileMDX";
 import getImagesSizes from "./getImageSizes";
 import { ICompileMDXOutput } from "@/types/ICompileMDXOutput";
+import { specialCharToEscape } from "./manageSpecialChar";
 
 const getAllCompiledPostWithImageSizes = cache(async (s3: S3Client) => {
   const allFiles = (await listFiles(s3, "posts/")) as _Object[];
@@ -53,7 +54,7 @@ const getAllCompiledPostWithImageSizes = cache(async (s3: S3Client) => {
             const imageSizes = (await getImagesSizes(
               s3,
               compiledPost.frontmatter.complete === true
-                ? compiledPost.frontmatter.title.replace(/ /g, "_")
+                ? specialCharToEscape(compiledPost.frontmatter.title)
                 : compiledPost.frontmatter.epoch,
             )) as IImageSize;
 
