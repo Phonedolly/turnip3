@@ -8,9 +8,11 @@ import { specialCharToEscape } from "./manageSpecialChar";
 
 const checkImageSizesConfigExists = cache(
   async (s3: S3Client, titleOrEpoch: number | string) => {
+const espacedTitleOrEpoch=typeof titleOrEpoch ==="string" ? specialCharToEscape(titleOrEpoch) : titleOrEpoch;
+
     const params = {
       Bucket: process.env.S3_BUCKET_NAME,
-      Key: `posts/${titleOrEpoch}/imageSizes.json`,
+      Key: `posts/${espacedTitleOrEpoch}/imageSizes.json`,
     };
     return await s3
       .send(new GetObjectCommand(params))
@@ -23,11 +25,14 @@ export const createImageSizes = async (
   s3: S3Client,
   titleOrEpoch: number | string,
 ) => {
+
+const espacedTitleOrEpoch=typeof titleOrEpoch ==="string" ? specialCharToEscape(titleOrEpoch) : titleOrEpoch;
+
   await s3.send(
     new PutObjectCommand({
       Bucket: process.env.S3_BUCKET_NAME as string,
       Body: JSON.stringify({} as IImageSize),
-      Key: `posts/${titleOrEpoch}/imageSizes.json`,
+      Key: `posts/${espacedTitleOrEpoch}/imageSizes.json`,
     }),
   );
 };
