@@ -73,13 +73,13 @@ const Pre = (props: any) => {
   }, []);
   return (
     <div
-      className="my-5 flex w-full flex-col rounded-xl bg-white shadow-code dark:bg-neutral-700"
+      className="my-5 flex w-full flex-col rounded-2xl bg-white shadow-code dark:bg-neutral-700"
       key={uuidv4()}
     >
       {showLang === true ? (
         <div className="flex flex-row items-center py-3">
           <div
-            className="text-md white text-neutral- mx-3 rounded-lg px-2 py-0.5 text-center font-outfit font-bold text-neutral-600 shadow-card dark:text-neutral-300"
+            className="text-md white text-neutral- mx-3 rounded-lg px-2 py-1 text-center font-outfit font-bold text-neutral-600 shadow-card dark:text-neutral-300"
             key={uuidv4()}
           >{`${language}`}</div>
           <div
@@ -112,73 +112,73 @@ const Pre = (props: any) => {
                 /* Do you think there is a better approach? ☹️ */
                 let style;
                 if (highlights?.slate && highlights.slate(i) === true) {
-                  style = `bg-slate-100 hover:saturate-200`;
+                  style = `bg-slate-100 hover:saturate-200 dark:bg-slate-700/50`;
                 } else if (highlights?.gray && highlights.gray(i) === true) {
-                  style = `bg-gray-100 hover:saturate-200`;
+                  style = `bg-gray-100 hover:saturate-200  dark:bg-gray-700/50`;
                 } else if (highlights?.zinc && highlights.zinc(i) === true) {
-                  style = `bg-zinc-100 hover:saturate-200`;
+                  style = `bg-zinc-100 hover:saturate-200 dark:bg-zinc-700/50`;
                 } else if (
                   highlights?.neutral &&
                   highlights.neutral(i) === true
                 ) {
-                  style = `bg-neutral-100 hover:saturate-200`;
+                  style = `bg-neutral-100 hover:saturate-200 dark:bg-neutral-700/50`;
                 } else if (highlights?.stone && highlights.stone(i) === true) {
-                  style = `bg-stone-100 hover:saturate-200`;
+                  style = `bg-stone-100 hover:saturate-200 dark:bg-stone-700/50`;
                 } else if (highlights?.red && highlights.red(i) === true) {
-                  style = `bg-red-100 hover:saturate-200`;
+                  style = `bg-red-100 hover:saturate-200 dark:bg-red-700/50`;
                 } else if (
                   highlights?.ogrange &&
                   highlights.ogrange(i) === true
                 ) {
-                  style = `bg-ogrange-100 hover:saturate-200`;
+                  style = `bg-ogrange-100 hover:saturate-200 dark:bg-orange-700/50`;
                 } else if (highlights?.amber && highlights.amber(i) === true) {
-                  style = `bg-amber-100 hover:saturate-200`;
+                  style = `bg-amber-100 hover:saturate-200 dark:bg-amber-700/50`;
                 } else if (
                   highlights?.yellow &&
                   highlights.yellow(i) === true
                 ) {
-                  style = `bg-yellow-100 hover:saturate-200`;
+                  style = `bg-yellow-100 hover:saturate-200 dark:bg-yellow-700/50`;
                 } else if (highlights?.lime && highlights.lime(i) === true) {
-                  style = `bg-lime-100 hover:saturate-200`;
+                  style = `bg-lime-100 hover:saturate-200 dark:bg-lime-700/50`;
                 } else if (highlights?.green && highlights.green(i) === true) {
-                  style = `bg-green-100 hover:saturate-200`;
+                  style = `bg-green-100 hover:saturate-200 dark:bg-green-700/50`;
                 } else if (
                   highlights?.emerald &&
                   highlights.emerald(i) === true
                 ) {
-                  style = `bg-emerald-100 hover:saturate-200`;
+                  style = `bg-emerald-100 hover:saturate-200 dark:bg-emerald-700/50`;
                 } else if (highlights?.teal && highlights.teal(i) === true) {
-                  style = `bg-teal-100 hover:saturate-200`;
+                  style = `bg-teal-100 hover:saturate-200 dark:bg-teal-700/50`;
                 } else if (highlights?.cyan && highlights.cyan(i) === true) {
-                  style = `bg-cyan-100 hover:saturate-200`;
+                  style = `bg-cyan-100 hover:saturate-200 dark:bg-cyan-700/50`;
                 } else if (highlights?.sky && highlights.sky(i) === true) {
-                  style = `bg-sky-100 hover:saturate-200`;
+                  style = `bg-sky-100 hover:saturate-200 dark:bg-sky-700/50`;
                 } else if (highlights?.blue && highlights.blue(i) === true) {
-                  style = `bg-blue-100 hover:saturate-200`;
+                  style = `bg-blue-100 hover:saturate-200 dark:bg-blue-700/50`;
                 } else if (
                   highlights?.indigo &&
                   highlights.indigo(i) === true
                 ) {
-                  style = `bg-indigo-100 hover:saturate-200`;
+                  style = `bg-indigo-100 hover:saturate-200 dark:bg-indigo-700/50`;
                 } else if (
                   highlights?.violet &&
                   highlights.violet(i) === true
                 ) {
-                  style = `bg-violet-100 hover:saturate-200`;
+                  style = `bg-violet-100 hover:saturate-200 dark:bg-violet-700/50`;
                 } else if (
                   highlights?.purple &&
                   highlights.purple(i) === true
                 ) {
-                  style = `bg-purple-100 hover:saturate-200`;
+                  style = `bg-purple-100 hover:saturate-200 dark:bg-purple-700/50`;
                 } else if (
                   highlights?.fuchsia &&
                   highlights.fuchsia(i) === true
                 ) {
-                  style = `bg-fuchsia-100 hover:saturate-200`;
+                  style = `bg-fuchsia-100 hover:saturate-200 dark:bg-fuchsia-700/50`;
                 } else if (highlights?.pink && highlights.pink(i) === true) {
-                  style = `bg-pink-100 hover:saturate-200`;
+                  style = `bg-pink-100 hover:saturate-200 dark:bg-pink-700/50`;
                 } else if (highlights?.rose && highlights.rose(i) === true) {
-                  style = `bg-rose-100 hover:saturate-200`;
+                  style = `bg-rose-100 hover:saturate-200 dark:bg-rose-700/50`;
                 } else {
                   style = `hover:bg-neutral-200/50 hover:saturate-200 dark:hover:bg-neutral-600`;
                 }
@@ -190,7 +190,7 @@ const Pre = (props: any) => {
                 const thisLine = (
                   <div
                     {...getLineProps({ line, key: i })}
-                    className={`block px-6 last:mb-3 ${style}`}
+                    className={`block px-6 last:mb-3.5 ${style}`}
                     key={uuidv4()}
                   >
                     <div className="flex flex-row" key={uuidv4()}>
@@ -225,7 +225,7 @@ const Pre = (props: any) => {
                   return (
                     <div
                       {...getLineProps({ line, key: i })}
-                      className={`block bg-neutral-100 px-6 last:mb-3 hover:bg-neutral-200`}
+                      className={`block bg-neutral-100 px-6 last:mb-3.5 hover:bg-neutral-200  dark:bg-neutral-600 dark:hover:bg-neutral-500/80`}
                       key={uuidv4()}
                     >
                       <div className="flex flex-row" key={uuidv4()}>

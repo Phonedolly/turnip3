@@ -4,6 +4,7 @@ import Image from "next/image";
 import Pre from "./pre";
 import path from "path";
 import React, { isValidElement } from "react";
+import Code from "./Code";
 
 const componentsGenerator: (imageSize: IImageSize) => MDXComponents = (
   imageSizes: IImageSize,
@@ -102,22 +103,7 @@ const componentsGenerator: (imageSize: IImageSize) => MDXComponents = (
     );
   },
   pre: Pre,
-  code: (props) => {
-    return (
-      // <code {...props} className="inline rounded-lg bg-neutral-200/60 p-1.5" />
-      /* Use Inline style instead of tailwind, because it's not working well with the code block */
-      <code
-        {...props}
-        style={{
-          display: "inline",
-          backgroundColor: "rgb(229 229 229 / 0.6)",
-          padding: "0.25rem 0.375rem",
-          borderRadius: "0.5rem",
-          wordBreak: "break-all",
-        }}
-      />
-    );
-  },
+  code: Code,
   span: (props) => {
     if (props.className?.includes("math math-inline")) {
       return (
@@ -257,7 +243,7 @@ const componentsGenerator: (imageSize: IImageSize) => MDXComponents = (
 
   blockquote: ({ children, ...otherProps }) => {
     return (
-      <div className="mx-2 my-5 rounded-lg bg-white px-4 py-2 shadow-[0_12px_32px_4px_rgba(0,0,0,0.26)]">
+      <div className="mx-2 my-5 rounded-2xl bg-white px-4 py-2 shadow-[0_12px_32px_4px_rgba(0,0,0,0.26)]">
         {children}
       </div>
     );
@@ -321,7 +307,7 @@ const componentsGenerator: (imageSize: IImageSize) => MDXComponents = (
   table: ({ children, ...otherProps }) => {
     return (
       <div className="my-5 flex w-full flex-row justify-center">
-        <div className="flex w-fit flex-row items-center justify-center overflow-x-auto rounded-lg bg-white px-4 py-2 shadow-card">
+        <div className="flex w-fit flex-row items-center justify-center overflow-x-auto rounded-2xl bg-white px-4 py-2 shadow-card">
           <table className="" {...otherProps}>
             {children}
           </table>
@@ -365,7 +351,7 @@ const componentsGenerator: (imageSize: IImageSize) => MDXComponents = (
   },
   Quote2: (props) => {
     return (
-      <div className="my-5 flex w-full flex-col rounded-lg bg-white p-4 shadow-card dark:bg-neutral-700">
+      <div className="my-5 flex w-full flex-col rounded-2xl bg-white p-4 shadow-card dark:bg-neutral-700">
         <div className="flex select-none flex-row justify-start">
           <p>
             <span
