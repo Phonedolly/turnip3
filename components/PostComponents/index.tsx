@@ -12,7 +12,7 @@ const componentsGenerator: (imageSize: IImageSize) => MDXComponents = (
     return (
       <h1
         {...otherProps}
-        className="mt-4 flex flex-row items-start gap-x-2 py-2 text-3xl font-bold"
+        className="mt-4 flex flex-row items-start gap-x-2 py-2 text-3xl font-bold dark:text-neutral-200"
         id={typeof children === "string" ? children?.toString() : ``}
       >
         <a
@@ -29,7 +29,7 @@ const componentsGenerator: (imageSize: IImageSize) => MDXComponents = (
     return (
       <h2
         {...otherProps}
-        className="mt-2 flex flex-row items-start gap-x-1.5 py-1 text-2xl font-bold"
+        className="mt-2 flex flex-row items-start gap-x-1.5 py-1 text-2xl font-bold dark:text-neutral-200"
         id={typeof children === "string" ? children?.toString() : ``}
       >
         <a
@@ -46,7 +46,7 @@ const componentsGenerator: (imageSize: IImageSize) => MDXComponents = (
     return (
       <h3
         {...otherProps}
-        className="mt-1 flex flex-row items-start gap-x-1 py-0.5 text-xl font-bold"
+        className="mt-1 flex flex-row items-start gap-x-1 py-0.5 text-xl font-bold dark:text-neutral-200"
         id={typeof children === "string" ? children?.toString() : ``}
       >
         <a
@@ -63,7 +63,7 @@ const componentsGenerator: (imageSize: IImageSize) => MDXComponents = (
     return (
       <h4
         {...otherProps}
-        className="mt-0.5 flex flex-row items-start gap-x-0.5 py-[0.0625] text-lg font-bold"
+        className="mt-0.5 flex flex-row items-start gap-x-0.5 py-[0.0625] text-lg font-bold dark:text-neutral-200"
         id={typeof children === "string" ? children?.toString() : ``}
       >
         <a
@@ -240,7 +240,7 @@ const componentsGenerator: (imageSize: IImageSize) => MDXComponents = (
   p: ({ children, ...otherProps }) => {
     if (typeof children === "string") {
       return (
-        <p className="my-1 py-0.5 text-base leading-loose  md:text-lg md:leading-9 xl:text-xl xl:leading-10">
+        <p className="my-1 py-0.5 text-base leading-loose  dark:text-neutral-300 md:text-lg md:leading-9 xl:text-xl xl:leading-10">
           {children}
         </p>
       );
@@ -248,7 +248,7 @@ const componentsGenerator: (imageSize: IImageSize) => MDXComponents = (
     return (
       <div
         {...otherProps}
-        className="my-1 py-0.5 text-base leading-loose  md:text-lg md:leading-9 xl:text-xl xl:leading-10"
+        className="my-1 py-0.5 text-base leading-loose dark:text-neutral-300 md:text-lg md:leading-9 xl:text-xl xl:leading-10"
       >
         {children}
       </div>
@@ -365,7 +365,7 @@ const componentsGenerator: (imageSize: IImageSize) => MDXComponents = (
   },
   Quote2: (props) => {
     return (
-      <div className="my-5 flex w-full flex-col rounded-lg bg-white p-4 shadow-card">
+      <div className="my-5 flex w-full flex-col rounded-lg bg-white p-4 shadow-card dark:bg-neutral-700">
         <div className="flex select-none flex-row justify-start">
           <p>
             <span
@@ -381,10 +381,14 @@ const componentsGenerator: (imageSize: IImageSize) => MDXComponents = (
             </span>
           </p>
         </div>
-        <div className="-mt-8 ml-4 flex w-full flex-col gap-y-1 pr-8">
+        <div
+          className={`${
+            props.serif ? `-mt-8` : `-mt-10`
+          }  ml-4 flex w-full flex-col gap-y-1 pr-8`}
+        >
           <div className="flex w-full flex-row">
             <div
-              className={`my-1 break-all py-0.5 text-base leading-relaxed text-neutral-700 md:text-lg md:leading-7 xl:text-xl xl:leading-loose ${
+              className={`my-1 break-all py-0.5 text-base leading-relaxed text-neutral-700 dark:text-neutral-300 md:text-lg md:leading-7 xl:text-xl xl:leading-loose ${
                 props.contextItalic ? `italic` : ``
               } ${props.contextSerif ? `font-noto-serif` : ``}`}
             >

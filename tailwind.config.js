@@ -11,7 +11,9 @@ module.exports = {
       boxShadow: {
         'code': '0px 4px 12px rgba(0,0,0,.16)',
         'card': '0px 4px 12px rgba(0,0,0,.18)',
-        'card-hover': '0px 4px 12px rgba(0,0,0,.24)'
+        'card-hover': '0px 4px 12px rgba(0,0,0,.24)',
+        'card-dark': '0px 0px 12px rgba(255,255,255,.18)',
+        'card-hover-dark': '0px 0px 12px rgba(255,255,255,.24)'
       },
       fontFamily: {
         'spoqa-han-sans-neo': ['var(--font-spoqa-han-sans-neo)'],

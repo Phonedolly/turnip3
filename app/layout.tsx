@@ -122,7 +122,7 @@ export default async function RootLayout({
   return (
     <html
       lang={process.env.NEXT_PUBLIC_LANG || "en"}
-      className={`${spoqaHanSansNeo.variable} ${outfit.variable} ${cascadiaMono.variable} ${cascadiaCode.variable} ${notoSerifKr.variable} flex h-auto w-full flex-col items-center bg-white font-spoqa-han-sans-neo`}
+      className={`${spoqaHanSansNeo.variable} ${outfit.variable} ${cascadiaMono.variable} ${cascadiaCode.variable} ${notoSerifKr.variable} flex h-auto w-full flex-col items-center bg-white font-spoqa-han-sans-neo dark:bg-neutral-900`}
     >
       {process.env.ENV_DEVELOPMENT !== undefined ? <GoogleAnalytics /> : null}
       <link

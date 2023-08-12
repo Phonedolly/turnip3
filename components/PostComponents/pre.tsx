@@ -64,13 +64,13 @@ const pre = (props: any) => {
   }
   return (
     <div
-      className="my-5 flex w-full flex-col rounded-xl bg-white shadow-code"
+      className="my-5 flex w-full flex-col rounded-xl bg-white shadow-code dark:bg-neutral-700"
       key={uuidv4()}
     >
       {showLang === true ? (
         <div className="flex flex-row items-center py-3">
           <div
-            className="text-md white text-neutral- mx-3 rounded-lg px-2 py-0.5 text-center font-outfit font-bold text-neutral-600 shadow-card"
+            className="text-md white text-neutral- mx-3 rounded-lg px-2 py-0.5 text-center font-outfit font-bold text-neutral-600 shadow-card dark:text-neutral-300"
             key={uuidv4()}
           >{`${language}`}</div>
           <div
@@ -86,7 +86,12 @@ const pre = (props: any) => {
           // {...defaultProps}
           code={code}
           language={language}
-          theme={themes.github}
+          theme={
+            window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? themes.palenight
+              : themes.github
+          }
           key={uuidv4()}
         >
           {({ className, style, tokens, getLineProps, getTokenProps }) => (
@@ -171,7 +176,7 @@ const pre = (props: any) => {
                 } else if (highlights?.rose && highlights.rose(i) === true) {
                   style = `bg-rose-100 hover:saturate-200`;
                 } else {
-                  style = `hover:bg-neutral-200/50 hover:saturate-200`;
+                  style = `hover:bg-neutral-200/50 hover:saturate-200 dark:hover:bg-neutral-600`;
                 }
 
                 const alsoSkipNextLine =

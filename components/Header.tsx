@@ -14,9 +14,9 @@ const IconAndName = () => {
       href="/"
       className="relative flex flex-row items-center justify-between gap-x-1 md:gap-x-2"
     >
-      <AppIcon className="h-6 w-6 sm:h-8 sm:w-8 md:h-10 md:w-10 lg:h-12 lg:w-12" />
+      <AppIcon className="h-6 w-6 saturate-[0.8] sm:h-8 sm:w-8 md:h-10 md:w-10 lg:h-12 lg:w-12" />
       <h1
-        className={`select-none font-outfit text-xl font-bold sm:text-2xl md:text-3xl lg:text-4xl `}
+        className={`select-none font-outfit text-xl font-bold dark:text-neutral-300 sm:text-2xl md:text-3xl lg:text-4xl`}
       >
         {process.env.NEXT_PUBLIC_APP_NAME}
       </h1>
@@ -32,7 +32,7 @@ const Header = (props: { categories: string[] }) => {
   }
   return (
     <header
-      className={`top-4 z-50 mx-2 mb-4 flex h-12 w-full flex-row items-center justify-between rounded-2xl bg-white/70 px-3 shadow-card backdrop-blur-xl sm:top-8 sm:mb-11 sm:h-14 sm:px-3 md:top-10 md:mb-14 md:h-16 md:max-w-4xl md:px-3 lg:top-12 lg:mb-16 lg:h-20 lg:max-w-5xl lg:px-5 xl:max-w-6xl ${
+      className={`top-4 z-50 mx-2 mb-4 flex h-12 w-full flex-row items-center justify-between rounded-2xl bg-white/70 px-3 shadow-card backdrop-blur-xl dark:bg-neutral-700/50 sm:top-8 sm:mb-11 sm:h-14 sm:px-3 md:top-10 md:mb-14 md:h-16 md:max-w-4xl md:px-3 lg:top-12 lg:mb-16 lg:h-20 lg:max-w-5xl lg:px-5 xl:max-w-6xl ${
         pathname?.includes("/post") || pathname?.includes("/deploy")
           ? `relative`
           : `sticky`
