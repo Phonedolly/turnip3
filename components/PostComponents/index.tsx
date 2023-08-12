@@ -371,11 +371,11 @@ const componentsGenerator: (imageSize: IImageSize) => MDXComponents = (
             <span
               className={`${
                 props.quoteSerif
-                  ? `font-noto-serif`
-                  : `relative left-0.5 top-1.5`
+                  ? `font-noto-serif  text-7xl`
+                  : `relative left-0.5 top-1.5 text-8xl`
               } ${
                 props.quoteItalic ? `italic` : ``
-              } text-7xl font-bold text-neutral-400`}
+              } font-bold text-neutral-400`}
             >
               “
             </span>
