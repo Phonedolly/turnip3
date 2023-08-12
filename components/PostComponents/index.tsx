@@ -369,8 +369,12 @@ const componentsGenerator: (imageSize: IImageSize) => MDXComponents = (
         <div className="flex select-none flex-row justify-start">
           <p>
             <span
-              className={`${props.serif ? `font-noto-serif` : ``} ${
-                props.italic ? `italic` : ``
+              className={`${
+                props.quoteSerif
+                  ? `font-noto-serif`
+                  : `relative left-0.5 top-1.5`
+              } ${
+                props.quoteItalic ? `italic` : ``
               } text-7xl font-bold text-neutral-400`}
             >
               “
@@ -380,9 +384,9 @@ const componentsGenerator: (imageSize: IImageSize) => MDXComponents = (
         <div className="-mt-8 ml-4 flex w-full flex-col gap-y-1 pr-8">
           <div className="flex w-full flex-row">
             <div
-              className={`break-all text-lg leading-relaxed text-neutral-700 ${
-                props.italic ? `italic` : ``
-              } ${props.serif ? `font-noto-serif` : ``}`}
+              className={`my-1 break-all py-0.5 text-base leading-relaxed text-neutral-700 md:text-lg md:leading-7 xl:text-xl xl:leading-loose ${
+                props.contextItalic ? `italic` : ``
+              } ${props.contextSerif ? `font-noto-serif` : ``}`}
             >
               {props.quote}
             </div>
@@ -390,9 +394,9 @@ const componentsGenerator: (imageSize: IImageSize) => MDXComponents = (
           {props.author ? (
             <div className="flex w-full flex-row">
               <p
-                className={`${props.serif ? `font-noto-serif` : ``} ${
-                  props.italic ? `italic` : ``
-                } break-all text-base text-neutral-500`}
+                className={`${props.authorSerif ? `font-noto-serif` : ``} ${
+                  props.authorItalic ? `italic` : ``
+                } break-all text-base text-neutral-500 md:text-lg xl:text-xl`}
               >
                 &mdash; {props.author}
               </p>
