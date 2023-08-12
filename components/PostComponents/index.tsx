@@ -1,7 +1,7 @@
 import { MDXComponents } from "mdx/types";
 import { v4 as uuidv4 } from "uuid";
 import Image from "next/image";
-import pre from "./pre";
+import Pre from "./pre";
 import path from "path";
 import React, { isValidElement } from "react";
 
@@ -101,7 +101,7 @@ const componentsGenerator: (imageSize: IImageSize) => MDXComponents = (
       </div>
     );
   },
-  pre: pre,
+  pre: Pre,
   code: (props) => {
     return (
       // <code {...props} className="inline rounded-lg bg-neutral-200/60 p-1.5" />

@@ -3,6 +3,7 @@
 import Image from "next/image";
 import rangeParser from "parse-numeric-range";
 import { Highlight, themes } from "prism-react-renderer";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 type ColorReferences = {
@@ -42,7 +43,8 @@ const calculateHighlights = (raw: ColorReferences) => {
   // }
 };
 
-const pre = (props: any) => {
+const Pre = (props: any) => {
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
   const className = props.children?.props?.className || "";
   const code = props.children?.props.children?.trim() || "";
   const language = className.replace(/language-/, "");
@@ -62,6 +64,13 @@ const pre = (props: any) => {
   if (!language || language.length === 0 || language.includes(" ")) {
     showLang = false;
   }
+  useEffect(() => {
+    setIsDarkMode(
+      window !== undefined &&
+        window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches,
+    );
+  }, []);
   return (
     <div
       className="my-5 flex w-full flex-col rounded-xl bg-white shadow-code dark:bg-neutral-700"
@@ -86,13 +95,7 @@ const pre = (props: any) => {
           // {...defaultProps}
           code={code}
           language={language}
-          theme={
-            window !== undefined &&
-            window.matchMedia &&
-            window.matchMedia("(prefers-color-scheme: dark)").matches
-              ? themes.palenight
-              : themes.github
-          }
+          theme={isDarkMode === true ? themes.palenight : themes.github}
           key={uuidv4()}
         >
           {({ className, style, tokens, getLineProps, getTokenProps }) => (
@@ -258,4 +261,4 @@ const pre = (props: any) => {
   );
 };
 
-export default pre;
+export default Pre;
