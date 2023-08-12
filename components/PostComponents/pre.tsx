@@ -87,7 +87,7 @@ const pre = (props: any) => {
           code={code}
           language={language}
           theme={
-            window &&
+            window !== undefined &&
             window.matchMedia &&
             window.matchMedia("(prefers-color-scheme: dark)").matches
               ? themes.palenight
