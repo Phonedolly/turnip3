@@ -24,10 +24,10 @@ const checkShouldMakeNewEpoch = async (s3: S3Client) => {
         (eachImageSizes) =>
           new Promise<{
             onlyImageSizesExists: boolean;
-            thatTitleOrEpoch?: string | number;
+            thatEpoch?: number;
           }>((resolve) => {
             const _titleOrEpoch = eachImageSizes.Key?.split("/")[1] as string;
-            const titleOrEpoch = Number.isNaN(Number(_titleOrEpoch))
+            const titleOrEpoch = Number.isNaN(_titleOrEpoch)
               ? _titleOrEpoch
               : Number(_titleOrEpoch);
             s3.send(
@@ -40,7 +40,7 @@ const checkShouldMakeNewEpoch = async (s3: S3Client) => {
               .catch(() =>
                 resolve({
                   onlyImageSizesExists: true,
-                  thatTitleOrEpoch: titleOrEpoch,
+                  thatEpoch: Number(titleOrEpoch),
                 }),
               ); // epoch-only directory not exists
           }),
@@ -54,7 +54,7 @@ const checkShouldMakeNewEpoch = async (s3: S3Client) => {
     containingOnlyImageSizesExists,
     thatEpoch:
       containingOnlyImageSizesExists === true
-        ? epochContainingOnlyImageSizes[0].thatTitleOrEpoch
+        ? epochContainingOnlyImageSizes[0].thatEpoch
         : null,
   };
 };
