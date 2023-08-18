@@ -7,6 +7,7 @@ import {
 import initS3Client from "./S3";
 import listFiles from "./listFiles";
 import { createImageSizes } from "./getImageSizes";
+import { specialCharToEscape } from "./manageSpecialChar";
 
 const checkShouldMakeNewEpoch = async (s3: S3Client) => {
   const imageSizesList = (await listFiles(s3, "posts/")).filter(
@@ -28,7 +29,7 @@ const checkShouldMakeNewEpoch = async (s3: S3Client) => {
           }>((resolve) => {
             const _titleOrEpoch = eachImageSizes.Key?.split("/")[1] as string;
             const titleOrEpoch = Number.isNaN(_titleOrEpoch)
-              ? _titleOrEpoch
+              ? specialCharToEscape(_titleOrEpoch)
               : Number(_titleOrEpoch);
             s3.send(
               new GetObjectCommand({
