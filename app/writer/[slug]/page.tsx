@@ -21,6 +21,12 @@ export default async function WriterWrapper({
 }: {
   params: { slug: string };
 }) {
+  if (params.slug === "new" || isNaN(Number(params.slug))) {
+    const newSlug = await initNewPost();
+    console.log(22222);
+    console.log(newSlug);
+    redirect(`/writer/${newSlug}`, RedirectType.replace);
+  }
   // if (!session || !session.user) {
   //   return <SignIn />
   // } else {
@@ -30,17 +36,17 @@ export default async function WriterWrapper({
   const incompletePosts = posts.filter(
     (compiledPost) => compiledPost.frontmatter.complete !== true,
   );
-  if (params.slug === "new" || Number.isNaN(params.slug)) {
-    redirect(`/writer/${await initNewPost()}`, RedirectType.replace);
-  }
   const epoch = Number(params.slug);
   const post = posts.find((p) => p.frontmatter.epoch === epoch);
-  const titleOrEpoch =
-    post?.frontmatter.complete === true
-      ? post?.frontmatter.title
-      : post
-      ? Number(post?.frontmatter.epoch)
-      : epoch;
+  let titleOrEpoch;
+  if (post?.frontmatter.complete === true) {
+    titleOrEpoch = post.frontmatter.title;
+  } else if (post?.frontmatter.epoch) {
+    titleOrEpoch = Number(post.frontmatter.epoch);
+  } else {
+    titleOrEpoch = epoch;
+    console.log(titleOrEpoch);
+  }
   const imageSizes = await getImagesSizes(s3, titleOrEpoch);
   const initialMediaList = await getMediaList(s3, epoch);
   const initialMdx = `---

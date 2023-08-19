@@ -67,7 +67,7 @@ export default async function HomeWithMorePage({
   } else if (
     decodedSlug &&
     decodedSlug.length === 2 &&
-    !Number.isNaN(decodedSlug[1]) &&
+    !isNaN(Number(decodedSlug[1])) &&
     Number(decodedSlug[1]) * 10 <= posts.length
   ) {
     slugToSend = ["category", decodedSlug[0], Number(decodedSlug[1])];

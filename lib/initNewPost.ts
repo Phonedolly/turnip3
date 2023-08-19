@@ -27,7 +27,7 @@ const checkShouldMakeNewEpoch = async (s3: S3Client) => {
             thatEpoch?: number;
           }>((resolve) => {
             const _titleOrEpoch = eachImageSizes.Key?.split("/")[1] as string;
-            const titleOrEpoch = Number.isNaN(_titleOrEpoch)
+            const titleOrEpoch = isNaN(Number(_titleOrEpoch))
               ? _titleOrEpoch
               : Number(_titleOrEpoch);
             s3.send(

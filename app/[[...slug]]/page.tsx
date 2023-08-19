@@ -47,7 +47,7 @@ export default async function Home({ params }: { params?: { slug: string } }) {
   const slugToSend =
     params?.slug &&
     params.slug.length === 1 &&
-    !Number.isNaN(params.slug.length[1])
+    !isNaN(Number(params.slug.length[1]))
       ? ([Number(params.slug)] as [number])
       : undefined;
   const { posts, categories } = await getInitDataFromS3();
