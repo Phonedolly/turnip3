@@ -7,6 +7,7 @@ import {
 import initS3Client from "./S3";
 import listFiles from "./listFiles";
 import { createImageSizes } from "./getImageSizes";
+import { specialCharToEscape } from "./manageSpecialChar";
 
 const checkShouldMakeNewEpoch = async (s3: S3Client) => {
   const imageSizesList = (await listFiles(s3, "posts/")).filter(
