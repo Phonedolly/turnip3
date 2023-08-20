@@ -152,7 +152,7 @@ export async function POST(request: Request) {
   /* update mdx with new frontmatter */
   const imageURLReplacedFrontmatter = {
     ...frontmatter,
-    thumbnail: frontmatter.thumbnail.replace(
+    thumbnail: frontmatter.thumbnail.replaceAll(
       encodeURI(oldProperDir),
       encodeURI(properDir),
     ),
