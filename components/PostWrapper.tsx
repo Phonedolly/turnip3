@@ -16,7 +16,7 @@ const PostWrapper = (props: {
   const lastEdited =
     (props.frontmatter.updateTime &&
       props.frontmatter.updateTime.length > 1 &&
-      new Date(
+    new Date(
         props.frontmatter.updateTime[props.frontmatter.updateTime.length - 1],
       )) ||
     null;
