@@ -150,15 +150,15 @@ const componentsGenerator: (imageSize: IImageSize) => MDXComponents = (
     );
   },
   // TODO improve stability of list
-  ol: (props) => {
+  ol: ({children, otherProps}:any) => {
     // if (props.children instanceof Array && props.children.length == 0) {
     //   return <ol {...props} />;
     // }
     return (
-      <div className="flex flex-col">
+      <ol className="flex flex-col">
         {/* TODO improve stability of list */}
-        {props.children instanceof Array &&
-          props.children?.map((child: any, i: number) => {
+        {children instanceof Array &&
+          children?.map((child: any, i: number) => {
             if (i % 2 == 0 || !child) return null;
             return (
               <div
@@ -167,11 +167,11 @@ const componentsGenerator: (imageSize: IImageSize) => MDXComponents = (
               >
                 <span className="w-3" />
                 <p className="select-none">{(i + 1) / 2}.</p>
-                <div key={uuidv4()}>{child.props.children}</div>
+                <div key={uuidv4()} id={child.props.id}>{child.props.children}</div>
               </div>
             );
           })}
-      </div>
+      </ol>
     );
   },
   ul: (props) => {
@@ -215,7 +215,7 @@ const componentsGenerator: (imageSize: IImageSize) => MDXComponents = (
     // }
     return (
       // <div className="flex flex-row text-base leading-loose">
-      <div className="flex flex-col items-start text-base leading-loose md:leading-10">
+      <div className="flex flex-col items-start text-base leading-loose md:leading-10" id={otherProps.id}>
         <div className="inline">
           <p className="mr-1.5 inline select-none items-center">•</p>
           {children}
