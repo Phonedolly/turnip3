@@ -44,7 +44,7 @@ const Header = (props: { categories: string[] }) => {
           {props.categories.map((category) => (
             <Link
               href={`/category/${category}`}
-              className="cursor-pointer select-none rounded-md px-3 py-2 font-outfit text-2xl font-bold transition hover:bg-neutral-300/60"
+              className="cursor-pointer select-none rounded-md px-3 py-2 font-outfit text-2xl font-bold transition hover:bg-neutral-200/60"
               key={uuidv4()}
             >
               {category}
