@@ -45,7 +45,7 @@ export default async function HomeWithMorePage({
   }
 
   return (
-    <main className="m-2 flex h-full w-11/12 flex-col items-center justify-between py-2 sm:px-2">
+    <main className="m-2 flex h-full w-full sm:w-11/12 flex-col items-center justify-between py-2 sm:px-2">
       <PostWrapper
         code={post.code}
         imageSizes={post.imageSizes}
