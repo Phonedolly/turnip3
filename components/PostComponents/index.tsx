@@ -1,7 +1,7 @@
 import { MDXComponents } from "mdx/types";
 import { v4 as uuidv4 } from "uuid";
 import Image from "next/image";
-import Pre from "./pre";
+import Pre from "./Pre";
 import path from "path";
 import React, { isValidElement } from "react";
 import Code from "./Code";
