@@ -46,7 +46,7 @@ const calculateHighlights = (raw: ColorReferences) => {
 const Pre = (props: any) => {
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
   const className = props.children?.props?.className || "";
-  const code = props.children?.props.children?.trim() || "";
+  const code = props.children?.props.children || "";
   const language = className.replace(/language-/, "");
   const fileName = props?.fileName;
   const skip = props?.skip ? checkThisLineSelected(props.skip) : () => false;
