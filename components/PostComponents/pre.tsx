@@ -1,23 +1,13 @@
 "use client";
 
-import Image from "next/image";
-import rangeParser from "parse-numeric-range";
+import checkThisLineSelected from "@/lib/checkThisLineSelected";
+
 import { Highlight, themes } from "prism-react-renderer";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 type ColorReferences = {
   [key in string]: string;
-};
-
-const checkThisLineSelected = (range: string) => {
-  const lineNumbers = rangeParser(range);
-
-  const returnFunc = lineNumbers
-    ? (index: number) => lineNumbers.includes(index + 1)
-    : () => false;
-
-  return returnFunc;
 };
 
 const calculateHighlights = (raw: ColorReferences) => {
@@ -44,6 +34,7 @@ const calculateHighlights = (raw: ColorReferences) => {
 };
 
 const Pre = (props: any) => {
+  console.log(props)
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
   const className = props.children?.props?.className || "";
   const code = props.children?.props.children || "";

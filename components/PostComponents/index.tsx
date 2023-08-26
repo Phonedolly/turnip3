@@ -5,6 +5,7 @@ import Pre from "./Pre";
 import path from "path";
 import React, { isValidElement } from "react";
 import Code from "./Code";
+import { Pre2, SubPre2 } from "./Pre2";
 
 const componentsGenerator: (imageSize: IImageSize) => MDXComponents = (
   imageSizes: IImageSize,
@@ -150,7 +151,7 @@ const componentsGenerator: (imageSize: IImageSize) => MDXComponents = (
     );
   },
   // TODO improve stability of list
-  ol: ({children, otherProps}:any) => {
+  ol: ({ children, otherProps }: any) => {
     // if (props.children instanceof Array && props.children.length == 0) {
     //   return <ol {...props} />;
     // }
@@ -167,7 +168,9 @@ const componentsGenerator: (imageSize: IImageSize) => MDXComponents = (
               >
                 <span className="w-3" />
                 <p className="select-none">{(i + 1) / 2}.</p>
-                <div key={uuidv4()} id={child.props.id}>{child.props.children}</div>
+                <div key={uuidv4()} id={child.props.id}>
+                  {child.props.children}
+                </div>
               </div>
             );
           })}
@@ -215,7 +218,10 @@ const componentsGenerator: (imageSize: IImageSize) => MDXComponents = (
     // }
     return (
       // <div className="flex flex-row text-base leading-loose">
-      <div className="flex flex-col items-start text-base leading-loose md:leading-10" id={otherProps.id}>
+      <div
+        className="flex flex-col items-start text-base leading-loose md:leading-10"
+        id={otherProps.id}
+      >
         <div className="inline">
           <p className="mr-1.5 inline select-none items-center">•</p>
           {children}
@@ -401,6 +407,8 @@ const componentsGenerator: (imageSize: IImageSize) => MDXComponents = (
       {children}
     </div>
   ),
+  Pre2: Pre2,
+  SubPre2: SubPre2,
 });
 
 export default componentsGenerator;
