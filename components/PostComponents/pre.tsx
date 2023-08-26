@@ -37,7 +37,11 @@ const Pre = (props: any) => {
   console.log(props)
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
   const className = props.children?.props?.className || "";
-  const code = props.children?.props.children || "";
+  const code =
+    props.children?.props.children?.slice(
+      0,
+      props.children?.props.children.length - 1,
+    ) || ""; // have to cut last char, '\n'
   const language = className.replace(/language-/, "");
   const fileName = props?.fileName;
   const skip = props?.skip ? checkThisLineSelected(props.skip) : () => false;
