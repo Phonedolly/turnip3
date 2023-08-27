@@ -5,7 +5,7 @@ import Pre from "./Pre";
 import path from "path";
 import React, { isValidElement } from "react";
 import Code from "./Code";
-import { Pre2, SubPre2 } from "./Pre2";
+import { Pre2 } from "./Pre2";
 
 const componentsGenerator: (imageSize: IImageSize) => MDXComponents = (
   imageSizes: IImageSize,
@@ -408,7 +408,6 @@ const componentsGenerator: (imageSize: IImageSize) => MDXComponents = (
     </div>
   ),
   Pre2: Pre2,
-  SubPre2: SubPre2,
 });
 
 export default componentsGenerator;

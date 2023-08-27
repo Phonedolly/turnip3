@@ -1,115 +1,113 @@
-import checkThisLineSelected from "@/lib/checkThisLineSelected";
 import Code from "./Code";
-import Pre from "./Pre";
+import Pre, { Container, Info } from "./Pre";
 import React from "react";
+import { v4 as uuidv4 } from "uuid";
 
 interface IPre2Props {
-  language?: string;
-  fileName?: string;
   showLineNumber?: boolean;
   highlights?: any;
-  skip?: boolean;
+  skip?: string;
   children: React.JSX.Element | React.JSX.Element[];
 }
 
-interface ISubPre2Props {
-  startLine?: number;
-  endLine?: number;
-  highlights?: any;
-  skip?: boolean;
-  children?: string;
-}
-
 export const SkipPre2 = () => {
-  return <SubPre2 skip />;
-};
-
-export const Pre2 = (props: IPre2Props) => {
-  console.log(props);
-  if (!(props.children instanceof Array) && !props.children.props.children) {
-    <Pre
-      showLineNumber={props.showLineNumber}
-      fileName={props.fileName}
-      highlights={props.highlights}
-      skip={props.skip}
-    >
-      <code className={`language-${props.language}`}>{props.children}</code>
-    </Pre>;
-  }
-  const highlights =
-    props.children instanceof Array
-      ? props.children.reduce((acc, curr) => {
-          if (curr.props.highlights !== undefined) {
-            Object.keys(curr.props.highlights).map((currColorKey) => {
-              acc[currColorKey] =
-                acc[currColorKey] + "," + curr.props.highlights[currColorKey];
-            });
-          }
-          return acc;
-        }, {})
-      : props.children.props.highlights;
-  let skip =
-    props.children instanceof Array
-      ? props.children.reduce((acc, currChildren, i) => {
-          /* skipStart and skipEnd considering if currChileren is <SkipPre2/> */
-          const skipStart = i === 0 ? 0 : props.children[i - 1].endLine + 1;
-          const skipEnd =
-            props.children instanceof Array && i < props.children.length - 1
-              ? props.children[i + 1].props.startLine - 1
-              : Infinity;
-          if (currChildren.props.skip === true) {
-            /* skip just one line? */
-            if (skipEnd - skipStart === 1) {
-              acc = `${acc.length > 0 ? "," : ""}${String(skipEnd - 1)}`;
-            } else {
-              acc = `${acc.length > 0 ? "," : ""}${skipStart}-${skipEnd}`;
-            }
-          }
-
-          return acc;
-        }, "")
-      : "";
-
-  let skipCnt = 0;
-  const codes =
-    props.children instanceof Array
-      ? props.children.reduce((acc, currChildren, i) => {
-          if (currChildren.props.skip === true) {
-            const curSkip = skip.split(",")[skipCnt];
-            const checkThisLineIsToSkip = checkThisLineSelected(curSkip);
-            for (
-              let j = Number(curSkip);
-              checkThisLineIsToSkip(j) === true;
-              j++
-            ) {
-              acc.concat(<Code>{""}</Code>);
-            }
-          }
-          return acc;
-        }, [] as React.JSX.Element[])
-      : props.children;
-
   return (
-    <Pre
-      className={`prism-code language-${props.language}`}
-      showLineNumber={props.showLineNumber}
-      fileName={props.fileName}
-      highlights={highlights}
-      skip={skip}
-    >
-      {codes}
+    <Pre skip="1" showContainer={false}>
+      <code></code>
     </Pre>
   );
 };
 
-export const SubPre2 = (props: ISubPre2Props) => {
+export const Pre2 = (props: IPre2Props) => {
+  if (!(props.children instanceof Array)) {
+    return (
+      <Pre
+        showLineNumber={
+          props.children.props.showLineNumber || props.showLineNumber
+        }
+        fileName={props.children.props.fileName}
+        highlights={props.children.props.highlights || props.highlights}
+        skip={props.children.props.skip || props.skip}
+      >
+        <Code className={props.children.props?.className}>
+          {/* Should Find Better Approach☹️*/}
+          {props.children.props.children.props.children}
+        </Code>
+      </Pre>
+    );
+  }
+  console.log(333);
+  console.log();
   return (
-    <Code
-      startLine={props.startLine}
-      endLine={props.endLine}
-      highlights={props.highlights}
-    >
-      {props.children}
-    </Code>
+    <Container>
+      <Info
+        language={props.children[0].props.children.props.className.replace(
+          /language-/g,
+          "",
+        )}
+        fileName={props.children[0].props.fileName}
+      />
+      {props.children.map((pre, i) => {
+        const isEnd =
+          (props.children instanceof Array &&
+            i === props.children.length - 1 &&
+            pre.props.end) ||
+          (props.children instanceof Array && i < props.children.length - 1)
+            ? true
+            : false;
+        const highlights = props.highlights
+          ? Object.keys(props.highlights).reduce(
+              (acc, curHighlightColorKey) => {
+                acc[curHighlightColorKey] =
+                  props.highlights[curHighlightColorKey];
+                return acc;
+              },
+              {},
+            )
+          : pre.props.highlights
+          ? Object.keys(JSON.parse(pre.props.highlights)).reduce(
+              (acc, curHighlightColorkey) => {
+                acc[curHighlightColorkey] = JSON.parse(pre.props.highlights)[
+                  curHighlightColorkey
+                ];
+                // ].replaceAll(
+                //   /[0-9]/g,
+                //   (m) => Number(m) - Number(pre.props.startLine) + 1,
+                // );
+                return acc;
+              },
+              {},
+            )
+          : undefined;
+        let aheadOfCode = "";
+        for (let i = 0; i < Math.max(pre.props.startLine - 1, 0); i++) {
+          aheadOfCode += "\n";
+        }
+
+        const skip =
+          pre.props.startLine && pre.props.startLine > 1
+            ? `1-${pre.props.startLine - 1}`
+            : undefined;
+
+        return (
+          <div className="flex w-full flex-col" key={uuidv4()}>
+            {/* {i === 0 && pre.props.startLine > 1 ? <SkipPre2 /> : null} */}
+            <Pre
+              showLineNumber={props.showLineNumber}
+              highlights={highlights}
+              showContainer={false}
+              skip={skip}
+            >
+              <Code
+                className={props.children[0].props.children.props.className}
+              >
+                {aheadOfCode + pre.props.children.props.children}
+              </Code>
+            </Pre>
+            {isEnd === false ? <SkipPre2 /> : null}
+          </div>
+        );
+      })}
+    </Container>
   );
 };
