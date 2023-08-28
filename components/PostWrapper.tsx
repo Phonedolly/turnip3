@@ -1,13 +1,48 @@
+"use client";
+
 import { getMDXComponent } from "mdx-bundler/client";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import componentsGenerator from "./PostComponents";
+import { ErrorBoundary } from "react-error-boundary";
 
 const PostWrapper = (props: {
   code: string;
   imageSizes: IImageSize;
   frontmatter: IFrontmatter;
+  safeCode: string;
+  setSafeCode: React.Dispatch<React.SetStateAction<string>>;
 }) => {
   const Component = useMemo(() => getMDXComponent(props.code), [props.code]);
+  useEffect(() => {
+    console.log(`safe Render!`);
+    props.setSafeCode(props.code);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const WithBoundary = ({
+    view: ComponentsForInternal,
+  }: {
+    view: React.JSX.Element;
+  }) => {
+    return (
+      <ErrorBoundary
+        FallbackComponent={() => {
+          const ComponentForError = getMDXComponent(props.safeCode);
+          return (
+            <WithBoundary
+              view={
+                <ComponentForError
+                  components={componentsGenerator(props.imageSizes)}
+                />
+              }
+            />
+          );
+        }}
+      >
+        {ComponentsForInternal}
+      </ErrorBoundary>
+    );
+  };
+
   const firstPublished =
     (props.frontmatter.updateTime &&
       new Date(props.frontmatter.updateTime[0])) ||
@@ -16,7 +51,7 @@ const PostWrapper = (props: {
   const lastEdited =
     (props.frontmatter.updateTime &&
       props.frontmatter.updateTime.length > 1 &&
-    new Date(
+      new Date(
         props.frontmatter.updateTime[props.frontmatter.updateTime.length - 1],
       )) ||
     null;
@@ -52,7 +87,11 @@ const PostWrapper = (props: {
         </div>
       </div>
       <div className="flex w-full flex-col gap-y-2 sm:px-4">
-        <Component components={componentsGenerator(props.imageSizes)} />
+        <WithBoundary
+          view={
+            <Component components={componentsGenerator(props.imageSizes)} />
+          }
+        />
       </div>
     </div>
   );

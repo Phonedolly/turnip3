@@ -39,6 +39,7 @@ const MDXEditor = (props: {
       content: getMDXComponent(props.initialCompiledMdxInfo.code),
       mdx: props.initialCompiledMdxInfo.mdx,
     }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

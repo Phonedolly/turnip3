@@ -10,7 +10,6 @@ import TrashIcon from "./icons/TrashIcon";
 import PublishIcon from "./icons/PublishIcon";
 import { useRouter } from "next/navigation";
 import { IPost } from "@/types/IPost";
-import Preview from "./MDXEditor/Preview";
 import Image from "next/image";
 import path from "path";
 import { getTime, parseISO } from "date-fns";
@@ -18,6 +17,7 @@ import AppIcon from "./icons/AppIcon";
 import CloseIcon from "./icons/CloseIcon";
 import ListIcon from "./icons/ListIcon";
 import Link from "next/link";
+import PostWrapper from "./PostWrapper";
 
 const EpochIsNull = () => (
   <div className="text-bold flex h-full w-full select-none flex-col items-center justify-center bg-red-500 font-outfit text-5xl font-bold">
@@ -49,7 +49,9 @@ export default function Writer(props: {
   );
   const [isWorking, setIsWorking] = useState<boolean>(false);
   const [imageSizes, setImageSizes] = useState<IImageSize>(props.imageSizes);
-  const [previewScrollTop, setPreviewScrollTop] = useState<number>(0);
+  const [safeCode, setSafeCode] = useState<string>(
+    props.initialCompiledMdxInfo.code,
+  );
   const [isShowImage, setIsShowImage] = useState<
     { objectUrl: string; imageSize: { height: number; width: number } } | false
   >(false);
@@ -59,19 +61,6 @@ export default function Writer(props: {
     "date-asc" | "date-desc" | "name-asc" | "name-desc"
   >("date-asc");
   const router = useRouter();
-
-  const MemoizedPreview = useMemo(
-    () => (
-      <Preview
-        code={post.code}
-        imageSizes={imageSizes}
-        frontmatter={post.frontmatter}
-        previewScrollTop={previewScrollTop}
-        setPreviewScrollTop={setPreviewScrollTop}
-      />
-    ),
-    [imageSizes, post.code, post.frontmatter],
-  );
 
   const beforeUnload = (e: BeforeUnloadEvent) => {
     e.preventDefault();
@@ -305,7 +294,13 @@ export default function Writer(props: {
         </div>
         {/* Content Preview */}
         <div className="h-full w-full overflow-y-scroll border-t-2 border-t-neutral-300 px-6 lg:border-l-2 lg:border-t-0 lg:border-l-neutral-300">
-          {MemoizedPreview}
+          <PostWrapper
+            code={post.code}
+            frontmatter={post.frontmatter}
+            imageSizes={imageSizes}
+            safeCode={safeCode}
+            setSafeCode={setSafeCode}
+          />
         </div>
         {/* Image Management Popup */}
         {isShowManagementPopup === true ? (
