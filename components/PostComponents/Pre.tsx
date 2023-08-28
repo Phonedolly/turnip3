@@ -24,13 +24,6 @@ const calculateHighlights = (raw: ColorReferences) => {
   ) as {
     [key in string]: (index: number) => boolean;
   };
-
-  // const lineNumbers = rangeParser(raw);
-  // if (lineNumbers) {
-  //   return (index: number) => lineNumbers.includes(index + 1);
-  // } else {
-  //   return () => false;
-  // }
 };
 export const Container = (containerProps) => (
   <div
@@ -53,7 +46,7 @@ export const Info = (props) => (
     ) : null}
     {props.fileName !== undefined ? (
       <div
-        className="first:ml-5 mr-2 flex items-center justify-center break-all font-mono text-[0.95rem] text-neutral-400"
+        className="mr-2 flex items-center justify-center break-all font-mono text-[0.95rem] text-neutral-400 first:ml-5"
         key={uuidv4()}
       >
         {props.fileName || null}
@@ -65,14 +58,32 @@ export const Info = (props) => (
 const Pre = (props: any) => {
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
   const className = props.children?.props?.className || "";
+  let aheadOfCode = "";
+  for (
+    let i = 0;
+    i < Math.max(props.startLine ? Number(props.startLine) - 1 : 0, 0);
+    i++
+  ) {
+    aheadOfCode += "\n";
+  }
   const code =
-    props.children?.props.children?.slice(
-      0,
-      props.children?.props.children?.length - 1,
-    ) || ""; // should cut last char, '\n'
+    aheadOfCode +
+      props.children?.props.children?.slice(
+        0,
+        props.children?.props.children?.length - 1,
+      ) || ""; // should cut last char, '\n'
+  const skip =
+    props.skip !== undefined || props.startLine !== undefined
+      ? checkThisLineSelected(
+          props.startLine !== undefined && Number(props.startLine) > 1
+            ? `1-${Number(props.startLine) - 1}${
+                props.skip ? `,${props.skip}` : ``
+              }`
+            : props.skip || "",
+        )
+      : () => false;
   const language = className.replace(/language-/, "");
   const fileName = props?.fileName;
-  const skip = props?.skip ? checkThisLineSelected(props.skip) : () => false;
   const showLineNumber = props?.showLineNumber || false;
   const showContainer =
     props.showContainer === undefined || props.showContainer === true

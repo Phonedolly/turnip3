@@ -9,6 +9,7 @@ interface IPre2Props {
   showLineNumber?: boolean;
   highlights?: any;
   skip?: string;
+  startLine: number;
   children: React.JSX.Element | React.JSX.Element[];
 }
 
@@ -69,14 +70,10 @@ export const Pre2 = (props: IPre2Props) => {
               {},
             )
           : undefined;
-        let aheadOfCode = "";
-        for (let i = 0; i < Math.max(pre.props.startLine - 1, 0); i++) {
-          aheadOfCode += "\n";
-        }
-        const skip =
-          pre.props.startLine && pre.props.startLine > 1
-            ? `1-${pre.props.startLine - 1}`
-            : undefined;
+        // const skip =
+        // pre.props.startLine && pre.props.startLine > 1
+        //   ? `1-${pre.props.startLine - 1}`
+        //   : undefined;
         return (
           <div className="flex w-full flex-col" key={uuidv4()}>
             {/* {i === 0 && pre.props.startLine > 1 ? <SkipPre2 /> : null} */}
@@ -84,12 +81,13 @@ export const Pre2 = (props: IPre2Props) => {
               showLineNumber={pre.props.showLineNumber || props.showLineNumber}
               highlights={highlights}
               showContainer={false}
-              skip={skip}
+              skip={props.skip || pre.props.skip}
+              startLine={props.startLine || pre.props.startLine}
             >
               <Code
                 className={props.children[0].props.children.props.className}
               >
-                {pre.props.children.props.children !==undefined? aheadOfCode + pre.props.children.props.children : undefined}
+                {pre.props.children.props.children}
               </Code>
             </Pre>
             {isEnd === false ? <SkipPre2 /> : null}
