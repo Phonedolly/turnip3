@@ -9,13 +9,13 @@ const PostWrapper = (props: {
   code: string;
   imageSizes: IImageSize;
   frontmatter: IFrontmatter;
-  safeCode: string;
-  setSafeCode: React.Dispatch<React.SetStateAction<string>>;
+  safeCode?: string;
+  setSafeCode?: React.Dispatch<React.SetStateAction<string>>;
 }) => {
   const Component = useMemo(() => getMDXComponent(props.code), [props.code]);
   useEffect(() => {
     console.log(`safe Render!`);
-    props.setSafeCode(props.code);
+    props.setSafeCode && props.setSafeCode(props.code);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const WithBoundary = ({
@@ -26,7 +26,7 @@ const PostWrapper = (props: {
     return (
       <ErrorBoundary
         FallbackComponent={() => {
-          const ComponentForError = getMDXComponent(props.safeCode);
+          const ComponentForError = getMDXComponent(props.safeCode || "");
           return (
             <WithBoundary
               view={
