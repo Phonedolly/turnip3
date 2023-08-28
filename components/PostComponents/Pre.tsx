@@ -53,7 +53,7 @@ export const Info = (props) => (
     ) : null}
     {props.fileName !== undefined ? (
       <div
-        className="mr-2 flex items-center justify-center break-all font-mono text-[0.95rem] text-neutral-400"
+        className="first:ml-5 mr-2 flex items-center justify-center break-all font-mono text-[0.95rem] text-neutral-400"
         key={uuidv4()}
       >
         {props.fileName || null}
@@ -69,7 +69,7 @@ const Pre = (props: any) => {
     props.children?.props.children?.slice(
       0,
       props.children?.props.children?.length - 1,
-    ) || ""; // have to cut last char, '\n'
+    ) || ""; // should cut last char, '\n'
   const language = className.replace(/language-/, "");
   const fileName = props?.fileName;
   const skip = props?.skip ? checkThisLineSelected(props.skip) : () => false;
