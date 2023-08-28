@@ -34,7 +34,7 @@ const calculateHighlights = (raw: ColorReferences) => {
 };
 export const Container = (containerProps) => (
   <div
-    className="my-5 flex w-full flex-col rounded-2xl bg-white pb-3.5 shadow-code dark:bg-neutral-700"
+    className={`my-5 flex w-full flex-col rounded-2xl bg-white pb-3.5 pt-3.5 shadow-code dark:bg-neutral-700`}
     key={uuidv4()}
   >
     {containerProps.children}{" "}
@@ -42,14 +42,10 @@ export const Container = (containerProps) => (
 );
 
 export const Info = (props) => (
-  <div
-    className={`flex flex-row items-center ${
-      !props.language && !props.fileName ? `mt-3.5` : `py-3`
-    }`}
-  >
+  <div className={`flex flex-row items-center pb-3`}>
     {props.language !== undefined ? (
       <div
-        className="text-md white text-neutral- mx-3 rounded-lg px-2 py-1 text-center font-outfit font-bold text-neutral-600 shadow-card dark:text-neutral-300"
+        className="text-md white mx-3 rounded-lg px-2 py-1 text-center font-outfit font-bold text-neutral-600 shadow-card dark:text-neutral-300"
         key={uuidv4()}
       >
         {props.language}
@@ -67,8 +63,6 @@ export const Info = (props) => (
 );
 
 const Pre = (props: any) => {
-  console.log("ㄱ");
-  console.log(props);
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
   const className = props.children?.props?.className || "";
   const code =
@@ -95,10 +89,9 @@ const Pre = (props: any) => {
 
   const highlights = rawHighlights && calculateHighlights(rawHighlights);
 
-  let showLang = true;
-  if (!language || language.length === 0 || language.includes(" ")) {
-    showLang = false;
-  }
+  const showLang =
+    !language || language.length === 0 || language.includes(" ") ? false : true;
+
   useEffect(() => {
     setIsDarkMode(
       window !== undefined &&
@@ -206,7 +199,7 @@ const Pre = (props: any) => {
                           {`${i + 1}`}
                           {Array(
                             String(tokens.length).length - String(i + 1).length,
-                          ).fill(<span>{` `}</span>)}
+                          ).fill(<span key={uuidv4()}>{` `}</span>)}
                         </h1>
                       </div>
                     ) : null}
@@ -235,7 +228,7 @@ const Pre = (props: any) => {
                         <h1 className="mr-4 select-none text-neutral-400">
                           {`···`}
                           {Array(String(tokens.length).length).fill(
-                            <span>{` `}</span>,
+                            <span key={uuidv4()}>{` `}</span>,
                           )}
                         </h1>
                       </div>
@@ -259,11 +252,10 @@ const Pre = (props: any) => {
       </Highlight>
     </div>
   );
-
   if (showContainer === true)
     return (
       <Container>
-        {showLang !== undefined || fileName !== undefined ? (
+        {showLang || fileName ? (
           <Info language={language} fileName={fileName} />
         ) : null}
         {lines}

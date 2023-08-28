@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import Image from "next/image";
 import Pre from "./Pre";
 import path from "path";
-import React, { isValidElement } from "react";
+import React from "react";
 import Code from "./Code";
 import { Pre2 } from "./Pre2";
 

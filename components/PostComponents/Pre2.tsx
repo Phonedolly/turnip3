@@ -20,24 +20,24 @@ export const SkipPre2 = () => {
 
 export const Pre2 = (props: IPre2Props) => {
   if (!(props.children instanceof Array)) {
+    const { children, ...otherProps } = props;
     return (
-      <Pre
-        showLineNumber={
-          props.children.props.showLineNumber || props.showLineNumber
-        }
-        fileName={props.children.props.fileName}
-        highlights={props.children.props.highlights || props.highlights}
-        skip={props.children.props.skip || props.skip}
-      >
-        <Code className={props.children.props?.className}>
-          {/* Should Find Better Approach☹️*/}
-          {props.children.props.children.props.children}
-        </Code>
-      </Pre>
+      <Pre2 {...otherProps}>{[children]}</Pre2>
+      // <Pre
+      //   showLineNumber={
+      //     props.children.props.showLineNumber || props.showLineNumber
+      //   }
+      //   fileName={props.children.props.fileName}
+      //   highlights={props.children.props.highlights || props.highlights}
+      //   skip={props.children.props.skip || props.skip}
+      // >
+      //   <Code className={props.children.props?.children.props.className}>
+      //     {/* Should Find Better Approach☹️*/}
+      //     {props.children.props.children.props.children}
+      //   </Code>
+      // </Pre>
     );
   }
-  console.log(333);
-  console.log();
   return (
     <Container>
       <Info
@@ -88,12 +88,11 @@ export const Pre2 = (props: IPre2Props) => {
           pre.props.startLine && pre.props.startLine > 1
             ? `1-${pre.props.startLine - 1}`
             : undefined;
-
         return (
           <div className="flex w-full flex-col" key={uuidv4()}>
             {/* {i === 0 && pre.props.startLine > 1 ? <SkipPre2 /> : null} */}
             <Pre
-              showLineNumber={props.showLineNumber}
+              showLineNumber={pre.props.showLineNumber || props.showLineNumber}
               highlights={highlights}
               showContainer={false}
               skip={skip}
