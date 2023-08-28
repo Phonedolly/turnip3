@@ -4,6 +4,8 @@ import React from "react";
 import { v4 as uuidv4 } from "uuid";
 
 interface IPre2Props {
+  language?: string;
+  fileName?: string;
   showLineNumber?: boolean;
   highlights?: any;
   skip?: string;
@@ -21,31 +23,19 @@ export const SkipPre2 = () => {
 export const Pre2 = (props: IPre2Props) => {
   if (!(props.children instanceof Array)) {
     const { children, ...otherProps } = props;
-    return (
-      <Pre2 {...otherProps}>{[children]}</Pre2>
-      // <Pre
-      //   showLineNumber={
-      //     props.children.props.showLineNumber || props.showLineNumber
-      //   }
-      //   fileName={props.children.props.fileName}
-      //   highlights={props.children.props.highlights || props.highlights}
-      //   skip={props.children.props.skip || props.skip}
-      // >
-      //   <Code className={props.children.props?.children.props.className}>
-      //     {/* Should Find Better Approach☹️*/}
-      //     {props.children.props.children.props.children}
-      //   </Code>
-      // </Pre>
-    );
+    return <Pre2 {...otherProps}>{[children]}</Pre2>;
   }
   return (
     <Container>
       <Info
-        language={props.children[0].props.children.props.className.replace(
-          /language-/g,
-          "",
-        )}
-        fileName={props.children[0].props.fileName}
+        language={
+          props.language ||
+          props.children[0].props.children.props.className.replace(
+            /language-/g,
+            "",
+          )
+        }
+        fileName={props.fileName || props.children[0].props.fileName}
       />
       {props.children.map((pre, i) => {
         const isEnd =
