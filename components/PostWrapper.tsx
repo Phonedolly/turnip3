@@ -14,7 +14,6 @@ const PostWrapper = (props: {
 }) => {
   const Component = useMemo(() => getMDXComponent(props.code), [props.code]);
   useEffect(() => {
-    console.log(`safe Render!`);
     props.setSafeCode && props.setSafeCode(props.code);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
