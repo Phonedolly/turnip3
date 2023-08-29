@@ -79,10 +79,7 @@ export const Pre2 = (props: IPre2Props) => {
               {},
             )
           : undefined;
-
         return (
-          <div className="flex w-full flex-col" key={uuidv4()}>
-            {/* {i === 0 && pre.props.startLineNumber > 1 ? <SkipPre2 /> : null} */}
             <Pre
               showContainer={false}
               showLineNumber={pre.props.showLineNumber || props.showLineNumber}
@@ -93,6 +90,8 @@ export const Pre2 = (props: IPre2Props) => {
                   ? props.startLineNumber || pre.props.startLineNumber
                   : pre.props.startLineNumber
               }
+              notEnd={notEnd}
+              key={uuidv4()}
             >
               <Code
                 className={props.children[0].props.children.props.className}
@@ -100,8 +99,6 @@ export const Pre2 = (props: IPre2Props) => {
                 {pre.props.children.props.children}
               </Code>
             </Pre>
-            {notEnd === true ? <SkipPre2 /> : null}
-          </div>
         );
       })}
     </Container>

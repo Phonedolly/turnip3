@@ -61,26 +61,31 @@ const Pre = (props: any) => {
   let aheadOfCode = "";
   for (
     let i = 0;
-    i < Math.max(props.startLineNumber ? Number(props.startLineNumber) - 1 : 0, 0);
+    i <
+    Math.max(props.startLineNumber ? Number(props.startLineNumber) - 1 : 0, 0);
     i++
   ) {
     aheadOfCode += "\n";
   }
+  const endOfCode = props.notEnd ? "\n" : "";
   const code =
     aheadOfCode +
       props.children?.props.children?.slice(
         0,
         props.children?.props.children?.length - 1,
-      ) || ""; // should cut last char, '\n'
+      ) +
+      endOfCode || ""; // should cut last char, '\n'
+  const numOfLineFeed = code.match(/\n/g)?.length || 0;
+  const aheadOfSkip = `1-${Number(props.startLineNumber) - 1}`;
+  const endOfSkip = `${props.notEnd ? `,${numOfLineFeed + 1}` : ``}`;
+  const skipRange = `${aheadOfSkip}${
+    props.skip !== undefined ? `,${props.skip}` : ``
+  }${endOfSkip}`;
   const skip =
-    props.skip !== undefined || props.startLineNumber !== undefined
-      ? checkThisLineSelected(
-          props.startLineNumber !== undefined && Number(props.startLineNumber) > 1
-            ? `1-${Number(props.startLineNumber) - 1}${
-                props.skip ? `,${props.skip}` : ``
-              }`
-            : props.skip || "",
-        )
+    props.skip !== undefined ||
+    props.startLineNumber !== undefined ||
+    props.notEnd !== undefined
+      ? checkThisLineSelected(skipRange)
       : () => false;
   const language = className.replace(/language-/, "");
   const fileName = props?.fileName;
@@ -194,8 +199,8 @@ const Pre = (props: any) => {
               }
 
               const alsoSkipNextLine =
-                 (i < tokens.length && skip(i + 1) === true);
-              const skipThisLine =  skip(i) === true;
+                i < tokens.length && skip(i + 1) === true;
+              const skipThisLine = skip(i) === true;
 
               const thisLine = (
                 <div
@@ -206,7 +211,10 @@ const Pre = (props: any) => {
                   <div className="flex flex-row" key={uuidv4()}>
                     {showLineNumber === true ? (
                       <div className="flex flex-row">
-                        <h1 className="mr-4 select-none text-neutral-400">
+                        <h1
+                          className="mr-4 select-none text-neutral-400"
+                          key={uuidv4()}
+                        >
                           {`${i + 1}`}
                           {Array(
                             String(tokens.length).length - String(i + 1).length,
@@ -236,14 +244,15 @@ const Pre = (props: any) => {
                   >
                     <div className="flex flex-row" key={uuidv4()}>
                       <div className="flex flex-row">
-                        <h1 className="mr-4 select-none text-neutral-400">
+                        <h1
+                          className="mr-4 select-none text-neutral-400"
+                        >
                           {`···`}
                           {Array(String(tokens.length).length).fill(
                             <span key={uuidv4()}>{` `}</span>,
                           )}
                         </h1>
                       </div>
-
                       <div
                         className="px-1 md:whitespace-pre-wrap"
                         key={uuidv4()}
