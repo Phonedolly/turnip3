@@ -9,7 +9,7 @@ interface IPre2Props {
   showLineNumber?: boolean;
   highlights?: any;
   skip?: string;
-  startLine: number;
+  startLineNumber: number;
   children: React.JSX.Element | React.JSX.Element[];
 }
 
@@ -72,7 +72,7 @@ export const Pre2 = (props: IPre2Props) => {
                 ];
                 // ].replaceAll(
                 //   /[0-9]/g,
-                //   (m) => Number(m) - Number(pre.props.startLine) + 1,
+                //   (m) => Number(m) - Number(pre.props.startLineNumber) + 1,
                 // );
                 return acc;
               },
@@ -82,16 +82,16 @@ export const Pre2 = (props: IPre2Props) => {
 
         return (
           <div className="flex w-full flex-col" key={uuidv4()}>
-            {/* {i === 0 && pre.props.startLine > 1 ? <SkipPre2 /> : null} */}
+            {/* {i === 0 && pre.props.startLineNumber > 1 ? <SkipPre2 /> : null} */}
             <Pre
               showContainer={false}
               showLineNumber={pre.props.showLineNumber || props.showLineNumber}
               highlights={highlights}
               skip={props.skip || pre.props.skip}
-              startLine={
+              startLineNumber={
                 props.children instanceof Array && props.children.length === 1
-                  ? props.startLine || pre.props.startLine
-                  : pre.props.startLine
+                  ? props.startLineNumber || pre.props.startLineNumber
+                  : pre.props.startLineNumber
               }
             >
               <Code

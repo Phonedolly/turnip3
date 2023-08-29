@@ -61,7 +61,7 @@ const Pre = (props: any) => {
   let aheadOfCode = "";
   for (
     let i = 0;
-    i < Math.max(props.startLine ? Number(props.startLine) - 1 : 0, 0);
+    i < Math.max(props.startLineNumber ? Number(props.startLineNumber) - 1 : 0, 0);
     i++
   ) {
     aheadOfCode += "\n";
@@ -73,10 +73,10 @@ const Pre = (props: any) => {
         props.children?.props.children?.length - 1,
       ) || ""; // should cut last char, '\n'
   const skip =
-    props.skip !== undefined || props.startLine !== undefined
+    props.skip !== undefined || props.startLineNumber !== undefined
       ? checkThisLineSelected(
-          props.startLine !== undefined && Number(props.startLine) > 1
-            ? `1-${Number(props.startLine) - 1}${
+          props.startLineNumber !== undefined && Number(props.startLineNumber) > 1
+            ? `1-${Number(props.startLineNumber) - 1}${
                 props.skip ? `,${props.skip}` : ``
               }`
             : props.skip || "",
