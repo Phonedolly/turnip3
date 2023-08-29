@@ -117,7 +117,10 @@ const Pre = (props: any) => {
   }, []);
 
   const lines = (
-    <div className="overflow-x-auto" key={uuidv4()}>
+    <div
+      className={props.showContainer ? `overflow-x-auto` : ``}
+      key={uuidv4()}
+    >
       <Highlight
         // {...defaultProps}
         code={code}
@@ -244,9 +247,7 @@ const Pre = (props: any) => {
                   >
                     <div className="flex flex-row" key={uuidv4()}>
                       <div className="flex flex-row">
-                        <h1
-                          className="mr-4 select-none text-neutral-400"
-                        >
+                        <h1 className="mr-4 select-none text-neutral-400">
                           {`···`}
                           {Array(String(tokens.length).length).fill(
                             <span key={uuidv4()}>{` `}</span>,

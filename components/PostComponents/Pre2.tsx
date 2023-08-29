@@ -38,48 +38,49 @@ export const Pre2 = (props: IPre2Props) => {
         }
         fileName={props.fileName || props.children[0].props.fileName}
       />
-      {props.children.map((pre, i) => {
-        let _notEnd = false;
-        if (
-          props.children instanceof Array &&
-          i === props.children.length - 1 &&
-          pre.props.notEnd
-        ) {
-          _notEnd = true;
-        } else if (
-          props.children instanceof Array &&
-          props.children.length === 1 &&
-          props.children[0].props.end
-        ) {
-          _notEnd = true;
-        }
-        const notEnd = _notEnd;
+      <div className="flex w-full flex-col overflow-x-auto">
+        {props.children.map((pre, i) => {
+          let _notEnd = false;
+          if (
+            props.children instanceof Array &&
+            i === props.children.length - 1 &&
+            pre.props.notEnd
+          ) {
+            _notEnd = true;
+          } else if (
+            props.children instanceof Array &&
+            props.children.length === 1 &&
+            props.children[0].props.end
+          ) {
+            _notEnd = true;
+          }
+          const notEnd = _notEnd;
 
-        const highlights = props.highlights
-          ? Object.keys(props.highlights).reduce(
-              (acc, curHighlightColorKey) => {
-                acc[curHighlightColorKey] =
-                  props.highlights[curHighlightColorKey];
-                return acc;
-              },
-              {},
-            )
-          : pre.props.highlights
-          ? Object.keys(JSON.parse(pre.props.highlights)).reduce(
-              (acc, curHighlightColorkey) => {
-                acc[curHighlightColorkey] = JSON.parse(pre.props.highlights)[
-                  curHighlightColorkey
-                ];
-                // ].replaceAll(
-                //   /[0-9]/g,
-                //   (m) => Number(m) - Number(pre.props.startLineNumber) + 1,
-                // );
-                return acc;
-              },
-              {},
-            )
-          : undefined;
-        return (
+          const highlights = props.highlights
+            ? Object.keys(props.highlights).reduce(
+                (acc, curHighlightColorKey) => {
+                  acc[curHighlightColorKey] =
+                    props.highlights[curHighlightColorKey];
+                  return acc;
+                },
+                {},
+              )
+            : pre.props.highlights
+            ? Object.keys(JSON.parse(pre.props.highlights)).reduce(
+                (acc, curHighlightColorkey) => {
+                  acc[curHighlightColorkey] = JSON.parse(pre.props.highlights)[
+                    curHighlightColorkey
+                  ];
+                  // ].replaceAll(
+                  //   /[0-9]/g,
+                  //   (m) => Number(m) - Number(pre.props.startLineNumber) + 1,
+                  // );
+                  return acc;
+                },
+                {},
+              )
+            : undefined;
+          return (
             <Pre
               showContainer={false}
               showLineNumber={pre.props.showLineNumber || props.showLineNumber}
@@ -99,8 +100,9 @@ export const Pre2 = (props: IPre2Props) => {
                 {pre.props.children.props.children}
               </Code>
             </Pre>
-        );
-      })}
+          );
+        })}
+      </div>
     </Container>
   );
 };
