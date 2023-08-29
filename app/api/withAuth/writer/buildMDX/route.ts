@@ -1,3 +1,4 @@
+import compileMDX from "@/lib/compileMDX";
 import { bundleMDX } from "mdx-bundler";
 import { NextResponse } from "next/server";
 import rehypeKatex from "rehype-katex";
@@ -11,30 +12,19 @@ export async function POST(request: Request) {
   const formData = await request.formData();
   const mdxSource = formData.get("mdxSource") as string;
 
-  const result = await bundleMDX({
-    source: mdxSource,
-    mdxOptions(options, frontmatter) {
-      options.remarkPlugins = [
-        remarkGfm,
-        remarkMath,
-        remarkFrontmatter,
-        remarkMdxFrontmatter,
-      ];
-      options.rehypePlugins = [rehypeKatex, rehypeMdxCodeProps];
+  const result = await compileMDX(mdxSource)
+    .then((result) =>
+      NextResponse.json(
+        { code: result.code, frontmatter: result.frontmatter },
+        { status: 200 },
+      ),
+    )
+    .catch((errReason) =>
+      NextResponse.json(
+        { code: "", frontmatter: { error: errReason } },
+        { status: 400 },
+      ),
+    );
 
-      return options;
-    },
-  })
-    .then((result) => result)
-    .catch((errReason) => {
-      return { code: "", frontmatter: { error: errReason } };
-    });
-
-  return NextResponse.json(
-    {
-      code: result.code,
-      frontmatter: result.frontmatter,
-    },
-    { status: result.frontmatter.error ? 400 : 200 },
-  );
+  return result;
 }
