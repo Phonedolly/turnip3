@@ -194,8 +194,8 @@ const Pre = (props: any) => {
               }
 
               const alsoSkipNextLine =
-                props?.skip && i < tokens.length && skip(i + 1) === true;
-              const skipThisLine = props?.skip && skip(i) === true;
+                 (i < tokens.length && skip(i + 1) === true);
+              const skipThisLine =  skip(i) === true;
 
               const thisLine = (
                 <div

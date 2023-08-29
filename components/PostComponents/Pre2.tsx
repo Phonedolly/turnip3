@@ -16,7 +16,7 @@ interface IPre2Props {
 export const SkipPre2 = () => {
   return (
     <Pre skip="1" showContainer={false}>
-      <code></code>
+      <Code></Code>
     </Pre>
   );
 };
@@ -39,13 +39,22 @@ export const Pre2 = (props: IPre2Props) => {
         fileName={props.fileName || props.children[0].props.fileName}
       />
       {props.children.map((pre, i) => {
-        const isEnd =
-          (props.children instanceof Array &&
-            i === props.children.length - 1 &&
-            pre.props.end) ||
-          (props.children instanceof Array && i < props.children.length - 1)
-            ? true
-            : false;
+        let _notEnd = false;
+        if (
+          props.children instanceof Array &&
+          i === props.children.length - 1 &&
+          pre.props.notEnd
+        ) {
+          _notEnd = true;
+        } else if (
+          props.children instanceof Array &&
+          props.children.length === 1 &&
+          props.children[0].props.end
+        ) {
+          _notEnd = true;
+        }
+        const notEnd = _notEnd;
+
         const highlights = props.highlights
           ? Object.keys(props.highlights).reduce(
               (acc, curHighlightColorKey) => {
@@ -70,19 +79,20 @@ export const Pre2 = (props: IPre2Props) => {
               {},
             )
           : undefined;
-        // const skip =
-        // pre.props.startLine && pre.props.startLine > 1
-        //   ? `1-${pre.props.startLine - 1}`
-        //   : undefined;
+
         return (
           <div className="flex w-full flex-col" key={uuidv4()}>
             {/* {i === 0 && pre.props.startLine > 1 ? <SkipPre2 /> : null} */}
             <Pre
+              showContainer={false}
               showLineNumber={pre.props.showLineNumber || props.showLineNumber}
               highlights={highlights}
-              showContainer={false}
               skip={props.skip || pre.props.skip}
-              startLine={props.startLine || pre.props.startLine}
+              startLine={
+                props.children instanceof Array && props.children.length === 1
+                  ? props.startLine || pre.props.startLine
+                  : pre.props.startLine
+              }
             >
               <Code
                 className={props.children[0].props.children.props.className}
@@ -90,7 +100,7 @@ export const Pre2 = (props: IPre2Props) => {
                 {pre.props.children.props.children}
               </Code>
             </Pre>
-            {isEnd === false ? <SkipPre2 /> : null}
+            {notEnd === true ? <SkipPre2 /> : null}
           </div>
         );
       })}
