@@ -27,10 +27,10 @@ const calculateHighlights = (raw: ColorReferences) => {
 };
 export const Container = (containerProps) => (
   <div
-    className={`my-5 flex w-full flex-col rounded-2xl bg-white pb-3.5 pt-3.5 shadow-code dark:bg-neutral-700 overflow-x-hidden`}
+    className={`my-5 flex w-full flex-col overflow-x-hidden rounded-2xl bg-white pb-3.5 pt-3.5 shadow-code dark:bg-neutral-700`}
     key={uuidv4()}
   >
-    {containerProps.children}{" "}
+    {containerProps.children}
   </div>
 );
 
