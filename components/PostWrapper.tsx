@@ -1,9 +1,11 @@
 "use client";
 
 import { getMDXComponent } from "mdx-bundler/client";
-import { useEffect, useMemo } from "react";
+import { useEffect, useLayoutEffect, useMemo } from "react";
 import componentsGenerator from "./PostComponents";
 import { ErrorBoundary } from "react-error-boundary";
+import * as reactThreeFiber from "@react-three/fiber";
+import * as reactThreeDrei from "@react-three/drei";
 
 const PostWrapper = (props: {
   code: string;
@@ -12,11 +14,23 @@ const PostWrapper = (props: {
   safeCode?: string;
   setSafeCode?: React.Dispatch<React.SetStateAction<string>>;
 }) => {
-  const Component = useMemo(() => getMDXComponent(props.code), [props.code]);
-  useEffect(() => {
+  const globalVars = {
+    reactThreeFiber,
+    reactThreeDrei,
+  };
+
+  const Component = useMemo(
+    () => getMDXComponent(props.code, globalVars),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [props.code],
+  );
+  // const Component = getMDXComponent(props.code);
+
+  useLayoutEffect(() => {
     props.setSafeCode && props.setSafeCode(props.code);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   const WithBoundary = ({
     view: ComponentsForInternal,
   }: {
@@ -25,15 +39,23 @@ const PostWrapper = (props: {
     return (
       <ErrorBoundary
         FallbackComponent={() => {
-          const ComponentForError = getMDXComponent(props.safeCode || "");
+          const ComponentForError = getMDXComponent(
+            props.safeCode || "",
+            globalVars,
+          );
           return (
-            <WithBoundary
-              view={
-                <ComponentForError
-                  components={componentsGenerator(props.imageSizes)}
-                />
-              }
-            />
+            <div className="relative h-full w-full">
+              <h1 className="absolute flex h-full w-full items-center justify-center bg-red-500/10 py-4 font-outfit text-2xl font-bold text-white">
+                MDX has a Problem.
+              </h1>
+              <WithBoundary
+                view={
+                  <ComponentForError
+                    components={componentsGenerator(props.imageSizes)}
+                  />
+                }
+              />
+            </div>
           );
         }}
       >

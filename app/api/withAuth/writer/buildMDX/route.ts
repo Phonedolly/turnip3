@@ -1,12 +1,5 @@
 import compileMDX from "@/lib/compileMDX";
-import { bundleMDX } from "mdx-bundler";
 import { NextResponse } from "next/server";
-import rehypeKatex from "rehype-katex";
-import rehypeMdxCodeProps from "rehype-mdx-code-props";
-import remarkFrontmatter from "remark-frontmatter";
-import remarkGfm from "remark-gfm";
-import remarkMath from "remark-math";
-import remarkMdxFrontmatter from "remark-mdx-frontmatter";
 
 export async function POST(request: Request) {
   const formData = await request.formData();

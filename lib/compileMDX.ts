@@ -1,15 +1,27 @@
 import { ICompileMDXOutput } from "@/types/ICompileMDXOutput";
 import { bundleMDX } from "mdx-bundler";
-import { NextResponse } from "next/server";
 import rehypeKatex from "rehype-katex";
 import rehypeMdxCodeProps from "rehype-mdx-code-props";
 import remarkFrontmatter from "remark-frontmatter";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import remarkMdxFrontmatter from "remark-mdx-frontmatter";
+import {reactThreeFiberExports, reactThreeDreiExports} from "./reactThreeExports";
 
 const compileMDX = async (source: string) => {
   const result = (await bundleMDX<IFrontmatter>({
+    globals: {
+      "@react-three/fiber": {
+        varName: "reactThreeFiber",
+        namedExports: reactThreeFiberExports,
+        defaultExport: false,
+      },
+      "@react-three/drei": {
+        varName: "reactThreeDrei",
+        namedExports: reactThreeDreiExports,
+        defaultExport: false,
+      },
+    },
     source: source,
     mdxOptions(options, frontmatter) {
       options.remarkPlugins = [

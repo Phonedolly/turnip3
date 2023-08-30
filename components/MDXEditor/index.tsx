@@ -36,7 +36,7 @@ const MDXEditor = (props: {
   useEffect(() => {
     props.setPost((prev) => ({
       ...prev,
-      content: getMDXComponent(props.initialCompiledMdxInfo.code),
+      // content: getMDXComponent(props.initialCompiledMdxInfo.code),
       mdx: props.initialCompiledMdxInfo.mdx,
     }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
