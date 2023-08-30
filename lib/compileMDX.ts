@@ -6,11 +6,20 @@ import remarkFrontmatter from "remark-frontmatter";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import remarkMdxFrontmatter from "remark-mdx-frontmatter";
-import {reactThreeFiberExports, reactThreeDreiExports} from "./reactThreeExports";
+import {
+  threeExports,
+  reactThreeFiberExports,
+  reactThreeDreiExports,
+} from "./reactThreeExports";
 
 const compileMDX = async (source: string) => {
   const result = (await bundleMDX<IFrontmatter>({
     globals: {
+      three: {
+        varName: "THREE",
+        namedExports: threeExports,
+        defaultExport: false,
+      },
       "@react-three/fiber": {
         varName: "reactThreeFiber",
         namedExports: reactThreeFiberExports,

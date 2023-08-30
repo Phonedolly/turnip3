@@ -6,6 +6,9 @@
 // export const reactThreeFiberExports = Object.keys(reactThreeFiber);
 // export const reactThreeDreiExports = Object.keys(reactThreeDrei);
 
+import * as THREE from 'three';
+
+export const threeExports = Object.keys(THREE)
 export const reactThreeFiberExports = [
   "Canvas",
   "ReactThreeFiber",

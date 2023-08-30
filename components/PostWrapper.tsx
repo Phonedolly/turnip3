@@ -6,6 +6,7 @@ import componentsGenerator from "./PostComponents";
 import { ErrorBoundary } from "react-error-boundary";
 import * as reactThreeFiber from "@react-three/fiber";
 import * as reactThreeDrei from "@react-three/drei";
+import * as THREE from "three"
 
 const PostWrapper = (props: {
   code: string;
@@ -17,6 +18,7 @@ const PostWrapper = (props: {
   const globalVars = {
     reactThreeFiber,
     reactThreeDrei,
+    THREE,
   };
 
   const Component = useMemo(
