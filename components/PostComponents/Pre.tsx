@@ -27,10 +27,10 @@ const calculateHighlights = (raw: ColorReferences) => {
 };
 export const Container = (containerProps) => (
   <div
-    className={`my-5 flex w-full flex-col overflow-x-hidden rounded-2xl bg-white pb-3.5 pt-3.5 shadow-code dark:bg-neutral-700`}
+    className={`my-5 overflow-x-hidden rounded-2xl bg-white pb-3.5 pt-3.5 shadow-code dark:bg-neutral-700`}
     key={uuidv4()}
   >
-    {containerProps.children}
+    <div className="flex flex-col w-full overflow-x-auto">{containerProps.children}</div>
   </div>
 );
 
@@ -118,7 +118,7 @@ const Pre = (props: any) => {
 
   const lines = (
     <div
-      className={props.showContainer ? `overflow-x-auto` : ``}
+      // className={props.showContainer ? `overflow-x-auto` : ``}
       key={uuidv4()}
     >
       <Highlight

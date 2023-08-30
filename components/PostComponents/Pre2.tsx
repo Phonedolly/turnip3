@@ -38,7 +38,7 @@ export const Pre2 = (props: IPre2Props) => {
         }
         fileName={props.fileName || props.children[0].props.fileName}
       />
-      <div className="flex w-full flex-col overflow-x-auto">
+      {/* <div className="flex w-full flex-col overflow-x-hidden"> */}
         {props.children.map((pre, i) => {
           let _notEnd = false;
           if (
@@ -102,7 +102,7 @@ export const Pre2 = (props: IPre2Props) => {
             </Pre>
           );
         })}
-      </div>
+      {/* </div> */}
     </Container>
   );
 };
