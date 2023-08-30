@@ -118,7 +118,7 @@ const Pre = (props: any) => {
 
   const lines = (
     <div
-      className={props.showContainer ? `overflow-x-auto` : `overflow-x-auto`}
+      className={props.showContainer ? `overflow-x-auto` : ``}
       key={uuidv4()}
     >
       <Highlight
